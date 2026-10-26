@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   dealValueUsd,
+  planRows,
   rankBuildings,
   realMonthlyCost,
   suggestAlternatives,
@@ -189,5 +190,32 @@ describe("suggestAlternatives", () => {
       budget: null,
       moveIn: null,
     });
+  });
+});
+
+describe("planRows", () => {
+  const b = building({
+    floor_plans: [
+      plan({ id: "big", name: "Big", rent_usd: 1800, available_from: "2026-11-01" }),
+      plan({ id: "small", name: "Small", rent_usd: 1100, available_from: "2027-01-15" }),
+    ],
+    building_fees: [{ id: "f", name: "Trash", monthly_usd: 25 }],
+  });
+
+  it("lists every plan cheapest first with real cost", () => {
+    const rows = planRows(b, TODAY, "2026-12-01");
+    expect(rows.map((r) => [r.plan.id, r.cost.realMonthlyCost])).toEqual([
+      ["small", 1125],
+      ["big", 1825],
+    ]);
+  });
+
+  it("marks which plans are ready by the move-in date", () => {
+    const rows = planRows(b, TODAY, "2026-12-01");
+    expect(rows.map((r) => r.availableByMoveIn)).toEqual([false, true]);
+  });
+
+  it("uses today when there is no move-in date", () => {
+    expect(planRows(b, TODAY, null).every((r) => !r.availableByMoveIn)).toBe(true);
   });
 });

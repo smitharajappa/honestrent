@@ -17,16 +17,21 @@ const STYLE: Record<FitLevel, { tone: Tone; icon: React.ReactNode }> = {
   unlikely: { tone: "danger", icon: <XCircleIcon className="size-3.5" /> },
 };
 
-/** Approval fit for one building. Shows nothing until all 3 answers are given. */
+/** Approval fit for one building. Shows nothing (or a hint) until all 3 answers are given. */
 export function FitBadge({
   criteria,
   rentUsd,
+  emptyHint,
 }: {
   criteria: ApprovalCriteria;
   rentUsd: number;
+  /** Shown instead of the badge when the renter hasn't answered yet. */
+  emptyHint?: string;
 }) {
   const { answers } = useApproval();
-  if (!isCompleteProfile(answers)) return null;
+  if (!isCompleteProfile(answers)) {
+    return emptyHint ? <p className="mt-3 text-sm text-text-muted">{emptyHint}</p> : null;
+  }
 
   const fit = approvalFit(answers, criteria, rentUsd);
   const { tone, icon } = STYLE[fit.level];

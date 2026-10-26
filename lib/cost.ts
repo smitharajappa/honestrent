@@ -137,3 +137,28 @@ export function suggestAlternatives(
     moveIn: earliestAffordable,
   };
 }
+
+export type PlanRow = {
+  plan: FloorPlan;
+  cost: CostBreakdown;
+  availableByMoveIn: boolean;
+};
+
+/** Every floor plan with its real cost, cheapest first, for the detail page. */
+export function planRows(
+  building: Building,
+  today: string,
+  moveIn: string | null,
+): PlanRow[] {
+  return building.floor_plans
+    .map((plan) => ({
+      plan,
+      cost: realMonthlyCost(plan, building.building_fees, building.building_deals, today),
+      availableByMoveIn: plan.available_from <= (moveIn ?? today),
+    }))
+    .sort(
+      (a, b) =>
+        a.cost.realMonthlyCost - b.cost.realMonthlyCost ||
+        a.plan.name.localeCompare(b.plan.name),
+    );
+}

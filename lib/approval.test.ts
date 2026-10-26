@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   approvalFit,
+  describeCriteria,
   isCompleteProfile,
   pickCriteria,
   type ApprovalCriteria,
@@ -142,6 +143,37 @@ describe("pickCriteria", () => {
       "accepts_no_ssn",
       "min_credit_score",
       "min_income_multiple",
+    ]);
+  });
+});
+
+describe("describeCriteria", () => {
+  it("states each rule in plain words", () => {
+    expect(describeCriteria(criteria())).toEqual([
+      { label: "Income", value: "At least 3× the monthly rent" },
+      { label: "Credit score", value: "650 or higher" },
+      { label: "SSN", value: "Required" },
+      { label: "Guarantor", value: "Not accepted" },
+      { label: "International credit report", value: "Not accepted" },
+    ]);
+  });
+
+  it("describes flexible buildings", () => {
+    const rules = describeCriteria(
+      criteria({
+        min_income_multiple: 2.5,
+        min_credit_score: null,
+        accepts_no_ssn: true,
+        accepts_guarantor: true,
+        accepts_international_credit: true,
+      }),
+    );
+    expect(rules.map((r) => r.value)).toEqual([
+      "At least 2.5× the monthly rent",
+      "No minimum",
+      "Not required (ITIN or passport OK)",
+      "Accepted",
+      "Accepted",
     ]);
   });
 });
