@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { HomeIcon } from "./ui/icons";
+import { HomeIcon, InfoIcon } from "./ui/icons";
 
 export function SiteHeader() {
   return (
@@ -28,5 +28,20 @@ export function SiteFooter() {
         you apply.
       </p>
     </footer>
+  );
+}
+
+/** Shown while building data is made up (see lib/site.ts). */
+export function DemoBanner() {
+  return (
+    <div role="note" className="bg-warning-soft text-warning-text">
+      <p className="mx-auto flex max-w-2xl items-center gap-2 px-4 py-2 text-sm">
+        <InfoIcon className="size-4 shrink-0" />
+        <span>
+          <strong className="font-semibold">Demo:</strong> buildings and prices are sample
+          data for testing.
+        </span>
+      </p>
+    </div>
   );
 }

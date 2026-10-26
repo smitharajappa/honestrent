@@ -25,8 +25,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   const result = await fetchBuilding(id);
-  const name = result.ok && result.building ? result.building.name : "Apartment";
-  return { title: `${name} · Swelt` };
+  const building = result.ok ? result.building : null;
+  if (!building) return { title: "Apartment" };
+  return {
+    title: building.name,
+    description: `Real monthly cost, fees, deals and approval rules for ${building.name}, ${building.city}.`,
+  };
 }
 
 export default async function BuildingPage({
