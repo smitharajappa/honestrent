@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Swelt
 
-## Getting Started
+Richardson-Plano apartments ranked by **real monthly cost** (rent + mandatory fees − deals
+spread over the lease) and, later, by how likely a newcomer is to be approved.
+See [prd.md](prd.md) for the product plan.
 
-First, run the development server:
+## Run it on your computer
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Needs Node.js 20 or newer.
+
+1. Install packages: `npm install`
+2. Copy `.env.example` to `.env.local` and paste in your Supabase URL and publishable key.
+3. Start the app: `npm run dev`, then open http://localhost:3000
+
+## Set up the database (one time)
+
+In the Supabase dashboard, open **SQL Editor** and run these files in order:
+
+1. `supabase/migrations/20261025000000_create_buildings.sql` creates the tables and
+   read-only security rules.
+2. `supabase/seed.sql` adds **made-up** sample buildings for testing.
+
+Any later change to the tables goes in a new, dated file in `supabase/migrations/`.
+Never edit a migration that has already been run.
+
+## Before you commit
+
+```
+npm run check
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This runs lint, type checks, the formatting check and tests. `npm run format` fixes formatting.
+GitHub runs the same checks plus a production build on every push (`.github/workflows/ci.yml`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Working rules
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- One branch per feature (`feature/short-name`), then merge into `main` through a pull request.
+- Secrets live only in `.env.local`, which git ignores. Never commit keys.
+- Use only made-up renter data. Never store SSNs, ID scans, exact credit scores or
+  immigration status.
+- Show the "last verified" date wherever building prices appear.
 
-## Learn More
+## Project layout
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Path                   | What it holds                               |
+| ---------------------- | ------------------------------------------- |
+| `app/`                 | Pages (Next.js App Router)                  |
+| `components/`          | Reusable pieces of the page                 |
+| `lib/cost.ts`          | Real-monthly-cost math and ranking (tested) |
+| `lib/validation.ts`    | Checks search inputs (tested)               |
+| `lib/buildings.ts`     | Loads building data from Supabase           |
+| `supabase/migrations/` | Database table definitions, in order        |
+| `supabase/seed.sql`    | Made-up sample buildings                    |
