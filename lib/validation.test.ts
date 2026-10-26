@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { todayInTexas, validateSearch } from "./validation";
+import { daysBetween, todayInTexas, validateSearch } from "./validation";
 
 const TODAY = "2026-10-25";
 
@@ -45,5 +45,13 @@ describe("todayInTexas", () => {
   it("uses Central time, not UTC", () => {
     // 2026-10-26 03:00 UTC is still 2026-10-25 in Texas
     expect(todayInTexas(new Date("2026-10-26T03:00:00Z"))).toBe("2026-10-25");
+  });
+});
+
+describe("daysBetween", () => {
+  it("counts whole days, including across months", () => {
+    expect(daysBetween("2026-10-10", "2026-10-25")).toBe(15);
+    expect(daysBetween("2026-10-31", "2026-11-01")).toBe(1);
+    expect(daysBetween("2026-10-25", "2026-10-25")).toBe(0);
   });
 });

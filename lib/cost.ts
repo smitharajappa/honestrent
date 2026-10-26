@@ -92,3 +92,48 @@ export function rankBuildings(
       a.building.name.localeCompare(b.building.name),
   );
 }
+
+/** Prices older than this many days get an "may have changed" warning. */
+export const STALE_AFTER_DAYS = 14;
+
+export type Suggestions = {
+  /** Lowest budget (rounded up to $50) that would show at least one apartment. */
+  budget: number | null;
+  /** Earliest move-in date with an apartment that fits the current budget. */
+  moveIn: string | null;
+};
+
+/** When nothing fits, work out the smallest change that would show results. */
+export function suggestAlternatives(
+  buildings: Building[],
+  budgetUsd: number,
+  moveInDate: string,
+  today: string,
+): Suggestions {
+  let cheapestAvailable: number | null = null;
+  let earliestAffordable: string | null = null;
+
+  for (const building of buildings) {
+    for (const plan of building.floor_plans) {
+      const { realMonthlyCost: cost } = realMonthlyCost(
+        plan,
+        building.building_fees,
+        building.building_deals,
+        today,
+      );
+      if (plan.available_from <= moveInDate) {
+        cheapestAvailable = Math.min(cheapestAvailable ?? Infinity, cost);
+      }
+      if (cost <= budgetUsd && plan.available_from > moveInDate) {
+        if (earliestAffordable === null || plan.available_from < earliestAffordable) {
+          earliestAffordable = plan.available_from;
+        }
+      }
+    }
+  }
+
+  return {
+    budget: cheapestAvailable === null ? null : Math.ceil(cheapestAvailable / 50) * 50,
+    moveIn: earliestAffordable,
+  };
+}

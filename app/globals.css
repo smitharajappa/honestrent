@@ -1,10 +1,125 @@
 @import "tailwindcss";
 
+/*
+ * Swelt design tokens.
+ * Every color, shadow and timing used in the app comes from here, so the look
+ * stays consistent and dark mode only needs the values below swapped.
+ * Text colors are chosen to meet WCAG 2.2 AA contrast (4.5:1) on their backgrounds.
+ */
+
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
+
+  /* Surfaces */
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --surface-muted: #f1f3f5;
+  --border: #e1e4e8;
+  --border-strong: #868e98;
+
+  /* Text */
+  --text: #1a1d21;
+  --text-muted: #5b616b;
+
+  /* Brand: calm, trustworthy teal */
+  --brand: #0f766e;
+  --brand-hover: #115e59;
+  --brand-fg: #ffffff;
+  --brand-soft: #e6f5f2;
+  --brand-text: #0f6b63;
+
+  /* Status (used with an icon and words, never color alone) */
+  --success-soft: #e7f6ec;
+  --success-text: #17663f;
+  --warning-soft: #fdf3d7;
+  --warning-text: #7c4a03;
+  --danger-soft: #fdecec;
+  --danger-text: #b42318;
+
+  --ring: #0f766e;
 }
 
-body {
-  background: #f7f7f5;
-  color: #1c1c1a;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1113;
+    --surface: #181a1d;
+    --surface-muted: #212428;
+    --border: #2e3237;
+    --border-strong: #6b737c;
+
+    --text: #eceef0;
+    --text-muted: #a9afb7;
+
+    --brand: #2dd4bf;
+    --brand-hover: #5eead4;
+    --brand-fg: #042f2e;
+    --brand-soft: #0f2e2b;
+    --brand-text: #5eead4;
+
+    --success-soft: #0f2a1c;
+    --success-text: #6ee7a8;
+    --warning-soft: #2e2205;
+    --warning-text: #fbd27a;
+    --danger-soft: #331414;
+    --danger-text: #fca5a5;
+
+    --ring: #5eead4;
+  }
+}
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-fg: var(--brand-fg);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-text: var(--brand-text);
+  --color-success-soft: var(--success-soft);
+  --color-success-text: var(--success-text);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-text: var(--warning-text);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-text: var(--danger-text);
+  --color-ring: var(--ring);
+}
+
+@theme {
+  /* Two depth levels only: resting cards and raised elements. */
+  --shadow-card: 0 1px 2px rgb(16 24 40 / 0.04), 0 1px 3px rgb(16 24 40 / 0.06);
+  --shadow-raised: 0 4px 12px rgb(16 24 40 / 0.08), 0 2px 4px rgb(16 24 40 / 0.04);
+
+  /* Motion: short and gentle. */
+  --ease-out-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@layer base {
+  body {
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  /* One visible focus style for keyboard users everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+/* Respect people who turn off motion in their phone settings. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

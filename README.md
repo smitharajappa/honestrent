@@ -40,6 +40,18 @@ GitHub runs the same checks plus a production build on every push (`.github/work
   immigration status.
 - Show the "last verified" date wherever building prices appear.
 
+## Design rules
+
+- All colors, shadows and motion live as tokens in `app/globals.css`. Use token classes
+  (`bg-surface`, `text-text-muted`, `bg-brand`…), never raw hex colors in components.
+- Every text color meets WCAG 2.2 AA contrast (4.5:1) in light and dark mode. Re-check
+  contrast whenever a token changes.
+- Build screens from `components/ui/` (Button, Field, Card, Badge, icons) before
+  writing new styles.
+- Tap targets are at least 44px tall. Inputs use 16px text so phones don't zoom.
+- Status is never shown by color alone: always pair it with words and usually an icon.
+- Design for 375px phone width first, then check desktop.
+
 ## Project layout
 
 | Path                   | What it holds                               |

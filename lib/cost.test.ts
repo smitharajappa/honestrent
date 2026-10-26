@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { dealValueUsd, rankBuildings, realMonthlyCost } from "./cost";
+import {
+  dealValueUsd,
+  rankBuildings,
+  realMonthlyCost,
+  suggestAlternatives,
+} from "./cost";
 import type { Building, Deal, FloorPlan } from "./types";
 
 const TODAY = "2026-10-25";
@@ -155,5 +160,29 @@ describe("rankBuildings", () => {
 
   it("returns an empty list when nothing fits", () => {
     expect(rankBuildings([cheapAfterFees], 500, "2026-12-01", TODAY)).toEqual([]);
+  });
+});
+
+describe("suggestAlternatives", () => {
+  const b = building({
+    floor_plans: [
+      plan({ id: "now", rent_usd: 1320, available_from: "2026-11-01" }),
+      plan({ id: "later", rent_usd: 1000, available_from: "2027-01-15" }),
+    ],
+  });
+
+  it("suggests a budget rounded up to the next $50", () => {
+    expect(suggestAlternatives([b], 900, "2026-12-01", TODAY).budget).toBe(1350);
+  });
+
+  it("suggests the earliest later move-in that fits the budget", () => {
+    expect(suggestAlternatives([b], 1100, "2026-12-01", TODAY).moveIn).toBe("2027-01-15");
+  });
+
+  it("returns nulls when there is nothing to suggest", () => {
+    expect(suggestAlternatives([], 1000, "2026-12-01", TODAY)).toEqual({
+      budget: null,
+      moveIn: null,
+    });
   });
 });

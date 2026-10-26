@@ -61,3 +61,9 @@ export function todayInTexas(now: Date = new Date()): string {
     day: "2-digit",
   }).format(now);
 }
+
+/** Whole days from one YYYY-MM-DD date to another (negative if `to` is earlier). */
+export function daysBetween(from: string, to: string): number {
+  const ms = Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`);
+  return Math.round(ms / 86_400_000);
+}
