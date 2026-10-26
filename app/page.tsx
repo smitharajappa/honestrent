@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { ApprovalProvider } from "@/components/approval/ApprovalContext";
+import { ApprovalPanel } from "@/components/approval/ApprovalPanel";
+import { FitSummary } from "@/components/approval/FitBadge";
 import { ResultCard } from "@/components/ResultCard";
 import { ResultsSkeleton } from "@/components/ResultsSkeleton";
 import { SearchForm } from "@/components/SearchForm";
@@ -14,6 +17,7 @@ import {
   SearchIcon,
 } from "@/components/ui/icons";
 import { fetchBuildings } from "@/lib/buildings";
+import { pickCriteria } from "@/lib/approval";
 import { rankBuildings, suggestAlternatives } from "@/lib/cost";
 import { formatDate, formatUsd } from "@/lib/format";
 import { todayInTexas, validateSearch } from "@/lib/validation";
@@ -37,56 +41,60 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
       <SiteHeader />
 
       <main className="mx-auto w-full max-w-2xl px-4 pt-8 pb-16 sm:pt-12">
-        <section aria-labelledby="page-title">
-          <Badge tone="brand">Free for renters</Badge>
-          <h1
-            id="page-title"
-            className="mt-3 text-3xl leading-tight font-bold tracking-tight text-balance sm:text-4xl"
-          >
-            See what you&apos;ll really pay each month
-          </h1>
-          <p className="mt-3 text-base text-pretty text-text-muted sm:text-lg">
-            Apartments in Richardson and Plano, ranked by rent plus required fees, minus
-            move-in deals.
-          </p>
-        </section>
+        <ApprovalProvider>
+          <section aria-labelledby="page-title">
+            <Badge tone="brand">Free for renters</Badge>
+            <h1
+              id="page-title"
+              className="mt-3 text-3xl leading-tight font-bold tracking-tight text-balance sm:text-4xl"
+            >
+              See what you&apos;ll really pay each month
+            </h1>
+            <p className="mt-3 text-base text-pretty text-text-muted sm:text-lg">
+              Apartments in Richardson and Plano, ranked by rent plus required fees, minus
+              move-in deals.
+            </p>
+          </section>
 
-        <Card as="section" aria-label="Search apartments" className="mt-6 p-5 sm:p-6">
-          <SearchForm
-            budget={rawBudget}
-            moveIn={rawMoveIn}
-            today={today}
-            errors={validation && !validation.ok ? validation.errors : undefined}
-          />
-        </Card>
-
-        {!validation?.ok && (
-          <ul className="mt-5 grid gap-2 text-sm text-text-muted sm:grid-cols-3">
-            {[
-              "Required fees included",
-              "Deals spread over the lease",
-              "Prices checked by hand",
-            ].map((item) => (
-              <li key={item} className="flex items-center gap-2">
-                <CheckIcon className="size-4 shrink-0 text-brand-text" />
-                {item}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {validation?.ok && (
-          <Suspense
-            key={`${validation.value.budget}-${validation.value.moveIn}`}
-            fallback={<ResultsSkeleton />}
-          >
-            <Results
-              budget={validation.value.budget}
-              moveIn={validation.value.moveIn}
+          <Card as="section" aria-label="Search apartments" className="mt-6 p-5 sm:p-6">
+            <SearchForm
+              budget={rawBudget}
+              moveIn={rawMoveIn}
               today={today}
+              errors={validation && !validation.ok ? validation.errors : undefined}
             />
-          </Suspense>
-        )}
+          </Card>
+
+          <ApprovalPanel />
+
+          {!validation?.ok && (
+            <ul className="mt-5 grid gap-2 text-sm text-text-muted sm:grid-cols-3">
+              {[
+                "Required fees included",
+                "Deals spread over the lease",
+                "Prices checked by hand",
+              ].map((item) => (
+                <li key={item} className="flex items-center gap-2">
+                  <CheckIcon className="size-4 shrink-0 text-brand-text" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {validation?.ok && (
+            <Suspense
+              key={`${validation.value.budget}-${validation.value.moveIn}`}
+              fallback={<ResultsSkeleton />}
+            >
+              <Results
+                budget={validation.value.budget}
+                moveIn={validation.value.moveIn}
+                today={today}
+              />
+            </Suspense>
+          )}
+        </ApprovalProvider>
       </main>
 
       <footer className="border-t border-border">
@@ -169,6 +177,12 @@ async function Results({
         Under {formatUsd(budget)}/mo · Move in by {formatDate(moveIn)} · Lowest real cost
         first
       </p>
+      <FitSummary
+        items={results.map((r) => ({
+          criteria: pickCriteria(r.building),
+          rentUsd: r.plan.rent_usd,
+        }))}
+      />
       <p className="mt-3 flex items-start gap-2 rounded-xl bg-brand-soft p-3 text-sm text-brand-text">
         <InfoIcon className="mt-0.5 size-4 shrink-0" />
         Real cost = advertised rent + required monthly fees − move-in deals spread over

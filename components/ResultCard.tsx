@@ -1,6 +1,8 @@
+import { pickCriteria } from "@/lib/approval";
 import { STALE_AFTER_DAYS, type RankedResult } from "@/lib/cost";
 import { bedroomLabel, formatDate, formatUsd } from "@/lib/format";
 import { daysBetween } from "@/lib/validation";
+import { FitBadge } from "./approval/FitBadge";
 import { Badge } from "./ui/Badge";
 import { Card } from "./ui/Card";
 import { AlertIcon, CheckIcon, ClockIcon, PlusCircleIcon, TagIcon } from "./ui/icons";
@@ -38,6 +40,8 @@ export function ResultCard({ result, rank, today }: Props) {
             <p className="mt-1 text-xs font-medium text-text-muted">real cost / mo</p>
           </div>
         </div>
+
+        <FitBadge criteria={pickCriteria(building)} rentUsd={plan.rent_usd} />
 
         <div className="mt-3 flex flex-wrap gap-2">
           {difference > 0 && (

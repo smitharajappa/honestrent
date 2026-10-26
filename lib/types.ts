@@ -1,5 +1,7 @@
 // Shapes of the data we read from Supabase.
 
+import type { ApprovalCriteria } from "./approval";
+
 export type FloorPlan = {
   id: string;
   name: string;
@@ -24,7 +26,7 @@ export type Deal = {
   valid_until: string | null; // YYYY-MM-DD
 };
 
-export type Building = {
+export type Building = ApprovalCriteria & {
   id: string;
   name: string;
   address: string;

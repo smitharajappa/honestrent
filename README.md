@@ -39,6 +39,8 @@ GitHub runs the same checks plus a production build on every push (`.github/work
 - Use only made-up renter data. Never store SSNs, ID scans, exact credit scores or
   immigration status.
 - Show the "last verified" date wherever building prices appear.
+- Approval answers (income range, credit band, ID type) stay in the renter's browser
+  memory only: never in the URL, server, database or browser storage.
 
 ## Design rules
 
