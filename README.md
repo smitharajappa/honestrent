@@ -26,6 +26,16 @@ In the Supabase dashboard, open **SQL Editor** and run these files in order:
 Any later change to the tables goes in a new, dated file in `supabase/migrations/`.
 Never edit a migration that has already been run.
 
+## Deploying (Vercel)
+
+- Every merge to `main` deploys the live site. Every pull request gets a private preview link.
+- In Vercel, set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+  (the publishable key only, never the secret key).
+- **Demo mode** is on by default: a "sample data" banner shows and search engines are asked
+  not to list the site. Once building data is real, set `NEXT_PUBLIC_DEMO_MODE=off` in
+  Vercel and redeploy.
+- Preview links use the same database as the live site, so delete any test leads they create.
+
 ## Before you commit
 
 ```
