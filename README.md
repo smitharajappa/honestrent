@@ -19,6 +19,9 @@ In the Supabase dashboard, open **SQL Editor** and run these files in order:
 1. `supabase/migrations/20261025000000_create_buildings.sql` creates the tables and
    read-only security rules.
 2. `supabase/seed.sql` adds **made-up** sample buildings for testing.
+3. `supabase/migrations/20261026000000_create_leads.sql` creates the "I'm interested"
+   leads table. The public key can add leads but never read, change or delete them.
+   View leads in the dashboard under **Table Editor → leads**.
 
 Any later change to the tables goes in a new, dated file in `supabase/migrations/`.
 Never edit a migration that has already been run.

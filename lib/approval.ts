@@ -53,6 +53,32 @@ export function pickCriteria(source: ApprovalCriteria): ApprovalCriteria {
   };
 }
 
+/** The building's approval rules in plain words, for the detail page. */
+export function describeCriteria(
+  c: ApprovalCriteria,
+): { label: string; value: string }[] {
+  return [
+    {
+      label: "Income",
+      value: `At least ${multiple(c.min_income_multiple)} the monthly rent`,
+    },
+    {
+      label: "Credit score",
+      value:
+        c.min_credit_score === null ? "No minimum" : `${c.min_credit_score} or higher`,
+    },
+    {
+      label: "SSN",
+      value: c.accepts_no_ssn ? "Not required (ITIN or passport OK)" : "Required",
+    },
+    { label: "Guarantor", value: c.accepts_guarantor ? "Accepted" : "Not accepted" },
+    {
+      label: "International credit report",
+      value: c.accepts_international_credit ? "Accepted" : "Not accepted",
+    },
+  ];
+}
+
 export type FitLevel = "good" | "guarantor" | "unlikely";
 export type Fit = { level: FitLevel; reason: string };
 

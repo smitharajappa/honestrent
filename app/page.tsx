@@ -1,6 +1,4 @@
-import Link from "next/link";
 import { Suspense } from "react";
-import { ApprovalProvider } from "@/components/approval/ApprovalContext";
 import { ApprovalPanel } from "@/components/approval/ApprovalPanel";
 import { FitSummary } from "@/components/approval/FitBadge";
 import { ResultCard } from "@/components/ResultCard";
@@ -9,13 +7,7 @@ import { SearchForm } from "@/components/SearchForm";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import {
-  AlertIcon,
-  CheckIcon,
-  HomeIcon,
-  InfoIcon,
-  SearchIcon,
-} from "@/components/ui/icons";
+import { AlertIcon, CheckIcon, InfoIcon, SearchIcon } from "@/components/ui/icons";
 import { fetchBuildings } from "@/lib/buildings";
 import { pickCriteria } from "@/lib/approval";
 import { rankBuildings, suggestAlternatives } from "@/lib/cost";
@@ -37,92 +29,60 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
   const validation = hasSearched ? validateSearch(rawBudget, rawMoveIn, today) : null;
 
   return (
-    <>
-      <SiteHeader />
-
-      <main className="mx-auto w-full max-w-2xl px-4 pt-8 pb-16 sm:pt-12">
-        <ApprovalProvider>
-          <section aria-labelledby="page-title">
-            <Badge tone="brand">Free for renters</Badge>
-            <h1
-              id="page-title"
-              className="mt-3 text-3xl leading-tight font-bold tracking-tight text-balance sm:text-4xl"
-            >
-              See what you&apos;ll really pay each month
-            </h1>
-            <p className="mt-3 text-base text-pretty text-text-muted sm:text-lg">
-              Apartments in Richardson and Plano, ranked by rent plus required fees, minus
-              move-in deals.
-            </p>
-          </section>
-
-          <Card as="section" aria-label="Search apartments" className="mt-6 p-5 sm:p-6">
-            <SearchForm
-              budget={rawBudget}
-              moveIn={rawMoveIn}
-              today={today}
-              errors={validation && !validation.ok ? validation.errors : undefined}
-            />
-          </Card>
-
-          <ApprovalPanel />
-
-          {!validation?.ok && (
-            <ul className="mt-5 grid gap-2 text-sm text-text-muted sm:grid-cols-3">
-              {[
-                "Required fees included",
-                "Deals spread over the lease",
-                "Prices checked by hand",
-              ].map((item) => (
-                <li key={item} className="flex items-center gap-2">
-                  <CheckIcon className="size-4 shrink-0 text-brand-text" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          )}
-
-          {validation?.ok && (
-            <Suspense
-              key={`${validation.value.budget}-${validation.value.moveIn}`}
-              fallback={<ResultsSkeleton />}
-            >
-              <Results
-                budget={validation.value.budget}
-                moveIn={validation.value.moveIn}
-                today={today}
-              />
-            </Suspense>
-          )}
-        </ApprovalProvider>
-      </main>
-
-      <footer className="border-t border-border">
-        <p className="mx-auto max-w-2xl px-4 py-6 text-xs text-text-muted">
-          Prices are entered by hand and can change. Always confirm with the building
-          before you apply.
-        </p>
-      </footer>
-    </>
-  );
-}
-
-function SiteHeader() {
-  return (
-    <header className="sticky top-0 z-10 border-b border-border bg-bg/85 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-2xl items-center justify-between px-4">
-        <Link
-          href="/"
-          className="flex items-center gap-2 rounded-lg font-bold tracking-tight"
+    <main className="mx-auto w-full max-w-2xl px-4 pt-8 pb-16 sm:pt-12">
+      <section aria-labelledby="page-title">
+        <Badge tone="brand">Free for renters</Badge>
+        <h1
+          id="page-title"
+          className="mt-3 text-3xl leading-tight font-bold tracking-tight text-balance sm:text-4xl"
         >
-          <span className="grid size-8 place-items-center rounded-lg bg-brand text-brand-fg">
-            <HomeIcon className="size-4.5" />
-          </span>
-          Swelt
-        </Link>
-        <span className="text-sm text-text-muted">Richardson · Plano</span>
-      </div>
-    </header>
+          See what you&apos;ll really pay each month
+        </h1>
+        <p className="mt-3 text-base text-pretty text-text-muted sm:text-lg">
+          Apartments in Richardson and Plano, ranked by rent plus required fees, minus
+          move-in deals.
+        </p>
+      </section>
+
+      <Card as="section" aria-label="Search apartments" className="mt-6 p-5 sm:p-6">
+        <SearchForm
+          budget={rawBudget}
+          moveIn={rawMoveIn}
+          today={today}
+          errors={validation && !validation.ok ? validation.errors : undefined}
+        />
+      </Card>
+
+      <ApprovalPanel />
+
+      {!validation?.ok && (
+        <ul className="mt-5 grid gap-2 text-sm text-text-muted sm:grid-cols-3">
+          {[
+            "Required fees included",
+            "Deals spread over the lease",
+            "Prices checked by hand",
+          ].map((item) => (
+            <li key={item} className="flex items-center gap-2">
+              <CheckIcon className="size-4 shrink-0 text-brand-text" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {validation?.ok && (
+        <Suspense
+          key={`${validation.value.budget}-${validation.value.moveIn}`}
+          fallback={<ResultsSkeleton />}
+        >
+          <Results
+            budget={validation.value.budget}
+            moveIn={validation.value.moveIn}
+            today={today}
+          />
+        </Suspense>
+      )}
+    </main>
   );
 }
 
@@ -196,6 +156,7 @@ async function Results({
             result={result}
             rank={index + 1}
             today={today}
+            detailHref={`/buildings/${result.building.id}?budget=${budget}&moveIn=${moveIn}`}
           />
         ))}
       </ol>

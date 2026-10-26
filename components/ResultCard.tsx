@@ -1,23 +1,25 @@
+import Link from "next/link";
 import { pickCriteria } from "@/lib/approval";
-import { STALE_AFTER_DAYS, type RankedResult } from "@/lib/cost";
+import type { RankedResult } from "@/lib/cost";
 import { bedroomLabel, formatDate, formatUsd } from "@/lib/format";
-import { daysBetween } from "@/lib/validation";
 import { FitBadge } from "./approval/FitBadge";
 import { Badge } from "./ui/Badge";
 import { Card } from "./ui/Card";
-import { AlertIcon, CheckIcon, ClockIcon, PlusCircleIcon, TagIcon } from "./ui/icons";
+import { CheckIcon, PlusCircleIcon, TagIcon } from "./ui/icons";
+import { VerifiedNote } from "./VerifiedNote";
 
-type Props = { result: RankedResult; rank: number; today: string };
+type Props = { result: RankedResult; rank: number; today: string; detailHref: string };
 
-export function ResultCard({ result, rank, today }: Props) {
+export function ResultCard({ result, rank, today, detailHref }: Props) {
   const { building, plan, cost, matchingPlanCount } = result;
   const difference = cost.realMonthlyCost - cost.advertisedRent;
-  const daysSinceVerified = daysBetween(building.last_verified, today);
-  const isStale = daysSinceVerified > STALE_AFTER_DAYS;
   const availableNow = plan.available_from <= today;
 
   return (
-    <Card as="li" className="p-4 sm:p-5">
+    <Card
+      as="li"
+      className="relative p-4 transition-colors duration-150 hover:border-border-strong sm:p-5"
+    >
       <article aria-labelledby={`b-${building.id}`}>
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
@@ -29,7 +31,13 @@ export function ResultCard({ result, rank, today }: Props) {
               <p className="mb-1 text-xs font-semibold text-text-muted">#{rank}</p>
             )}
             <h3 id={`b-${building.id}`} className="text-lg leading-snug font-semibold">
-              {building.name}
+              {/* The ::after layer makes the whole card tappable. */}
+              <Link
+                href={detailHref}
+                className="rounded-sm after:absolute after:inset-0 after:rounded-2xl after:content-['']"
+              >
+                {building.name}
+              </Link>
             </h3>
             <p className="mt-0.5 text-sm text-text-muted">{building.address}</p>
           </div>
@@ -86,17 +94,14 @@ export function ResultCard({ result, rank, today }: Props) {
           </span>
         </p>
 
-        <div className="mt-3 border-t border-border pt-3">
-          {isStale ? (
-            <Badge tone="warning" icon={<AlertIcon className="size-3.5" />}>
-              Verified {formatDate(building.last_verified)}: price may have changed
-            </Badge>
-          ) : (
-            <p className="flex items-center gap-1.5 text-xs text-text-muted">
-              <ClockIcon className="size-3.5" />
-              Last verified {formatDate(building.last_verified)}
-            </p>
-          )}
+        <div className="mt-3 flex items-center justify-between gap-3 border-t border-border pt-3">
+          <VerifiedNote lastVerified={building.last_verified} today={today} />
+          <span
+            aria-hidden="true"
+            className="shrink-0 text-sm font-semibold text-brand-text"
+          >
+            Details →
+          </span>
         </div>
       </article>
     </Card>
