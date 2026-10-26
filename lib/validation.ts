@@ -12,7 +12,7 @@ export type ValidationResult =
 
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
-function isRealDate(value: string): boolean {
+export function isRealDate(value: string): boolean {
   if (!DATE_PATTERN.test(value)) return false;
   const date = new Date(`${value}T00:00:00Z`);
   return !Number.isNaN(date.getTime()) && date.toISOString().startsWith(value);
@@ -60,4 +60,10 @@ export function todayInTexas(now: Date = new Date()): string {
     month: "2-digit",
     day: "2-digit",
   }).format(now);
+}
+
+/** Whole days from one YYYY-MM-DD date to another (negative if `to` is earlier). */
+export function daysBetween(from: string, to: string): number {
+  const ms = Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`);
+  return Math.round(ms / 86_400_000);
 }

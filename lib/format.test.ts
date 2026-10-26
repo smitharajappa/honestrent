@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { bedroomLabel, formatDate, formatUsd } from "./format";
+import { bathroomLabel, bedroomLabel, formatDate, formatUsd } from "./format";
 
 describe("format helpers", () => {
   it("formats dollars without cents", () => {
@@ -13,5 +13,10 @@ describe("format helpers", () => {
   it("labels studios", () => {
     expect(bedroomLabel(0)).toBe("Studio");
     expect(bedroomLabel(2)).toBe("2 bed");
+  });
+
+  it("labels bathrooms", () => {
+    expect(bathroomLabel(1)).toBe("1 bath");
+    expect(bathroomLabel(1.5)).toBe("1.5 baths");
   });
 });

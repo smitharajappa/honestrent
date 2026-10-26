@@ -19,6 +19,9 @@ In the Supabase dashboard, open **SQL Editor** and run these files in order:
 1. `supabase/migrations/20261025000000_create_buildings.sql` creates the tables and
    read-only security rules.
 2. `supabase/seed.sql` adds **made-up** sample buildings for testing.
+3. `supabase/migrations/20261026000000_create_leads.sql` creates the "I'm interested"
+   leads table. The public key can add leads but never read, change or delete them.
+   View leads in the dashboard under **Table Editor → leads**.
 
 Any later change to the tables goes in a new, dated file in `supabase/migrations/`.
 Never edit a migration that has already been run.
@@ -39,6 +42,20 @@ GitHub runs the same checks plus a production build on every push (`.github/work
 - Use only made-up renter data. Never store SSNs, ID scans, exact credit scores or
   immigration status.
 - Show the "last verified" date wherever building prices appear.
+- Approval answers (income range, credit band, ID type) stay in the renter's browser
+  memory only: never in the URL, server, database or browser storage.
+
+## Design rules
+
+- All colors, shadows and motion live as tokens in `app/globals.css`. Use token classes
+  (`bg-surface`, `text-text-muted`, `bg-brand`…), never raw hex colors in components.
+- Every text color meets WCAG 2.2 AA contrast (4.5:1) in light and dark mode. Re-check
+  contrast whenever a token changes.
+- Build screens from `components/ui/` (Button, Field, Card, Badge, icons) before
+  writing new styles.
+- Tap targets are at least 44px tall. Inputs use 16px text so phones don't zoom.
+- Status is never shown by color alone: always pair it with words and usually an icon.
+- Design for 375px phone width first, then check desktop.
 
 ## Project layout
 

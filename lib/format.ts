@@ -22,3 +22,7 @@ export function bedroomLabel(bedrooms: number): string {
   if (bedrooms === 0) return "Studio";
   return `${bedrooms} bed`;
 }
+
+export function bathroomLabel(bathrooms: number): string {
+  return `${bathrooms} ${bathrooms === 1 ? "bath" : "baths"}`;
+}

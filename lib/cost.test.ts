@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { dealValueUsd, rankBuildings, realMonthlyCost } from "./cost";
+import {
+  dealValueUsd,
+  planRows,
+  rankBuildings,
+  realMonthlyCost,
+  suggestAlternatives,
+} from "./cost";
 import type { Building, Deal, FloorPlan } from "./types";
 
 const TODAY = "2026-10-25";
@@ -35,6 +41,11 @@ function building(overrides: Partial<Building> = {}): Building {
     address: "1 Test St",
     city: "Plano",
     last_verified: "2026-10-20",
+    min_income_multiple: 3,
+    min_credit_score: null,
+    accepts_no_ssn: false,
+    accepts_guarantor: false,
+    accepts_international_credit: false,
     floor_plans: [plan()],
     building_fees: [],
     building_deals: [],
@@ -155,5 +166,56 @@ describe("rankBuildings", () => {
 
   it("returns an empty list when nothing fits", () => {
     expect(rankBuildings([cheapAfterFees], 500, "2026-12-01", TODAY)).toEqual([]);
+  });
+});
+
+describe("suggestAlternatives", () => {
+  const b = building({
+    floor_plans: [
+      plan({ id: "now", rent_usd: 1320, available_from: "2026-11-01" }),
+      plan({ id: "later", rent_usd: 1000, available_from: "2027-01-15" }),
+    ],
+  });
+
+  it("suggests a budget rounded up to the next $50", () => {
+    expect(suggestAlternatives([b], 900, "2026-12-01", TODAY).budget).toBe(1350);
+  });
+
+  it("suggests the earliest later move-in that fits the budget", () => {
+    expect(suggestAlternatives([b], 1100, "2026-12-01", TODAY).moveIn).toBe("2027-01-15");
+  });
+
+  it("returns nulls when there is nothing to suggest", () => {
+    expect(suggestAlternatives([], 1000, "2026-12-01", TODAY)).toEqual({
+      budget: null,
+      moveIn: null,
+    });
+  });
+});
+
+describe("planRows", () => {
+  const b = building({
+    floor_plans: [
+      plan({ id: "big", name: "Big", rent_usd: 1800, available_from: "2026-11-01" }),
+      plan({ id: "small", name: "Small", rent_usd: 1100, available_from: "2027-01-15" }),
+    ],
+    building_fees: [{ id: "f", name: "Trash", monthly_usd: 25 }],
+  });
+
+  it("lists every plan cheapest first with real cost", () => {
+    const rows = planRows(b, TODAY, "2026-12-01");
+    expect(rows.map((r) => [r.plan.id, r.cost.realMonthlyCost])).toEqual([
+      ["small", 1125],
+      ["big", 1825],
+    ]);
+  });
+
+  it("marks which plans are ready by the move-in date", () => {
+    const rows = planRows(b, TODAY, "2026-12-01");
+    expect(rows.map((r) => r.availableByMoveIn)).toEqual([false, true]);
+  });
+
+  it("uses today when there is no move-in date", () => {
+    expect(planRows(b, TODAY, null).every((r) => !r.availableByMoveIn)).toBe(true);
   });
 });
