@@ -38,6 +38,23 @@
   --info-soft: #eaf1fd;
   --info-text: #1d4ed8;
 
+  /* Decorative: building covers and the hero. Never used for text or actions. */
+  --cover-1-bg: #e3edf8;
+  --cover-1-ink: #8fb0d3;
+  --cover-2-bg: #e4f0e7;
+  --cover-2-ink: #92bb9e;
+  --cover-3-bg: #f4ecdd;
+  --cover-3-ink: #d2b88c;
+  --cover-4-bg: #ede7f6;
+  --cover-4-ink: #b3a3d4;
+  --cover-5-bg: #f8e8df;
+  --cover-5-ink: #dda88d;
+  --cover-6-bg: #e7eaee;
+  --cover-6-ink: #a3adb9;
+  --hero-from: #eef6f4;
+  --hero-to: #faf6ef;
+  --hero-ink: #c9d8d4;
+
   --ring: #0f766e;
 }
 
@@ -66,6 +83,22 @@
     --danger-text: #fca5a5;
     --info-soft: #10203a;
     --info-text: #9cc3ff;
+
+    --cover-1-bg: #172435;
+    --cover-1-ink: #2f4c6c;
+    --cover-2-bg: #17271d;
+    --cover-2-ink: #2f5a3d;
+    --cover-3-bg: #2a2418;
+    --cover-3-ink: #5c4c2d;
+    --cover-4-bg: #211b2e;
+    --cover-4-ink: #4a3d6b;
+    --cover-5-bg: #2b1d17;
+    --cover-5-ink: #6b4231;
+    --cover-6-bg: #1d2126;
+    --cover-6-ink: #3c4550;
+    --hero-from: #10201d;
+    --hero-to: #15140f;
+    --hero-ink: #23322f;
 
     --ring: #5eead4;
   }
@@ -137,5 +170,19 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Page width: uses the screen on laptops, with comfortable side margins. */
+@utility page-container {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1440px;
+  padding-inline: 1rem;
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+  @media (width >= 64rem) {
+    padding-inline: 2rem;
   }
 }

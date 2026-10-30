@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { BuildingCover } from "@/components/BuildingCover";
+import { CostBar } from "@/components/CostBar";
+import { TrustNotes } from "@/components/TrustNotes";
 import { Badge } from "@/components/ui/Badge";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -136,6 +139,56 @@ export default function StyleguidePage() {
             error="Enter a valid email, like name@example.com."
           />
         </div>
+      </Section>
+
+      <Section title="Building covers (decorative)">
+        <p className="mb-3 text-sm text-text-muted">
+          Each building gets its own color and skyline from its id. A real photo replaces
+          it once the building supplies one.
+        </p>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {[
+            "Maple Creek",
+            "Cottonwood",
+            "Bluebonnet",
+            "Legacy Row",
+            "Prairie Oak",
+            "Willow",
+          ].map((name) => (
+            <div
+              key={name}
+              className="h-20 overflow-hidden rounded-xl border border-border"
+            >
+              <BuildingCover id={name} name={name} />
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="Cost bar">
+        <CostBar
+          cost={{
+            advertisedRent: 1225,
+            monthlyFees: 100,
+            monthlyDealSavings: 141,
+            realMonthlyCost: 1184,
+          }}
+        />
+      </Section>
+
+      <Section title="Filter chips">
+        <div className="flex flex-wrap gap-2">
+          <span className="inline-flex min-h-11 items-center rounded-full border border-text bg-text px-3.5 text-sm font-medium text-bg">
+            Selected
+          </span>
+          <span className="inline-flex min-h-11 items-center rounded-full border border-border-strong bg-surface px-3.5 text-sm font-medium">
+            Not selected
+          </span>
+        </div>
+      </Section>
+
+      <Section title="Trust">
+        <TrustNotes />
       </Section>
 
       <Section title="Help and info">

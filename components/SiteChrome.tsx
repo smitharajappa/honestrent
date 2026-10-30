@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { HomeIcon, InfoIcon } from "./ui/icons";
+import { HeaderLinks } from "./shortlist/HeaderLinks";
+import { HomeIcon, InfoIcon, ShieldIcon } from "./ui/icons";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-10 border-b border-border bg-bg/85 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-2xl items-center justify-between px-4">
+    <header className="sticky top-0 z-20 border-b border-border bg-bg/85 backdrop-blur">
+      <div className="page-container flex h-16 items-center justify-between gap-3">
         <Link
           href="/"
           className="flex items-center gap-2 rounded-lg font-heading text-lg font-bold tracking-tight"
@@ -13,8 +14,11 @@ export function SiteHeader() {
             <HomeIcon className="size-4.5" />
           </span>
           Swelt
+          <span className="hidden text-sm font-medium text-text-muted md:inline">
+            · Richardson &amp; Plano
+          </span>
         </Link>
-        <span className="text-sm text-text-muted">Richardson · Plano</span>
+        <HeaderLinks />
       </div>
     </header>
   );
@@ -22,11 +26,26 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border">
-      <p className="mx-auto max-w-2xl px-4 py-6 text-xs text-text-muted">
-        Prices are entered by hand and can change. Always confirm with the building before
-        you apply.
-      </p>
+    <footer className="mt-16 border-t border-border">
+      <div className="page-container grid gap-6 py-8 text-sm text-text-muted md:grid-cols-3">
+        <p className="flex items-start gap-2">
+          <ShieldIcon className="mt-0.5 size-4 shrink-0 text-success-text" />
+          <span>
+            <strong className="font-semibold text-text">
+              We never rank by who pays us.
+            </strong>{" "}
+            Results are ordered only by real cost and how likely you are to be approved.
+          </span>
+        </p>
+        <p>
+          Prices are entered by hand and can change. Always confirm with the building
+          before you apply.
+        </p>
+        <p>
+          Your approval answers stay in this browser tab. Saved and compared buildings
+          stay on this device.
+        </p>
+      </div>
     </footer>
   );
 }
@@ -35,7 +54,7 @@ export function SiteFooter() {
 export function DemoBanner() {
   return (
     <div role="note" className="bg-warning-soft text-warning-text">
-      <p className="mx-auto flex max-w-2xl items-center gap-2 px-4 py-2 text-sm">
+      <p className="page-container flex items-center gap-2 py-2 text-sm">
         <InfoIcon className="size-4 shrink-0" />
         <span>
           <strong className="font-semibold">Demo:</strong> buildings and prices are sample

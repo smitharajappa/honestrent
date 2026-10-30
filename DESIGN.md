@@ -38,6 +38,8 @@ interface.
   - amber `warning`: extra fees, possible with guarantor, data may be stale;
   - red `danger`: errors, unlikely;
   - blue `info`: explanations and tips.
+- **Decorative colors** (`--cover-1` to `--cover-6`, `--hero-*`) are only for building
+  covers and the hero illustration. Never use them for text, status or actions.
 - Never write raw hex colors in components. Add or change a token in `globals.css`.
 - Every text color must pass WCAG AA (4.5:1 body text, 3:1 large text and input
   borders) in light **and** dark mode.
@@ -49,6 +51,15 @@ interface.
 - Body text is at least 16px in inputs (phones zoom in on smaller text).
 - One `h1` per page. Headings go in order (h1 → h2 → h3).
 
+## Layout
+
+- Pages use the full screen up to 1440px (`page-container`), with 16/24/32px side
+  margins on phone, tablet and laptop.
+- Results: a sticky filter sidebar on laptops (`lg`), a collapsible "Filters" panel on
+  phones; cards in a 1/2/3-column grid.
+- Building pages: content on the left, a sticky price summary on the right on laptops.
+- Check every screen at 320px, 375px and 1440px wide. Nothing may scroll sideways.
+
 ## Shape and space
 
 - Corners: cards `rounded-2xl`, controls `rounded-xl`, chips `rounded-full`.
@@ -59,8 +70,22 @@ interface.
 ## Components (reuse before creating)
 
 `components/ui/`: `Button` / `ButtonLink` (primary, secondary, ghost), `Field`, `Select`,
-`Card`, `Badge`, `Tip`, `icons`. If a new pattern is needed, add it there and to
-`/styleguide`.
+`Card`, `Badge`, `Tip`, `InfoNote`, `icons`.
+
+Swelt-specific: `BuildingCover` (drawn cover; shows a real photo once a building supplies
+one), `CostBar` (rent, + fees, − deals), `ResultCard`, `explore/FiltersPanel` (toggle
+chips), `explore/InsightBanner`, `shortlist/SaveButton` and `CompareToggle`, `CompareTray`,
+`TrustNotes`.
+
+If a new pattern is needed, add it there and to `/styleguide`.
+
+## Engagement, honestly
+
+- Engagement comes from usefulness: save, compare, filters, roommate split. No streaks,
+  countdown timers, fake scarcity ("2 people viewing!") or dark patterns.
+- Photos stay secondary (discovery report: reduce marketing content). Never copy photos
+  from other websites or Google Maps.
+- Saved and compared buildings stay on the device. Approval answers stay in the tab.
 
 ## Usability rules (Nielsen's 10 heuristics, applied to Swelt)
 
