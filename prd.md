@@ -26,6 +26,9 @@ USER:
     co-signer (their approval problem is usually solved for them).
 
 PROBLEM (in order of evidence):
+  (New evidence, Oct 2026: one renter's ledger shows $213-$274/month above
+  rent, 12-16%, mostly utilities billed by the building. See
+  research/ledger-example-2026.md.)
   1. Approval uncertainty: renters can't tell which buildings will accept them
      without an SSN or US credit, so they pay application fees (typically $50
      each) and lose weeks.
@@ -87,6 +90,23 @@ FEATURES
        distance from each building. Places saved on the device. Needs a map
        service (approval required).
   R2.7 Distance to UTD and bus access per building.
+  R2.8 Utilities billed by the building - done means: each building shows how
+       utilities are billed (split by meter, split by formula, included, or
+       none), its line items (water, sewer, trash, drainage, admin and billing
+       fees), and an average with a low-high range per bedroom count, each with
+       a source label ("Building's 2025 average", "Renters reported",
+       "Estimate") and a verified date. Electricity paid to the renter's own
+       provider is shown separately.
+  R2.9 Estimated total - done means: results rank by estimated total per month
+       (real cost + average utilities billed by the building), with the
+       estimate and its range clearly labeled.
+  R2.10 Anonymous renter bills - done means: renters can share one month's
+       charges for a building as line items and amounts (building, month,
+       bedrooms, amounts only). Never names, unit numbers or screenshots.
+       Reports feed the utility ranges after a basic sanity check.
+  R2.11 Location search - done means: renters can search by city, ZIP or
+       neighbourhood anywhere in DFW. Areas without data yet show a
+       "Request my area" button that records demand (area name and date only).
 
   Round 3 (then; needs accounts, payments and email services):
   R3.1 "Swelt Plus" waitlist test before building payments.
@@ -140,7 +160,10 @@ DATA WE STORE:
   Buildings: address, last-verified date, required monthly fees, current deals,
   approval rules, floor plans with rent, lease length and availability.
   Round 2 adds: application and admin fees, deposits, guarantor companies
-  accepted, documents required, distance to UTD, bus access.
+  accepted, documents required, distance to UTD, bus access, utility billing
+  method and line items with average and range per bedroom count, anonymous
+  renter-reported monthly charges (building, month, bedrooms, amounts only),
+  and "Request my area" demand (area name and date only).
   Leads: building, floor plan, email, move-in date, budget, date.
   Round 3 adds: renter accounts (email), price history, alert settings.
   Round 4 adds: roommate profiles with lifestyle preferences only.
@@ -163,7 +186,10 @@ LEGAL AND TRUST GUARDRAILS:
 OUT OF SCOPE (for now):
   - Live data feeds or scraping; buildings are entered by hand (Wizard of Oz)
   - Native mobile app
-  - Cities beyond Richardson-Plano
+  - Building data beyond Richardson-Plano. Search works for any DFW city, but
+    data collection stays in Richardson-Plano until it reaches about 30
+    buildings (the report's atomic network) or landlords self-list (R4.2).
+    "Request my area" measures demand in Dallas and Fort Worth first.
   - Software for landlords (vertical SaaS)
   - Swelt as a lender or guarantor
 
@@ -182,6 +208,9 @@ NEXT EVIDENCE (from the discovery report):
     what would make you apply through a new site?).
   - Check fee disclosure, approval rules, guarantor companies accepted and
     documents required at 10 Richardson and Plano complexes.
+  - At each building, ask for last calendar year's average, highest and lowest
+    monthly water/wastewater bill (Texas PUC rules require owners to provide
+    it), plus trash, drainage and admin fees.
   - Confirm commission rates and partner broker terms.
   - Test cost per lead with one student-group post.
   - Get advice on licensing, credit reporting and fair housing before R4.6
