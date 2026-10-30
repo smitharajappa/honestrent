@@ -7,13 +7,23 @@ export function InsightBanner({ insight }: { insight: Insight }) {
   return (
     <section
       aria-label="What these prices hide"
-      className="grid grid-cols-3 gap-2 sm:gap-3"
+      className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4"
     >
       <Stat
         label="Required fees add"
         value={`+${formatUsd(insight.avgFees)}/mo`}
         note="on average, on top of advertised rent"
         tone="warning"
+      />
+      <Stat
+        label="Utilities billed add"
+        value={
+          insight.avgUtilities > 0
+            ? `+${formatUsd(insight.avgUtilities)}/mo`
+            : "Not known"
+        }
+        note="on average, varies month to month"
+        tone="info"
       />
       <Stat
         label="Move-in deals take off"
@@ -27,13 +37,14 @@ export function InsightBanner({ insight }: { insight: Insight }) {
           gap ? `${gap.gap > 0 ? "+" : "−"}${formatUsd(Math.abs(gap.gap))}/mo` : "None"
         }
         note={gap ? gap.name : "Every price matches its ad"}
-        tone="info"
+        tone="neutral"
       />
     </section>
   );
 }
 
 const TONES = {
+  neutral: "text-text",
   warning: "text-warning-text",
   success: "text-success-text",
   info: "text-info-text",

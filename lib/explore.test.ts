@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   activeFilterCount,
+  applicationFeesSaved,
   DEFAULT_OPTIONS,
   explore,
+  inArea,
   insight,
   type ExploreOptions,
 } from "./explore";
@@ -155,6 +157,7 @@ describe("insight", () => {
       count: 2,
       avgFees: 50,
       avgDeals: 50,
+      avgUtilities: 0,
       avgGap: 0,
       biggestGap: { name: "Plano Fees", gap: 100 },
     });
@@ -176,5 +179,106 @@ describe("activeFilterCount", () => {
         people: 2,
       }),
     ).toBe(3);
+  });
+});
+
+describe("utilities in the estimated total", () => {
+  const withUtilities = building({
+    id: "u",
+    name: "With Utilities",
+    utility_billing: "allocated",
+    floor_plans: [plan({ id: "u1", rent_usd: 1000 })],
+    building_utility_estimates: [
+      {
+        bedrooms: 1,
+        avg_usd: 150,
+        low_usd: 100,
+        high_usd: 200,
+        source: "building",
+        as_of: "2025-12-31",
+      },
+    ],
+  });
+  const included = building({
+    id: "i",
+    name: "Included",
+    utility_billing: "included",
+    floor_plans: [plan({ id: "i1", rent_usd: 1100 })],
+  });
+
+  it("ranks by real cost plus average utilities", () => {
+    // 1000 + 150 = 1150 vs 1100 + 0 (included) = 1100
+    const items = explore([withUtilities, included], opts());
+    expect(items.map((i) => [i.building.id, i.estimatedTotal])).toEqual([
+      ["i", 1100],
+      ["u", 1150],
+    ]);
+  });
+
+  it("compares the budget with the estimated total", () => {
+    expect(explore([withUtilities], opts({ budget: 1149 }))).toHaveLength(0);
+    expect(explore([withUtilities], opts({ budget: 1150 }))).toHaveLength(1);
+  });
+
+  it("averages utilities only over buildings that bill them", () => {
+    expect(insight(explore([withUtilities, included], opts()))?.avgUtilities).toBe(150);
+  });
+});
+
+describe("area and near-UTD filters", () => {
+  const near = building({
+    id: "n",
+    name: "Near",
+    city: "Richardson",
+    zip: "75080",
+    miles_to_utd: 1.2,
+  });
+  const far = building({
+    id: "f",
+    name: "Far",
+    city: "Plano",
+    zip: "75024",
+    miles_to_utd: 7.9,
+  });
+  const unknown = building({ id: "x", name: "Unknown distance", city: "Plano" });
+
+  it("matches a city in any letter case, or a ZIP", () => {
+    expect(inArea(near, "richardson")).toBe(true);
+    expect(inArea(near, " 75080 ")).toBe(true);
+    expect(inArea(near, "75024")).toBe(false);
+    expect(inArea(near, "")).toBe(true);
+    expect(inArea(near, "Dallas")).toBe(false);
+  });
+
+  it("keeps only buildings within 3 miles of UTD", () => {
+    expect(
+      explore([near, far, unknown], opts({ nearUtd: true })).map((i) => i.building.id),
+    ).toEqual(["n"]);
+  });
+});
+
+describe("applicationFeesSaved", () => {
+  it("adds up fees at unlikely buildings, one per adult", () => {
+    const profile = {
+      income: "80-100k",
+      credit: "740-plus",
+      idType: "passport",
+    } as const;
+    const ssnOnly = building({ id: "s", name: "SSN only", application_fee_usd: 60 });
+    const open = building({
+      id: "o",
+      name: "Open",
+      accepts_no_ssn: true,
+      application_fee_usd: 40,
+    });
+    const items = explore([ssnOnly, open], opts({ profile }));
+    expect(applicationFeesSaved(items, 1)).toEqual({ buildings: 1, usd: 60 });
+    expect(applicationFeesSaved(items, 2)).toEqual({ buildings: 1, usd: 120 });
+  });
+});
+
+describe("activeFilterCount with near UTD", () => {
+  it("counts the near-UTD filter", () => {
+    expect(activeFilterCount({ ...DEFAULT_OPTIONS, nearUtd: true })).toBe(1);
   });
 });

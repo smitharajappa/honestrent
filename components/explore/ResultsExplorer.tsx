@@ -5,6 +5,7 @@ import { isCompleteProfile } from "@/lib/approval";
 import { suggestAlternatives } from "@/lib/cost";
 import {
   activeFilterCount,
+  applicationFeesSaved,
   DEFAULT_OPTIONS,
   explore,
   insight as getInsight,
@@ -19,12 +20,24 @@ import { CompareTray } from "../shortlist/CompareTray";
 import { TrustNotes } from "../TrustNotes";
 import { Button, ButtonLink } from "../ui/Button";
 import { Card } from "../ui/Card";
-import { ArrowLeftIcon, ChevronDownIcon, SearchIcon, SlidersIcon } from "../ui/icons";
+import {
+  ArrowLeftIcon,
+  ChevronDownIcon,
+  SearchIcon,
+  SlidersIcon,
+  TagIcon,
+} from "../ui/icons";
 import { InfoNote } from "../ui/InfoNote";
 import { FiltersPanel, type FilterState } from "./FiltersPanel";
 import { InsightBanner } from "./InsightBanner";
 
-type Props = { buildings: Building[]; budget: number; moveIn: string; today: string };
+type Props = {
+  buildings: Building[];
+  area?: string | null;
+  budget: number;
+  moveIn: string;
+  today: string;
+};
 
 const SORTS: { value: SortKey; label: string }[] = [
   { value: "cost", label: "Lowest real cost" },
@@ -38,9 +51,10 @@ const NO_FILTERS: FilterState = {
   cities: [],
   dealsOnly: false,
   goodFitOnly: false,
+  nearUtd: false,
 };
 
-export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
+export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Props) {
   const { answers } = useApproval();
   const profile = isCompleteProfile(answers) ? answers : null;
   const [filters, setFilters] = useState<FilterState>(NO_FILTERS);
@@ -67,6 +81,7 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
     [buildings, effectiveFilters, budget, moveIn, today, profile, effectiveSort],
   );
   const stats = getInsight(items);
+  const feesSaved = applicationFeesSaved(items, effectiveFilters.people);
   const filterCount = activeFilterCount(effectiveFilters);
   const cities = [...new Set(buildings.map((b) => b.city))].sort();
 
@@ -156,8 +171,8 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
               {items.length} {items.length === 1 ? "apartment fits" : "apartments fit"}
             </h2>
             <p className="mt-1 text-sm text-text-muted">
-              Under {formatUsd(budget)}/mo{filters.people > 1 ? " per person" : ""} · Move
-              in by {formatDate(moveIn)}
+              {area ? `${area} · ` : ""}Under {formatUsd(budget)}/mo
+              {filters.people > 1 ? " per person" : ""} · Move in by {formatDate(moveIn)}
             </p>
           </div>
           <label className="flex w-full items-center gap-2 text-sm sm:w-auto">
@@ -198,6 +213,19 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
             </p>
             <AnswersNote />
           </div>
+        )}
+        {feesSaved.buildings > 0 && (
+          <p className="mt-3 flex items-start gap-2 rounded-xl bg-success-soft p-3 text-sm text-success-text">
+            <TagIcon className="mt-0.5 size-4 shrink-0" />
+            <span>
+              <strong className="font-semibold">
+                Skipping the {feesSaved.buildings} unlikely{" "}
+                {feesSaved.buildings === 1 ? "building" : "buildings"} saves you about{" "}
+                {formatUsd(feesSaved.usd)}
+              </strong>{" "}
+              in application fees.
+            </span>
+          </p>
         )}
         {!profile && items.length > 0 && (
           <InfoNote className="mt-3">
@@ -256,7 +284,7 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
   );
 }
 
-function EmptyState({ buildings, budget, moveIn, today }: Omit<Props, never>) {
+function EmptyState({ buildings, budget, moveIn, today }: Omit<Props, "area">) {
   const suggestion = suggestAlternatives(buildings, budget, moveIn, today);
   return (
     <Card className="mt-6 p-6 text-center">

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   approvalFit,
   describeAnswers,
+  idCheck,
   describeCriteria,
   isCompleteProfile,
   pickCriteria,
@@ -141,7 +142,9 @@ describe("pickCriteria", () => {
     expect(Object.keys(pickCriteria(extra)).sort()).toEqual([
       "accepts_guarantor",
       "accepts_international_credit",
+      "accepts_itin",
       "accepts_no_ssn",
+      "accepts_passport_only",
       "min_credit_score",
       "min_income_multiple",
     ]);
@@ -190,5 +193,61 @@ describe("describeAnswers", () => {
     expect(
       describeAnswers({ income: "45-60k", credit: "no-us-credit", idType: "passport" }),
     ).toBe("$45,000 – $60,000 income · No US credit yet · Passport only");
+  });
+});
+
+describe("idCheck (finer ID rules)", () => {
+  const base = criteria({ accepts_no_ssn: true });
+
+  it("always accepts an SSN", () => {
+    expect(idCheck("ssn", criteria())).toEqual({ ok: true });
+  });
+
+  it("falls back to accepts_no_ssn when the finer rules aren't known", () => {
+    expect(idCheck("itin", base).ok).toBe(true);
+    expect(idCheck("passport", base).ok).toBe(true);
+  });
+
+  it("accepts an ITIN but not passport only when the building says so", () => {
+    const c = criteria({
+      accepts_no_ssn: true,
+      accepts_itin: true,
+      accepts_passport_only: false,
+    });
+    expect(idCheck("itin", c).ok).toBe(true);
+    expect(idCheck("passport", c)).toEqual({
+      ok: false,
+      reason: "This building needs an SSN or an ITIN.",
+    });
+  });
+
+  it("uses the finer rule even when accepts_no_ssn says otherwise", () => {
+    const c = criteria({ accepts_no_ssn: false, accepts_itin: true });
+    expect(idCheck("itin", c).ok).toBe(true);
+  });
+
+  it("explains an SSN-only building", () => {
+    const c = criteria({ accepts_itin: false, accepts_passport_only: false });
+    expect(idCheck("passport", c)).toEqual({
+      ok: false,
+      reason: "This building requires an SSN.",
+    });
+  });
+
+  it("feeds into the approval fit", () => {
+    const c = criteria({
+      accepts_no_ssn: true,
+      accepts_passport_only: false,
+      accepts_itin: true,
+    });
+    const fit = approvalFit(
+      { income: "80-100k", credit: "740-plus", idType: "passport" },
+      c,
+      1500,
+    );
+    expect(fit).toEqual({
+      level: "unlikely",
+      reason: "This building needs an SSN or an ITIN.",
+    });
   });
 });

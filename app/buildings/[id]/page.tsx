@@ -6,12 +6,22 @@ import { InterestForm } from "@/components/InterestForm";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { AlertIcon, ArrowLeftIcon, MapPinIcon, TagIcon } from "@/components/ui/icons";
+import {
+  AlertIcon,
+  ArrowLeftIcon,
+  CheckIcon,
+  MapPinIcon,
+  TagIcon,
+} from "@/components/ui/icons";
 import { VerifiedNote } from "@/components/VerifiedNote";
 import { BuildingCover } from "@/components/BuildingCover";
 import { CostBar } from "@/components/CostBar";
 import { CompareToggle, SaveButton } from "@/components/shortlist/ShortlistButtons";
 import { TrustNotes } from "@/components/TrustNotes";
+import { MoveInCashCard } from "@/components/building/MoveInCashCard";
+import { UtilitiesSection } from "@/components/building/UtilitiesSection";
+import { UtilitiesLine } from "@/components/ResultCard";
+import { utilitiesFor } from "@/lib/utilities";
 import { describeCriteria, pickCriteria } from "@/lib/approval";
 import { fetchBuilding } from "@/lib/buildings";
 import { isDealActive, planRows } from "@/lib/cost";
@@ -73,6 +83,17 @@ export default async function BuildingPage({
 
   const rows = planRows(building, today, moveIn);
   const cheapest = rows.find((r) => r.availableByMoveIn) ?? rows[0];
+  const cheapestUtilities = cheapest
+    ? utilitiesFor(building, cheapest.plan.bedrooms)
+    : null;
+  const cheapestTotal =
+    cheapest && cheapestUtilities
+      ? cheapest.cost.realMonthlyCost + cheapestUtilities.avg
+      : 0;
+  const nextMonthFirst = (() => {
+    const [y, m] = today.split("-").map(Number);
+    return new Date(Date.UTC(y, m, 1)).toISOString().slice(0, 10);
+  })();
   const deals = building.building_deals.filter((d) => isDealActive(d, today));
   const totalFees = building.building_fees.reduce((sum, f) => sum + f.monthly_usd, 0);
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(building.address)}`;
@@ -153,6 +174,14 @@ export default async function BuildingPage({
                   <div className="shrink-0 text-right tabular-nums">
                     <p className="text-xl font-bold">{formatUsd(cost.realMonthlyCost)}</p>
                     <p className="text-xs text-text-muted">real / mo</p>
+                    {(() => {
+                      const u = utilitiesFor(building, plan.bedrooms);
+                      return u.known && u.avg > 0 ? (
+                        <p className="text-xs text-info-text">
+                          + ~{formatUsd(u.avg)} utilities
+                        </p>
+                      ) : null;
+                    })()}
                     <p className="mt-1 text-sm text-text-muted">
                       Advertised {formatUsd(cost.advertisedRent)}
                     </p>
@@ -213,6 +242,39 @@ export default async function BuildingPage({
             )}
           </Section>
 
+          <Section id="utilities" title="Utilities billed by the building">
+            <UtilitiesSection building={building} />
+          </Section>
+
+          {cheapest && (
+            <Section id="move-in" title="Cash to move in">
+              <MoveInCashCard
+                building={building}
+                plan={cheapest.plan}
+                monthlyTotal={cheapestTotal}
+                moveIn={moveIn ?? nextMonthFirst}
+              />
+            </Section>
+          )}
+
+          <Section id="documents" title="What to bring when you apply">
+            {(building.documents_required ?? []).length > 0 ? (
+              <ul className="space-y-1.5 text-sm">
+                {building.documents_required!.map((doc) => (
+                  <li key={doc} className="flex items-start gap-2">
+                    <CheckIcon className="mt-0.5 size-4 shrink-0 text-success-text" />
+                    {doc}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-text-muted">
+                Not confirmed yet. Ask the leasing office before you pay an application
+                fee.
+              </p>
+            )}
+          </Section>
+
           <Section id="approval" title="Approval rules">
             <dl className="space-y-2 text-sm">
               {describeCriteria(building).map((rule) => (
@@ -221,6 +283,30 @@ export default async function BuildingPage({
                   <dd className="text-right font-medium">{rule.value}</dd>
                 </div>
               ))}
+              {building.accepts_offer_letter != null && (
+                <div className="flex justify-between gap-3">
+                  <dt className="text-text-muted">Job offer letter as income proof</dt>
+                  <dd className="text-right font-medium">
+                    {building.accepts_offer_letter ? "Accepted" : "Not accepted"}
+                  </dd>
+                </div>
+              )}
+              {(building.guarantor_companies ?? []).length > 0 && (
+                <div className="flex justify-between gap-3">
+                  <dt className="text-text-muted">Guarantor companies</dt>
+                  <dd className="text-right font-medium">
+                    {building.guarantor_companies!.join(", ")}
+                  </dd>
+                </div>
+              )}
+              {building.deposit_no_credit_usd != null && (
+                <div className="flex justify-between gap-3">
+                  <dt className="text-text-muted">Deposit with no US credit</dt>
+                  <dd className="text-right font-medium tabular-nums">
+                    {formatUsd(building.deposit_no_credit_usd)}
+                  </dd>
+                </div>
+              )}
             </dl>
             {cheapest && (
               <>
@@ -268,16 +354,26 @@ export default async function BuildingPage({
         {cheapest && (
           <aside aria-label="Price summary" className="lg:sticky lg:top-24 lg:self-start">
             <Card className="p-5 shadow-raised">
-              <p className="text-sm text-text-muted">Real cost from</p>
+              <p className="text-sm text-text-muted">
+                {cheapestUtilities?.known && cheapestUtilities.avg > 0
+                  ? "Estimated total from"
+                  : "Real cost from"}
+              </p>
               <p className="text-4xl font-extrabold tracking-tight tabular-nums">
-                {formatUsd(cheapest.cost.realMonthlyCost)}
+                {cheapestUtilities?.known && cheapestUtilities.avg > 0 ? "~" : ""}
+                {formatUsd(cheapestTotal)}
                 <span className="text-base font-medium text-text-muted">/mo</span>
               </p>
               <p className="mt-0.5 text-sm text-text-muted">
                 Advertised {formatUsd(cheapest.cost.advertisedRent)} ·{" "}
                 {cheapest.plan.name}
               </p>
-              <CostBar cost={cheapest.cost} />
+              <CostBar cost={cheapest.cost} utilities={cheapestUtilities ?? undefined} />
+              {cheapestUtilities && (
+                <p className="mt-1.5 text-xs text-text-muted">
+                  <UtilitiesLine utilities={cheapestUtilities} />
+                </p>
+              )}
               <ButtonLink href="#interest" size="lg" className="mt-5 w-full">
                 I&apos;m interested
               </ButtonLink>

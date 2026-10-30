@@ -1,11 +1,11 @@
 "use client";
 
-import type { BedroomFilter, ExploreOptions } from "@/lib/explore";
+import { NEAR_UTD_MILES, type BedroomFilter, type ExploreOptions } from "@/lib/explore";
 import { cn } from "../ui/cn";
 
 export type FilterState = Pick<
   ExploreOptions,
-  "people" | "bedrooms" | "cities" | "dealsOnly" | "goodFitOnly"
+  "people" | "bedrooms" | "cities" | "dealsOnly" | "goodFitOnly" | "nearUtd"
 >;
 
 type Props = {
@@ -74,6 +74,12 @@ export function FiltersPanel({ value, onChange, cities, hasApprovalAnswers }: Pr
       </Group>
 
       <Group title="Show only">
+        <Chip
+          on={value.nearUtd}
+          onClick={() => onChange({ ...value, nearUtd: !value.nearUtd })}
+        >
+          Near UTD ({NEAR_UTD_MILES} mi)
+        </Chip>
         <Chip
           on={value.dealsOnly}
           onClick={() => onChange({ ...value, dealsOnly: !value.dealsOnly })}
