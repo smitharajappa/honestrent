@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { FitBadge } from "@/components/approval/FitBadge";
+import { AnswersNote, FitBadge } from "@/components/approval/FitBadge";
+import { Tip } from "@/components/ui/Tip";
 import { InterestForm } from "@/components/InterestForm";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
@@ -221,15 +222,27 @@ export default async function BuildingPage({
           ))}
         </dl>
         {cheapest && (
-          <FitBadge
-            criteria={pickCriteria(building)}
-            rentUsd={cheapest.plan.rent_usd}
-            emptyHint="Answer the 3 approval questions on the search page to see your fit here."
-          />
+          <>
+            <FitBadge
+              criteria={pickCriteria(building)}
+              rentUsd={cheapest.plan.rent_usd}
+              emptyHint="Answer the 3 approval questions on the search page to see your fit here. Estimates only."
+            />
+            <div className="text-sm">
+              <AnswersNote editHref={`${backHref}#approval`} />
+            </div>
+          </>
         )}
-        <p className="mt-3 text-xs text-text-muted">
-          Estimates only. The building makes the final decision.
-        </p>
+        <Tip summary="What's a guarantor or ITIN?" className="mt-2">
+          <p>
+            <strong className="font-semibold">Guarantor:</strong> someone (or a guarantor
+            company) who promises to pay if you can&apos;t.
+          </p>
+          <p>
+            <strong className="font-semibold">ITIN:</strong> a US tax ID for people who
+            can&apos;t get an SSN.
+          </p>
+        </Tip>
       </Section>
 
       <Section id="interest" title="I'm interested">

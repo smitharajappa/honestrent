@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import {
   approvalFit,
+  describeAnswers,
   FIT_LABELS,
   isCompleteProfile,
   type ApprovalCriteria,
@@ -66,9 +68,30 @@ export function FitSummary({ items }: { items: Item[] }) {
   return (
     <div className="mt-3 text-sm">
       <p className="font-semibold">{parts.join(" · ")}</p>
-      <p className="mt-0.5 text-text-muted">
-        Estimates only. Each building makes its own approval decision.
-      </p>
+      <AnswersNote />
     </div>
+  );
+}
+
+/**
+ * Shows what the fit is based on, so renters don't have to remember
+ * (Nielsen #6), with a one-tap way to change it.
+ */
+export function AnswersNote({ editHref = "#approval" }: { editHref?: string }) {
+  const { answers } = useApproval();
+  if (!isCompleteProfile(answers)) return null;
+  return (
+    <p className="mt-1 text-text-muted">
+      Based on: {describeAnswers(answers)} ·{" "}
+      <Link
+        href={editHref}
+        className="font-semibold text-brand-text underline underline-offset-2"
+      >
+        Change
+      </Link>
+      <span className="block text-xs">
+        Estimates only. Each building makes the final decision.
+      </span>
+    </p>
   );
 }

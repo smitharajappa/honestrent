@@ -7,7 +7,8 @@ import { SearchForm } from "@/components/SearchForm";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { AlertIcon, CheckIcon, InfoIcon, SearchIcon } from "@/components/ui/icons";
+import { AlertIcon, ArrowLeftIcon, CheckIcon, SearchIcon } from "@/components/ui/icons";
+import { InfoNote } from "@/components/ui/InfoNote";
 import { fetchBuildings } from "@/lib/buildings";
 import { pickCriteria } from "@/lib/approval";
 import { rankBuildings, suggestAlternatives } from "@/lib/cost";
@@ -31,7 +32,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
   return (
     <main className="mx-auto w-full max-w-2xl px-4 pt-8 pb-16 sm:pt-12">
       <section aria-labelledby="page-title">
-        <Badge tone="brand">Free for renters</Badge>
+        <Badge>Free for renters</Badge>
         <h1
           id="page-title"
           className="mt-3 text-3xl leading-tight font-bold tracking-tight text-balance sm:text-4xl"
@@ -44,7 +45,12 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
         </p>
       </section>
 
-      <Card as="section" aria-label="Search apartments" className="mt-6 p-5 sm:p-6">
+      <Card
+        as="section"
+        id="search"
+        aria-label="Search apartments"
+        className="mt-6 scroll-mt-20 p-5 sm:p-6"
+      >
         <SearchForm
           budget={rawBudget}
           moveIn={rawMoveIn}
@@ -63,7 +69,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
             "Prices checked by hand",
           ].map((item) => (
             <li key={item} className="flex items-center gap-2">
-              <CheckIcon className="size-4 shrink-0 text-brand-text" />
+              <CheckIcon className="size-4 shrink-0 text-success-text" />
               {item}
             </li>
           ))}
@@ -98,20 +104,22 @@ async function Results({
   const data = await fetchBuildings();
 
   if (!data.ok) {
+    // Renters see plain language; the technical reason is in the server logs.
     return (
       <Card as="section" role="alert" className="mt-10 flex gap-3 p-5">
         <AlertIcon className="mt-0.5 size-5 shrink-0 text-warning-text" />
         <div>
-          <h2 className="font-semibold">
-            {data.reason === "not_configured"
-              ? "Building data isn't connected yet"
-              : "We couldn't load apartments"}
-          </h2>
+          <h2 className="font-semibold">Apartments are temporarily unavailable</h2>
           <p className="mt-1 text-sm text-text-muted">
-            {data.reason === "not_configured"
-              ? "Add your Supabase keys to .env.local. The README has the steps."
-              : "This is usually brief. Please try again in a minute."}
+            This is on our side, not yours. Please try again in a few minutes.
           </p>
+          <ButtonLink
+            href={`/?budget=${budget}&moveIn=${moveIn}`}
+            variant="secondary"
+            className="mt-3"
+          >
+            Try again
+          </ButtonLink>
         </div>
       </Card>
     );
@@ -126,6 +134,7 @@ async function Results({
 
   return (
     <section aria-labelledby="results-heading" className="mt-10">
+      <SearchActions />
       <h2
         id="results-heading"
         className="text-xl font-bold tracking-tight"
@@ -143,11 +152,10 @@ async function Results({
           rentUsd: r.plan.rent_usd,
         }))}
       />
-      <p className="mt-3 flex items-start gap-2 rounded-xl bg-brand-soft p-3 text-sm text-brand-text">
-        <InfoIcon className="mt-0.5 size-4 shrink-0" />
+      <InfoNote className="mt-3">
         Real cost = advertised rent + required monthly fees − move-in deals spread over
         the lease.
-      </p>
+      </InfoNote>
 
       <ol className="mt-5 space-y-4">
         {results.map((result, index) => (
@@ -174,37 +182,63 @@ function EmptyState({
   suggestion: { budget: number | null; moveIn: string | null };
 }) {
   return (
-    <Card as="section" aria-labelledby="empty-heading" className="mt-10 p-6 text-center">
-      <span className="mx-auto grid size-12 place-items-center rounded-full bg-surface-muted text-text-muted">
-        <SearchIcon className="size-6" />
+    <>
+      <div className="mt-10">
+        <SearchActions />
+      </div>
+      <Card as="section" aria-labelledby="empty-heading" className="mt-3 p-6 text-center">
+        <span className="mx-auto grid size-12 place-items-center rounded-full bg-surface-muted text-text-muted">
+          <SearchIcon className="size-6" />
+        </span>
+        <h2 id="empty-heading" className="mt-4 text-lg font-semibold" aria-live="polite">
+          No apartments fit yet
+        </h2>
+        <p className="mx-auto mt-1 max-w-sm text-sm text-text-muted">
+          Nothing is under {formatUsd(budget)}/mo for a {formatDate(moveIn)} move-in. One
+          small change could open up options:
+        </p>
+        {(suggestion.budget || suggestion.moveIn) && (
+          <div className="mt-5 flex flex-col justify-center gap-2 sm:flex-row">
+            {suggestion.budget && (
+              <ButtonLink
+                variant="secondary"
+                href={`/?budget=${suggestion.budget}&moveIn=${moveIn}`}
+              >
+                Try a {formatUsd(suggestion.budget)} budget
+              </ButtonLink>
+            )}
+            {suggestion.moveIn && (
+              <ButtonLink
+                variant="secondary"
+                href={`/?budget=${budget}&moveIn=${suggestion.moveIn}`}
+              >
+                Move in {formatDate(suggestion.moveIn)}
+              </ButtonLink>
+            )}
+          </div>
+        )}
+      </Card>
+    </>
+  );
+}
+
+/** One-tap exits from the results (Nielsen #3: user control and freedom). */
+function SearchActions() {
+  return (
+    <nav aria-label="Search actions" className="mb-3 flex items-center gap-1 text-sm">
+      <a
+        href="#search"
+        className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 font-semibold text-brand-text hover:bg-surface-muted"
+      >
+        <ArrowLeftIcon className="size-4 rotate-90" />
+        Edit search
+      </a>
+      <span aria-hidden="true" className="text-text-muted">
+        ·
       </span>
-      <h2 id="empty-heading" className="mt-4 text-lg font-semibold" aria-live="polite">
-        No apartments fit yet
-      </h2>
-      <p className="mx-auto mt-1 max-w-sm text-sm text-text-muted">
-        Nothing is under {formatUsd(budget)}/mo for a {formatDate(moveIn)} move-in. One
-        small change could open up options:
-      </p>
-      {(suggestion.budget || suggestion.moveIn) && (
-        <div className="mt-5 flex flex-col justify-center gap-2 sm:flex-row">
-          {suggestion.budget && (
-            <ButtonLink
-              variant="secondary"
-              href={`/?budget=${suggestion.budget}&moveIn=${moveIn}`}
-            >
-              Try a {formatUsd(suggestion.budget)} budget
-            </ButtonLink>
-          )}
-          {suggestion.moveIn && (
-            <ButtonLink
-              variant="secondary"
-              href={`/?budget=${budget}&moveIn=${suggestion.moveIn}`}
-            >
-              Move in {formatDate(suggestion.moveIn)}
-            </ButtonLink>
-          )}
-        </div>
-      )}
-    </Card>
+      <ButtonLink href="/" variant="ghost" className="px-2">
+        Start over
+      </ButtonLink>
+    </nav>
   );
 }

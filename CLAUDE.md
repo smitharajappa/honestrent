@@ -22,5 +22,10 @@ Next.js + Supabase + Vercel. Mobile-first web app (design for phone width first)
 - Show the data's "last verified" date wherever building prices appear.
 - Keep answers short. No introduction, no summary at the end.
 
+## Design rules
+- Read DESIGN.md before changing anything people see.
+- Never hardcode colors; use the tokens in app/globals.css.
+- Reuse components in components/ui/ before making new ones; add new ones to /styleguide.
+
 ## Current focus
 Walking skeleton: renter enters budget and move-in date, sees buildings ranked by real monthly cost.

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   approvalFit,
+  describeAnswers,
   describeCriteria,
   isCompleteProfile,
   pickCriteria,
@@ -175,5 +176,19 @@ describe("describeCriteria", () => {
       "Accepted",
       "Accepted",
     ]);
+  });
+});
+
+describe("describeAnswers", () => {
+  it("summarizes the renter's answers in plain words", () => {
+    expect(describeAnswers({ income: "60-80k", credit: "620-679", idType: "ssn" })).toBe(
+      "$60,000 – $80,000 income · 620 – 679 credit · SSN",
+    );
+  });
+
+  it("reads naturally for no US credit", () => {
+    expect(
+      describeAnswers({ income: "45-60k", credit: "no-us-credit", idType: "passport" }),
+    ).toBe("$45,000 – $60,000 income · No US credit yet · Passport only");
   });
 });

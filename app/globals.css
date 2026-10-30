@@ -21,7 +21,7 @@
   --text: #1a1d21;
   --text-muted: #5b616b;
 
-  /* Brand: calm, trustworthy teal */
+  /* Brand teal: for actions only (buttons, links, focus). See DESIGN.md. */
   --brand: #0f766e;
   --brand-hover: #115e59;
   --brand-fg: #ffffff;
@@ -35,6 +35,8 @@
   --warning-text: #7c4a03;
   --danger-soft: #fdecec;
   --danger-text: #b42318;
+  --info-soft: #eaf1fd;
+  --info-text: #1d4ed8;
 
   --ring: #0f766e;
 }
@@ -62,6 +64,8 @@
     --warning-text: #fbd27a;
     --danger-soft: #331414;
     --danger-text: #fca5a5;
+    --info-soft: #10203a;
+    --info-text: #9cc3ff;
 
     --ring: #5eead4;
   }
@@ -69,6 +73,8 @@
 
 @theme inline {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading:
+    var(--font-jakarta), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
   --color-bg: var(--bg);
   --color-surface: var(--surface);
@@ -88,6 +94,8 @@
   --color-warning-text: var(--warning-text);
   --color-danger-soft: var(--danger-soft);
   --color-danger-text: var(--danger-text);
+  --color-info-soft: var(--info-soft);
+  --color-info-text: var(--info-text);
   --color-ring: var(--ring);
 }
 
@@ -104,6 +112,14 @@
   body {
     background: var(--bg);
     color: var(--text);
+  }
+
+  /* Headings use Plus Jakarta Sans; body text stays Inter. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
   }
 
   /* One visible focus style for keyboard users everywhere. */

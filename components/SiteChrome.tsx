@@ -7,9 +7,9 @@ export function SiteHeader() {
       <div className="mx-auto flex h-14 max-w-2xl items-center justify-between px-4">
         <Link
           href="/"
-          className="flex items-center gap-2 rounded-lg font-bold tracking-tight"
+          className="flex items-center gap-2 rounded-lg font-heading text-lg font-bold tracking-tight"
         >
-          <span className="grid size-8 place-items-center rounded-lg bg-brand text-brand-fg">
+          <span className="grid size-8 place-items-center rounded-lg bg-text text-bg">
             <HomeIcon className="size-4.5" />
           </span>
           Swelt
