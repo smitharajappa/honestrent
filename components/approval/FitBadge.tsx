@@ -7,6 +7,7 @@ import {
   FIT_LABELS,
   isCompleteProfile,
   type ApprovalCriteria,
+  type Fit,
   type FitLevel,
 } from "@/lib/approval";
 import { Badge, type Tone } from "../ui/Badge";
@@ -35,15 +36,24 @@ export function FitBadge({
     return emptyHint ? <p className="mt-3 text-sm text-text-muted">{emptyHint}</p> : null;
   }
 
-  const fit = approvalFit(answers, criteria, rentUsd);
-  const { tone, icon } = STYLE[fit.level];
+  return <FitDisplay fit={approvalFit(answers, criteria, rentUsd)} />;
+}
 
+/** Shows a fit that was already worked out (badge plus one-line reason). */
+export function FitDisplay({ fit, compact = false }: { fit: Fit; compact?: boolean }) {
+  const { tone, icon } = STYLE[fit.level];
   return (
     <div className="mt-3">
       <Badge tone={tone} icon={icon}>
         {FIT_LABELS[fit.level]}
       </Badge>
-      <p className="mt-1.5 text-sm text-text-muted">{fit.reason}</p>
+      <p
+        className={
+          compact ? "mt-1 text-xs text-text-muted" : "mt-1.5 text-sm text-text-muted"
+        }
+      >
+        {fit.reason}
+      </p>
     </div>
   );
 }
@@ -77,7 +87,7 @@ export function FitSummary({ items }: { items: Item[] }) {
  * Shows what the fit is based on, so renters don't have to remember
  * (Nielsen #6), with a one-tap way to change it.
  */
-export function AnswersNote({ editHref = "#approval" }: { editHref?: string }) {
+export function AnswersNote({ editHref = "#search" }: { editHref?: string }) {
   const { answers } = useApproval();
   if (!isCompleteProfile(answers)) return null;
   return (

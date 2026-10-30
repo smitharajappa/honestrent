@@ -1,59 +1,80 @@
 import Link from "next/link";
-import { pickCriteria } from "@/lib/approval";
-import type { RankedResult } from "@/lib/cost";
+import type { ExploreItem } from "@/lib/explore";
 import { bedroomLabel, formatDate, formatUsd } from "@/lib/format";
-import { FitBadge } from "./approval/FitBadge";
+import { FitDisplay } from "./approval/FitBadge";
+import { BuildingCover } from "./BuildingCover";
+import { CostBar } from "./CostBar";
+import { CompareToggle, SaveButton } from "./shortlist/ShortlistButtons";
 import { Badge } from "./ui/Badge";
-import { Card } from "./ui/Card";
-import { CheckIcon, ChevronDownIcon, PlusCircleIcon, TagIcon } from "./ui/icons";
+import { CheckIcon, PlusCircleIcon, TagIcon } from "./ui/icons";
 import { VerifiedNote } from "./VerifiedNote";
 
-type Props = { result: RankedResult; rank: number; today: string; detailHref: string };
+type Props = {
+  item: ExploreItem;
+  rank?: number;
+  today: string;
+  detailHref: string;
+  people?: number;
+};
 
 /**
- * Shows only what a renter needs to compare at a glance (Nielsen #8): real price,
- * how it differs from the ad, approval fit and the plan. The full breakdown is
- * one tap away.
+ * One building in the results grid. The whole card opens the building page;
+ * the save and compare controls sit above that link.
  */
-export function ResultCard({ result, rank, today, detailHref }: Props) {
-  const { building, plan, cost, matchingPlanCount } = result;
+export function ResultCard({ item, rank, today, detailHref, people = 1 }: Props) {
+  const { building, plan, cost, perPerson, matchingPlanCount, fit } = item;
   const difference = cost.realMonthlyCost - cost.advertisedRent;
   const availableNow = plan.available_from <= today;
+  const shared = people > 1;
 
   return (
-    <Card
-      as="li"
-      className="relative p-4 transition-colors duration-150 hover:border-border-strong sm:p-5"
-    >
-      <article aria-labelledby={`b-${building.id}`}>
-        <div className="flex items-start justify-between gap-4">
+    <li className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-card transition-[transform,box-shadow,border-color] duration-200 ease-out-soft hover:-translate-y-0.5 hover:border-border-strong hover:shadow-raised">
+      <div className="relative h-32 overflow-hidden">
+        <BuildingCover
+          id={building.id}
+          name={building.name}
+          className="transition-transform duration-300 group-hover:scale-[1.03]"
+        />
+        <div className="absolute top-3 left-3 flex gap-1.5">
+          {rank === 1 && <Badge tone="success">Lowest real cost</Badge>}
+          <Badge className="bg-surface text-text">{building.city}</Badge>
+        </div>
+        <SaveButton
+          buildingId={building.id}
+          buildingName={building.name}
+          className="absolute top-2.5 right-2.5"
+        />
+      </div>
+
+      <article
+        aria-labelledby={`b-${building.id}`}
+        className="flex flex-1 flex-col p-4 sm:p-5"
+      >
+        <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            {rank === 1 ? (
-              <Badge tone="success" className="mb-2">
-                Lowest real cost
-              </Badge>
-            ) : (
-              <p className="mb-1 text-xs font-semibold text-text-muted">#{rank}</p>
-            )}
             <h3 id={`b-${building.id}`} className="text-lg leading-snug font-bold">
               {/* The ::after layer makes the whole card tappable. */}
               <Link
                 href={detailHref}
-                className="rounded-sm after:absolute after:inset-0 after:rounded-2xl after:content-['']"
+                className="rounded-sm after:absolute after:inset-0 after:content-['']"
               >
                 {building.name}
               </Link>
             </h3>
-            <p className="mt-0.5 text-sm text-text-muted">{building.address}</p>
+            <p className="mt-0.5 truncate text-sm text-text-muted">{building.address}</p>
           </div>
           <div className="shrink-0 text-right">
-            <p className="text-3xl leading-none font-bold tracking-tight tabular-nums">
-              {formatUsd(cost.realMonthlyCost)}
+            <p className="text-2xl leading-none font-bold tracking-tight tabular-nums sm:text-3xl">
+              {formatUsd(shared ? perPerson : cost.realMonthlyCost)}
             </p>
-            <p className="mt-1 text-xs font-medium text-text-muted">real cost / mo</p>
-            <p className="mt-0.5 text-xs text-text-muted tabular-nums">
-              Advertised {formatUsd(cost.advertisedRent)}
+            <p className="mt-1 text-xs font-medium text-text-muted">
+              {shared ? "per person / mo" : "real cost / mo"}
             </p>
+            {shared && (
+              <p className="text-xs text-text-muted tabular-nums">
+                {formatUsd(cost.realMonthlyCost)} total
+              </p>
+            )}
           </div>
         </div>
 
@@ -73,7 +94,9 @@ export function ResultCard({ result, rank, today, detailHref }: Props) {
           )}
         </div>
 
-        <FitBadge criteria={pickCriteria(building)} rentUsd={plan.rent_usd} />
+        <CostBar cost={cost} />
+
+        {fit && <FitDisplay fit={fit} compact />}
 
         <p className="mt-3 text-sm">
           <span className="font-medium">{plan.name}</span>
@@ -85,48 +108,11 @@ export function ResultCard({ result, rank, today, detailHref }: Props) {
           </span>
         </p>
 
-        {/* Sits above the card-wide link so it can be opened on its own. */}
-        <details className="group relative z-10 mt-2">
-          <summary className="inline-flex min-h-11 cursor-pointer list-none items-center gap-1 rounded-lg text-sm font-semibold text-brand-text [&::-webkit-details-marker]:hidden">
-            See cost breakdown
-            <ChevronDownIcon className="size-4 transition-transform group-open:rotate-180" />
-          </summary>
-          <dl className="mt-1 space-y-1.5 rounded-xl bg-surface-muted p-3.5 text-sm tabular-nums">
-            <Row label="Advertised rent" value={formatUsd(cost.advertisedRent)} />
-            <Row
-              label="Required monthly fees"
-              value={`+ ${formatUsd(cost.monthlyFees)}`}
-            />
-            <Row
-              label={`Move-in deals ÷ ${plan.lease_months} months`}
-              value={`− ${formatUsd(cost.monthlyDealSavings)}`}
-            />
-            <div className="mt-2 flex justify-between border-t border-border pt-2 font-semibold">
-              <dt>Real monthly cost</dt>
-              <dd>{formatUsd(cost.realMonthlyCost)}</dd>
-            </div>
-          </dl>
-        </details>
-
-        <div className="mt-2 flex items-center justify-between gap-3 border-t border-border pt-3">
+        <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2">
           <VerifiedNote lastVerified={building.last_verified} today={today} />
-          <span
-            aria-hidden="true"
-            className="shrink-0 text-sm font-semibold text-brand-text"
-          >
-            Details →
-          </span>
+          <CompareToggle buildingId={building.id} />
         </div>
       </article>
-    </Card>
-  );
-}
-
-function Row({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex justify-between gap-3 text-text-muted">
-      <dt>{label}</dt>
-      <dd className="text-text">{value}</dd>
-    </div>
+    </li>
   );
 }

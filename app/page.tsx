@@ -1,18 +1,19 @@
 import { Suspense } from "react";
-import { ApprovalPanel } from "@/components/approval/ApprovalPanel";
-import { FitSummary } from "@/components/approval/FitBadge";
-import { ResultCard } from "@/components/ResultCard";
+import { ResultsExplorer } from "@/components/explore/ResultsExplorer";
+import { HeroSkyline } from "@/components/HeroSkyline";
 import { ResultsSkeleton } from "@/components/ResultsSkeleton";
 import { SearchForm } from "@/components/SearchForm";
-import { Badge } from "@/components/ui/Badge";
+import { TrustNotes } from "@/components/TrustNotes";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { AlertIcon, ArrowLeftIcon, CheckIcon, SearchIcon } from "@/components/ui/icons";
-import { InfoNote } from "@/components/ui/InfoNote";
+import {
+  AlertIcon,
+  CheckIcon,
+  LockIcon,
+  SearchIcon,
+  TagIcon,
+} from "@/components/ui/icons";
 import { fetchBuildings } from "@/lib/buildings";
-import { pickCriteria } from "@/lib/approval";
-import { rankBuildings, suggestAlternatives } from "@/lib/cost";
-import { formatDate, formatUsd } from "@/lib/format";
 import { todayInTexas, validateSearch } from "@/lib/validation";
 
 type SearchParams = Promise<{ budget?: string | string[]; moveIn?: string | string[] }>;
@@ -28,66 +29,81 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
   const today = todayInTexas();
   const hasSearched = rawBudget !== undefined || rawMoveIn !== undefined;
   const validation = hasSearched ? validateSearch(rawBudget, rawMoveIn, today) : null;
+  const showingResults = validation?.ok === true;
 
   return (
-    <main className="mx-auto w-full max-w-2xl px-4 pt-8 pb-16 sm:pt-12">
-      <section aria-labelledby="page-title">
-        <Badge>Free for renters</Badge>
-        <h1
-          id="page-title"
-          className="mt-3 text-3xl leading-tight font-bold tracking-tight text-balance sm:text-4xl"
+    <main>
+      {/* Hero: full width, compact once results are showing. */}
+      <section
+        aria-labelledby="page-title"
+        className="bg-gradient-to-br from-[var(--hero-from)] to-[var(--hero-to)]"
+      >
+        <div
+          className={`page-container grid items-end gap-6 lg:grid-cols-[1fr_26rem] ${
+            showingResults ? "pt-8 pb-24 sm:pt-10" : "pt-10 pb-28 sm:pt-14 lg:pt-16"
+          }`}
         >
-          See what you&apos;ll really pay each month
-        </h1>
-        <p className="mt-3 text-base text-pretty text-text-muted sm:text-lg">
-          Apartments in Richardson and Plano, ranked by rent plus required fees, minus
-          move-in deals.
-        </p>
+          <div className="max-w-3xl">
+            <p className="inline-flex items-center gap-1.5 rounded-full bg-surface/80 px-3 py-1 text-xs font-semibold text-text-muted shadow-card">
+              <LockIcon className="size-3.5" />
+              No SSN or US credit? Start here.
+            </p>
+            <h1
+              id="page-title"
+              className={`mt-4 leading-[1.05] font-extrabold tracking-tight text-balance ${
+                showingResults
+                  ? "text-3xl sm:text-4xl"
+                  : "text-4xl sm:text-5xl lg:text-6xl"
+              }`}
+            >
+              Find a place that will say yes.{" "}
+              <span className="text-text-muted">See what it really costs.</span>
+            </h1>
+            {!showingResults && (
+              <p className="mt-4 max-w-xl text-lg text-pretty text-text-muted">
+                Richardson and Plano apartments ranked by real monthly cost (rent plus
+                required fees, minus deals) and by how likely they are to approve
+                newcomers.
+              </p>
+            )}
+          </div>
+          <HeroSkyline
+            className={`hidden w-full lg:block ${showingResults ? "max-h-32" : "max-h-56"}`}
+          />
+        </div>
       </section>
 
-      <Card
-        as="section"
-        id="search"
-        aria-label="Search apartments"
-        className="mt-6 scroll-mt-20 p-5 sm:p-6"
-      >
-        <SearchForm
-          budget={rawBudget}
-          moveIn={rawMoveIn}
-          today={today}
-          errors={validation && !validation.ok ? validation.errors : undefined}
-        />
-      </Card>
-
-      <ApprovalPanel />
-
-      {!validation?.ok && (
-        <ul className="mt-5 grid gap-2 text-sm text-text-muted sm:grid-cols-3">
-          {[
-            "Required fees included",
-            "Deals spread over the lease",
-            "Prices checked by hand",
-          ].map((item) => (
-            <li key={item} className="flex items-center gap-2">
-              <CheckIcon className="size-4 shrink-0 text-success-text" />
-              {item}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {validation?.ok && (
-        <Suspense
-          key={`${validation.value.budget}-${validation.value.moveIn}`}
-          fallback={<ResultsSkeleton />}
+      {/* The search card overlaps the hero. */}
+      <div className="page-container -mt-20">
+        <Card
+          as="section"
+          id="search"
+          aria-label="Search apartments"
+          className="scroll-mt-24 p-5 shadow-raised sm:p-6 lg:p-8"
         >
-          <Results
-            budget={validation.value.budget}
-            moveIn={validation.value.moveIn}
+          <SearchForm
+            budget={rawBudget}
+            moveIn={rawMoveIn}
             today={today}
+            errors={validation && !validation.ok ? validation.errors : undefined}
           />
-        </Suspense>
-      )}
+        </Card>
+
+        {showingResults ? (
+          <Suspense
+            key={`${validation.value.budget}-${validation.value.moveIn}`}
+            fallback={<ResultsSkeleton />}
+          >
+            <Results
+              budget={validation.value.budget}
+              moveIn={validation.value.moveIn}
+              today={today}
+            />
+          </Suspense>
+        ) : (
+          <HowItWorks />
+        )}
+      </div>
     </main>
   );
 }
@@ -125,120 +141,67 @@ async function Results({
     );
   }
 
-  const results = rankBuildings(data.buildings, budget, moveIn, today);
-
-  if (results.length === 0) {
-    const suggestion = suggestAlternatives(data.buildings, budget, moveIn, today);
-    return <EmptyState budget={budget} moveIn={moveIn} suggestion={suggestion} />;
-  }
-
   return (
-    <section aria-labelledby="results-heading" className="mt-10">
-      <SearchActions />
-      <h2
-        id="results-heading"
-        className="text-xl font-bold tracking-tight"
-        aria-live="polite"
-      >
-        {results.length} {results.length === 1 ? "apartment fits" : "apartments fit"}
-      </h2>
-      <p className="mt-1 text-sm text-text-muted">
-        Under {formatUsd(budget)}/mo · Move in by {formatDate(moveIn)} · Lowest real cost
-        first
-      </p>
-      <FitSummary
-        items={results.map((r) => ({
-          criteria: pickCriteria(r.building),
-          rentUsd: r.plan.rent_usd,
-        }))}
-      />
-      <InfoNote className="mt-3">
-        Real cost = advertised rent + required monthly fees − move-in deals spread over
-        the lease.
-      </InfoNote>
+    <ResultsExplorer
+      buildings={data.buildings}
+      budget={budget}
+      moveIn={moveIn}
+      today={today}
+    />
+  );
+}
 
-      <ol className="mt-5 space-y-4">
-        {results.map((result, index) => (
-          <ResultCard
-            key={result.building.id}
-            result={result}
-            rank={index + 1}
-            today={today}
-            detailHref={`/buildings/${result.building.id}?budget=${budget}&moveIn=${moveIn}`}
-          />
+const STEPS = [
+  {
+    icon: SearchIcon,
+    title: "Tell us your budget and move-in date",
+    body: "Your share if you're living with roommates.",
+  },
+  {
+    icon: LockIcon,
+    title: "Answer 3 private questions",
+    body: "Income range, credit, and the ID you have. Never your SSN or exact score.",
+  },
+  {
+    icon: CheckIcon,
+    title: "See who's likely to say yes",
+    body: "Each building shows Good fit, Possible with guarantor, or Unlikely, with the reason.",
+  },
+  {
+    icon: TagIcon,
+    title: "Compare the real cost",
+    body: "Required fees added, move-in deals spread over the lease. No surprises.",
+  },
+];
+
+function HowItWorks() {
+  return (
+    <section aria-labelledby="how-heading" className="mt-14">
+      <h2 id="how-heading" className="text-2xl font-bold tracking-tight">
+        How Swelt works
+      </h2>
+      <ol className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {STEPS.map((step, i) => (
+          <li
+            key={step.title}
+            className="rounded-2xl border border-border bg-surface p-5 shadow-card"
+          >
+            <span className="flex items-center gap-3">
+              <span className="grid size-10 place-items-center rounded-xl bg-surface-muted text-text">
+                <step.icon className="size-5" />
+              </span>
+              <span className="text-xs font-bold tracking-wider text-text-muted uppercase">
+                Step {i + 1}
+              </span>
+            </span>
+            <h3 className="mt-4 font-bold">{step.title}</h3>
+            <p className="mt-1 text-sm text-text-muted">{step.body}</p>
+          </li>
         ))}
       </ol>
-    </section>
-  );
-}
-
-function EmptyState({
-  budget,
-  moveIn,
-  suggestion,
-}: {
-  budget: number;
-  moveIn: string;
-  suggestion: { budget: number | null; moveIn: string | null };
-}) {
-  return (
-    <>
-      <div className="mt-10">
-        <SearchActions />
+      <div className="mt-6 max-w-xl">
+        <TrustNotes />
       </div>
-      <Card as="section" aria-labelledby="empty-heading" className="mt-3 p-6 text-center">
-        <span className="mx-auto grid size-12 place-items-center rounded-full bg-surface-muted text-text-muted">
-          <SearchIcon className="size-6" />
-        </span>
-        <h2 id="empty-heading" className="mt-4 text-lg font-semibold" aria-live="polite">
-          No apartments fit yet
-        </h2>
-        <p className="mx-auto mt-1 max-w-sm text-sm text-text-muted">
-          Nothing is under {formatUsd(budget)}/mo for a {formatDate(moveIn)} move-in. One
-          small change could open up options:
-        </p>
-        {(suggestion.budget || suggestion.moveIn) && (
-          <div className="mt-5 flex flex-col justify-center gap-2 sm:flex-row">
-            {suggestion.budget && (
-              <ButtonLink
-                variant="secondary"
-                href={`/?budget=${suggestion.budget}&moveIn=${moveIn}`}
-              >
-                Try a {formatUsd(suggestion.budget)} budget
-              </ButtonLink>
-            )}
-            {suggestion.moveIn && (
-              <ButtonLink
-                variant="secondary"
-                href={`/?budget=${budget}&moveIn=${suggestion.moveIn}`}
-              >
-                Move in {formatDate(suggestion.moveIn)}
-              </ButtonLink>
-            )}
-          </div>
-        )}
-      </Card>
-    </>
-  );
-}
-
-/** One-tap exits from the results (Nielsen #3: user control and freedom). */
-function SearchActions() {
-  return (
-    <nav aria-label="Search actions" className="mb-3 flex items-center gap-1 text-sm">
-      <a
-        href="#search"
-        className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 font-semibold text-brand-text hover:bg-surface-muted"
-      >
-        <ArrowLeftIcon className="size-4 rotate-90" />
-        Edit search
-      </a>
-      <span aria-hidden="true" className="text-text-muted">
-        ·
-      </span>
-      <ButtonLink href="/" variant="ghost" className="px-2">
-        Start over
-      </ButtonLink>
-    </nav>
+    </section>
   );
 }
