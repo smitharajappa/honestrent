@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { ApprovalProvider } from "@/components/approval/ApprovalContext";
 import { DemoBanner, SiteFooter, SiteHeader } from "@/components/SiteChrome";
 import { IS_DEMO, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
@@ -7,6 +7,12 @@ import "./globals.css";
 
 // Next.js downloads Inter at build time and serves it from our own site.
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  variable: "--font-jakarta",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -41,7 +47,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${jakarta.variable}`}>
       <body className="flex min-h-screen flex-col font-sans antialiased">
         {IS_DEMO && <DemoBanner />}
         <SiteHeader />

@@ -1,7 +1,6 @@
 import Form from "next/form";
-import { Button } from "./ui/Button";
+import { BudgetChips, SearchButton } from "./SearchFormControls";
 import { Field } from "./ui/Field";
-import { SearchIcon } from "./ui/icons";
 
 type Props = {
   budget?: string;
@@ -16,18 +15,21 @@ export function SearchForm({ budget, moveIn, today, errors = {} }: Props) {
   return (
     <Form action="/" noValidate className="space-y-5">
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field
-          id="budget"
-          name="budget"
-          label="Monthly budget"
-          hint="Your max for rent plus fees"
-          prefix="$"
-          inputMode="numeric"
-          autoComplete="off"
-          placeholder="1,500"
-          defaultValue={budget}
-          error={errors.budget}
-        />
+        <div>
+          <Field
+            id="budget"
+            name="budget"
+            label="Monthly budget"
+            hint="Your max for rent plus fees"
+            prefix="$"
+            inputMode="numeric"
+            autoComplete="off"
+            placeholder="1,500"
+            defaultValue={budget}
+            error={errors.budget}
+          />
+          <BudgetChips inputId="budget" />
+        </div>
         <Field
           id="moveIn"
           name="moveIn"
@@ -39,10 +41,7 @@ export function SearchForm({ budget, moveIn, today, errors = {} }: Props) {
           error={errors.moveIn}
         />
       </div>
-      <Button type="submit" size="lg" className="w-full">
-        <SearchIcon className="size-5" />
-        Show apartments
-      </Button>
+      <SearchButton />
     </Form>
   );
 }

@@ -161,3 +161,12 @@ export function isCompleteProfile(p: Partial<ApprovalProfile>): p is ApprovalPro
     ID_TYPES.some((t) => t.id === p.idType)
   );
 }
+
+/** "$60,000 – $80,000 income · 620 – 679 credit · SSN", so renters see what a fit is based on. */
+export function describeAnswers(profile: ApprovalProfile): string {
+  const income = INCOME_RANGES.find((r) => r.id === profile.income)!.label;
+  const credit = CREDIT_BANDS.find((c) => c.id === profile.credit)!;
+  const id = ID_TYPES.find((t) => t.id === profile.idType)!.label;
+  const creditText = credit.minScore === null ? credit.label : `${credit.label} credit`;
+  return `${income} income · ${creditText} · ${id}`;
+}

@@ -28,7 +28,13 @@ function normalize(row: Record<string, unknown>): Building {
 /** Loads every building with its floor plans, fees and deals. */
 export async function fetchBuildings(): Promise<BuildingsResult> {
   const supabase = getSupabase();
-  if (!supabase) return { ok: false, reason: "not_configured" };
+  if (!supabase) {
+    // For the team, in server logs only. Renters see a plain message.
+    console.error(
+      "Supabase keys are missing: set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.",
+    );
+    return { ok: false, reason: "not_configured" };
+  }
 
   const { data, error } = await supabase.from("buildings").select(BUILDING_COLUMNS);
   if (error) {

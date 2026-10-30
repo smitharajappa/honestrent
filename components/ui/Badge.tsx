@@ -1,13 +1,15 @@
 import { cn } from "./cn";
 
-export type Tone = "neutral" | "brand" | "success" | "warning" | "danger";
+// Brand teal is reserved for actions (see DESIGN.md), so badges only use
+// neutral or semantic colors.
+export type Tone = "neutral" | "success" | "warning" | "danger" | "info";
 
 const tones: Record<Tone, string> = {
   neutral: "bg-surface-muted text-text-muted",
-  brand: "bg-brand-soft text-brand-text",
   success: "bg-success-soft text-success-text",
   warning: "bg-warning-soft text-warning-text",
   danger: "bg-danger-soft text-danger-text",
+  info: "bg-info-soft text-info-text",
 };
 
 type BadgeProps = {
