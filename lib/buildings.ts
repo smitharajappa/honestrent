@@ -3,7 +3,7 @@ import { isUuid } from "./lead";
 import { getSupabase } from "./supabase";
 import type { Building } from "./types";
 
-const BUILDING_COLUMNS = `id, name, address, city, last_verified,
+const BUILDING_COLUMNS = `id, name, address, city, last_verified, latitude, longitude,
   min_income_multiple, min_credit_score, accepts_no_ssn, accepts_guarantor,
   accepts_international_credit,
   floor_plans (id, name, bedrooms, bathrooms, rent_usd, lease_months, available_from),
@@ -20,6 +20,8 @@ function normalize(row: Record<string, unknown>): Building {
   return {
     ...b,
     min_income_multiple: Number(b.min_income_multiple),
+    latitude: b.latitude === null ? null : Number(b.latitude),
+    longitude: b.longitude === null ? null : Number(b.longitude),
     building_deals: b.building_deals.map((d) => ({ ...d, amount: Number(d.amount) })),
     floor_plans: b.floor_plans.map((p) => ({ ...p, bathrooms: Number(p.bathrooms) })),
   };

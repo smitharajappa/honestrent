@@ -75,7 +75,7 @@ interface.
 Swelt-specific: `BuildingCover` (drawn cover; shows a real photo once a building supplies
 one), `CostBar` (rent, + fees, − deals), `ResultCard`, `explore/FiltersPanel` (toggle
 chips), `explore/InsightBanner`, `shortlist/SaveButton` and `CompareToggle`, `CompareTray`,
-`TrustNotes`.
+`TrustNotes`, `map/LazyMap` (maps, MapLibre + OpenFreeMap tiles) and `motion/Reveal` (fade-up animation presets; respects "reduce motion").
 
 If a new pattern is needed, add it there and to `/styleguide`.
 

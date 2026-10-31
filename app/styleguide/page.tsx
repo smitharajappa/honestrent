@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { BuildingCover } from "@/components/BuildingCover";
 import { CostBar } from "@/components/CostBar";
+import { LazyMap } from "@/components/map/LazyMap";
+import { RevealBlock } from "@/components/motion/Reveal";
 import { TrustNotes } from "@/components/TrustNotes";
 import { Badge } from "@/components/ui/Badge";
 import { Button, ButtonLink } from "@/components/ui/Button";
@@ -184,6 +186,52 @@ export default function StyleguidePage() {
           <span className="inline-flex min-h-11 items-center rounded-full border border-border-strong bg-surface px-3.5 text-sm font-medium">
             Not selected
           </span>
+        </div>
+      </Section>
+
+      <Section title="Map (made-up pins)">
+        <LazyMap
+          pins={[
+            {
+              id: "a",
+              name: "Sample building A",
+              latitude: 32.961,
+              longitude: -96.729,
+              label: "$1,184",
+            },
+            {
+              id: "b",
+              name: "Sample building B",
+              latitude: 33.019,
+              longitude: -96.73,
+              label: "$1,420",
+            },
+          ]}
+          summary="Two sample buildings and UT Dallas."
+          className="h-72"
+        />
+        <p className="mt-2 text-sm text-text-muted">
+          Teal pins are buildings (tap to open). The white pin is UT Dallas. Tiles from
+          OpenFreeMap; data © OpenStreetMap contributors.
+        </p>
+      </Section>
+
+      <Section title="Motion">
+        <p className="mb-3 text-sm text-text-muted">
+          Short and gentle: items fade up 12px in 0.35s, a little later one after another.
+          Turned off for people who choose &quot;reduce motion&quot;. Presets live in
+          components/motion/Reveal.tsx.
+        </p>
+        <div className="space-y-2">
+          {[0, 1, 2].map((i) => (
+            <RevealBlock
+              key={i}
+              index={i}
+              className="rounded-xl bg-surface-muted p-3 text-sm"
+            >
+              Item {i + 1} fades up
+            </RevealBlock>
+          ))}
         </div>
       </Section>
 

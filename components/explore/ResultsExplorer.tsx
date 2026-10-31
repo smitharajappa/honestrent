@@ -11,15 +11,24 @@ import {
   type SortKey,
 } from "@/lib/explore";
 import { formatDate, formatUsd } from "@/lib/format";
+import type { MapPin } from "@/lib/map";
 import type { Building } from "@/lib/types";
 import { useApproval } from "../approval/ApprovalContext";
 import { AnswersNote } from "../approval/FitBadge";
+import { LazyMap } from "../map/LazyMap";
 import { ResultCard } from "../ResultCard";
 import { CompareTray } from "../shortlist/CompareTray";
 import { TrustNotes } from "../TrustNotes";
 import { Button, ButtonLink } from "../ui/Button";
 import { Card } from "../ui/Card";
-import { ArrowLeftIcon, ChevronDownIcon, SearchIcon, SlidersIcon } from "../ui/icons";
+import {
+  ArrowLeftIcon,
+  ChevronDownIcon,
+  MapPinIcon,
+  SearchIcon,
+  SlidersIcon,
+  TagIcon,
+} from "../ui/icons";
 import { InfoNote } from "../ui/InfoNote";
 import { FiltersPanel, type FilterState } from "./FiltersPanel";
 import { InsightBanner } from "./InsightBanner";
@@ -46,6 +55,7 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
   const [filters, setFilters] = useState<FilterState>(NO_FILTERS);
   const [sort, setSort] = useState<SortKey>("cost");
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [view, setView] = useState<"list" | "map">("list");
 
   // "Best fit" and "Good fit only" need the approval answers.
   const effectiveSort: SortKey = sort === "fit" && !profile ? "cost" : sort;
@@ -65,6 +75,26 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
         sort: effectiveSort,
       }),
     [buildings, effectiveFilters, budget, moveIn, today, profile, effectiveSort],
+  );
+  const pins = useMemo<MapPin[]>(
+    () =>
+      items.flatMap((item) => {
+        const { building, cost, perPerson } = item;
+        if (building.latitude === null || building.longitude === null) return [];
+        return [
+          {
+            id: building.id,
+            name: building.name,
+            latitude: building.latitude,
+            longitude: building.longitude,
+            label: formatUsd(
+              effectiveFilters.people > 1 ? perPerson : cost.realMonthlyCost,
+            ),
+            href: `/buildings/${building.id}?budget=${budget}&moveIn=${moveIn}`,
+          },
+        ];
+      }),
+    [items, effectiveFilters.people, budget, moveIn],
   );
   const stats = getInsight(items);
   const filterCount = activeFilterCount(effectiveFilters);
@@ -184,6 +214,34 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
           </label>
         </div>
 
+        {items.length > 0 && (
+          <div
+            role="group"
+            aria-label="Show results as"
+            className="mt-4 inline-flex rounded-xl border border-border-strong bg-surface p-1"
+          >
+            {(
+              [
+                { value: "list", label: "List", icon: TagIcon },
+                { value: "map", label: "Map", icon: MapPinIcon },
+              ] as const
+            ).map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                aria-pressed={view === option.value}
+                onClick={() => setView(option.value)}
+                className={`inline-flex min-h-11 items-center gap-1.5 rounded-lg px-4 text-sm font-semibold ${
+                  view === option.value ? "bg-text text-bg" : "text-text-muted"
+                }`}
+              >
+                <option.icon className="size-4" />
+                {option.label}
+              </button>
+            ))}
+          </div>
+        )}
+
         {fitCounts && items.length > 0 && (
           <div className="mt-3 text-sm">
             <p className="font-semibold">
@@ -212,20 +270,40 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
           </div>
         )}
 
-        {items.length > 0 ? (
+        {items.length > 0 && view === "map" && (
+          <div className="mt-6">
+            {pins.length > 0 ? (
+              <LazyMap
+                pins={pins}
+                summary={`${pins.length} apartments with their real monthly cost. Switch to List to read them.`}
+                className="h-[28rem] lg:h-[34rem]"
+              />
+            ) : (
+              <InfoNote>
+                Map pins aren&apos;t available for these apartments yet.
+              </InfoNote>
+            )}
+            <p className="mt-2 text-sm text-text-muted">
+              Pins show the real monthly cost. Tap a pin to open the apartment.
+            </p>
+          </div>
+        )}
+
+        {items.length > 0 && view === "list" ? (
           <ol className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {items.map((item, index) => (
               <ResultCard
                 key={item.building.id}
                 item={item}
                 rank={effectiveSort === "cost" ? index + 1 : undefined}
+                index={index}
                 today={today}
                 people={effectiveFilters.people}
                 detailHref={`/buildings/${item.building.id}?budget=${budget}&moveIn=${moveIn}`}
               />
             ))}
           </ol>
-        ) : filterCount > 0 ? (
+        ) : items.length > 0 ? null : filterCount > 0 ? (
           <Card className="mt-6 p-6 text-center">
             <h3 className="text-lg font-semibold">No apartments match these filters</h3>
             <p className="mt-1 text-sm text-text-muted">Try removing a filter or two.</p>

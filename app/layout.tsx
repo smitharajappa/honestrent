@@ -1,3 +1,4 @@
+import { MotionProvider } from "@/components/motion/Reveal";
 import type { Metadata, Viewport } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { ApprovalProvider } from "@/components/approval/ApprovalContext";
@@ -52,13 +53,15 @@ export default function RootLayout({
       <body className="flex min-h-screen flex-col font-sans antialiased">
         {IS_DEMO && <DemoBanner />}
         {/* Approval answers live in memory only; the shortlist is saved on this device. */}
-        <ApprovalProvider>
-          <ShortlistProvider>
-            <SiteHeader />
-            <div className="flex-1">{children}</div>
-            <SiteFooter />
-          </ShortlistProvider>
-        </ApprovalProvider>
+        <MotionProvider>
+          <ApprovalProvider>
+            <ShortlistProvider>
+              <SiteHeader />
+              <div className="flex-1">{children}</div>
+              <SiteFooter />
+            </ShortlistProvider>
+          </ApprovalProvider>
+        </MotionProvider>
       </body>
     </html>
   );
