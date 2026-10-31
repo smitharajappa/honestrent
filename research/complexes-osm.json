@@ -1,0 +1,2132 @@
+[
+  {
+    "name": "1201 Park Apartment Homes",
+    "street": "1201 East Park Boulevard",
+    "city": "Plano",
+    "postcode": "75074",
+    "latitude": 33.033887,
+    "longitude": -96.696384,
+    "website": "",
+    "osm": "way/1319278878"
+  },
+  {
+    "name": "14",
+    "street": "1520 Preston Rd",
+    "city": "Plano",
+    "postcode": "75093",
+    "latitude": 33.020775,
+    "longitude": -96.792804,
+    "website": "",
+    "osm": "way/640760612"
+  },
+  {
+    "name": "2523",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.034498,
+    "longitude": -96.790931,
+    "website": "",
+    "osm": "way/650798468"
+  },
+  {
+    "name": "AMLI West Plano",
+    "street": "5961 West Parker Road",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.047023,
+    "longitude": -96.827561,
+    "website": "https://www.amli.com/apartments/dallas/north-dallas-apartments/amli-west-plano",
+    "osm": "relation/9045174"
+  },
+  {
+    "name": "Anthology Senior Living",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.002451,
+    "longitude": -96.759979,
+    "website": "",
+    "osm": "way/705249281"
+  },
+  {
+    "name": "Axis",
+    "street": "3700 Mapleshade Lane",
+    "city": "Plano",
+    "postcode": "75075",
+    "latitude": 33.002488,
+    "longitude": -96.762993,
+    "website": "",
+    "osm": "relation/8758630"
+  },
+  {
+    "name": "Bel Air Downtown",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.018791,
+    "longitude": -96.698908,
+    "website": "",
+    "osm": "way/650412100"
+  },
+  {
+    "name": "Bell Gateway Village",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.000985,
+    "longitude": -96.670193,
+    "website": "",
+    "osm": "way/1443560408"
+  },
+  {
+    "name": "Bentley Place Apartments",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.047621,
+    "longitude": -96.825787,
+    "website": "",
+    "osm": "way/429910838"
+  },
+  {
+    "name": "Bldg 1",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.072073,
+    "longitude": -96.695639,
+    "website": "",
+    "osm": "way/805467919"
+  },
+  {
+    "name": "Bldg 12",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.072837,
+    "longitude": -96.694735,
+    "website": "",
+    "osm": "way/805467276"
+  },
+  {
+    "name": "Bldg 2",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.071745,
+    "longitude": -96.696045,
+    "website": "",
+    "osm": "way/805467819"
+  },
+  {
+    "name": "Bldg 3",
+    "street": "1520 Preston Road",
+    "city": "Plano",
+    "postcode": "75093",
+    "latitude": 33.020505,
+    "longitude": -96.79396,
+    "website": "",
+    "osm": "way/640760613"
+  },
+  {
+    "name": "Bldg 3",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.072431,
+    "longitude": -96.696184,
+    "website": "",
+    "osm": "way/1334829943"
+  },
+  {
+    "name": "Bldg. 2",
+    "street": "5800 Jupiter Road",
+    "city": "Plano",
+    "postcode": "75074",
+    "latitude": 33.050754,
+    "longitude": -96.680591,
+    "website": "",
+    "osm": "way/665711728"
+  },
+  {
+    "name": "Bldg. 3",
+    "street": "5800 Jupiter Road",
+    "city": "Plano",
+    "postcode": "75074",
+    "latitude": 33.051063,
+    "longitude": -96.680974,
+    "website": "",
+    "osm": "way/665711725"
+  },
+  {
+    "name": "Bldg. 4",
+    "street": "5800 Jupiter Road",
+    "city": "Plano",
+    "postcode": "75074",
+    "latitude": 33.050663,
+    "longitude": -96.680966,
+    "website": "",
+    "osm": "way/665711729"
+  },
+  {
+    "name": "Bldg. 5",
+    "street": "5800 Jupiter Road",
+    "city": "Plano",
+    "postcode": "75074",
+    "latitude": 33.050346,
+    "longitude": -96.68085,
+    "website": "",
+    "osm": "way/665711731"
+  },
+  {
+    "name": "Bldg. 6",
+    "street": "5800 Jupiter Road",
+    "city": "Plano",
+    "postcode": "75074",
+    "latitude": 33.050425,
+    "longitude": -96.680445,
+    "website": "",
+    "osm": "way/665711726"
+  },
+  {
+    "name": "Bldg. 7",
+    "street": "5800 Jupiter Road",
+    "city": "Plano",
+    "postcode": "75074",
+    "latitude": 33.051371,
+    "longitude": -96.680863,
+    "website": "",
+    "osm": "way/665711730"
+  },
+  {
+    "name": "Broadstone Evoke",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.015246,
+    "longitude": -96.796685,
+    "website": "",
+    "osm": "way/590254130"
+  },
+  {
+    "name": "Building 14",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.057999,
+    "longitude": -96.684751,
+    "website": "",
+    "osm": "way/695488152"
+  },
+  {
+    "name": "Building 15",
+    "street": "2600 Ventura Drive",
+    "city": "Plano",
+    "postcode": "75093",
+    "latitude": 33.035419,
+    "longitude": -96.796828,
+    "website": "",
+    "osm": "way/648582374"
+  },
+  {
+    "name": "Camden Legacy Park",
+    "street": "6600 Preston Road",
+    "city": "Plano",
+    "postcode": "75024",
+    "latitude": 33.063024,
+    "longitude": -96.794973,
+    "website": "https://www.camdenliving.com/apartments/plano-tx/camden-legacy-park",
+    "osm": "way/672361113"
+  },
+  {
+    "name": "Clubhouse",
+    "street": "5800 Jupiter Road",
+    "city": "Plano",
+    "postcode": "75074",
+    "latitude": 33.05117,
+    "longitude": -96.680605,
+    "website": "",
+    "osm": "way/665711727"
+  },
+  {
+    "name": "Creekside at Legacy",
+    "street": "6300 Windcrest Drive",
+    "city": "Plano",
+    "postcode": "75024",
+    "latitude": 33.0589,
+    "longitude": -96.804397,
+    "website": "https://www.creeksideatlegacy.com/",
+    "osm": "way/429910819"
+  },
+  {
+    "name": "Fairway Apartments",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.024225,
+    "longitude": -96.770406,
+    "website": "",
+    "osm": "way/514363098"
+  },
+  {
+    "name": "Ferro",
+    "street": "1005 11th Street",
+    "city": "Plano",
+    "postcode": "75074",
+    "latitude": 33.013287,
+    "longitude": -96.700046,
+    "website": "",
+    "osm": "way/1117694956"
+  },
+  {
+    "name": "Heritage At Lakeside",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.054349,
+    "longitude": -96.798861,
+    "website": "",
+    "osm": "way/429910804"
+  },
+  {
+    "name": "Huntington Apartments",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.089446,
+    "longitude": -96.803103,
+    "website": "",
+    "osm": "relation/9303079"
+  },
+  {
+    "name": "Jada Legacy Central Apartments",
+    "street": "6501 Excellence Way",
+    "city": "Plano",
+    "postcode": "75023",
+    "latitude": 33.061648,
+    "longitude": -96.694178,
+    "website": "https://www.jadalegacycentralapartments.com/",
+    "osm": "relation/10550309"
+  },
+  {
+    "name": "Junction 15 Apartments",
+    "street": "930 East 15th Street",
+    "city": "Plano",
+    "postcode": "75074",
+    "latitude": 33.01877,
+    "longitude": -96.70143,
+    "website": "",
+    "osm": "relation/9058784"
+  },
+  {
+    "name": "K Avenue Lofts",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.032503,
+    "longitude": -96.699926,
+    "website": "",
+    "osm": "way/1355046445"
+  },
+  {
+    "name": "La Ventura Apartments",
+    "street": "2600 Ventura Drive",
+    "city": "Plano",
+    "postcode": "75093",
+    "latitude": 33.034298,
+    "longitude": -96.797002,
+    "website": "",
+    "osm": "way/429910839"
+  },
+  {
+    "name": "Legacy North",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.081806,
+    "longitude": -96.8202,
+    "website": "",
+    "osm": "way/1473743038"
+  },
+  {
+    "name": "Legacy Village Apartments",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.073803,
+    "longitude": -96.820415,
+    "website": "",
+    "osm": "way/1498580641"
+  },
+  {
+    "name": "Los Rios Park Apartments",
+    "street": "4701 14th Street",
+    "city": "Plano",
+    "postcode": "75074",
+    "latitude": 33.012744,
+    "longitude": -96.646449,
+    "website": "https://www.maac.com/texas/dallas/los-rios-park/",
+    "osm": "way/664780572"
+  },
+  {
+    "name": "MAA Legacy",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.075195,
+    "longitude": -96.82057,
+    "website": "",
+    "osm": "way/1498580643"
+  },
+  {
+    "name": "Mariposa",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.06778,
+    "longitude": -96.83115,
+    "website": "",
+    "osm": "node/12620791002"
+  },
+  {
+    "name": "Mission Gate",
+    "street": "8025 Ohio Drive",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.086813,
+    "longitude": -96.797175,
+    "website": "",
+    "osm": "way/663593344"
+  },
+  {
+    "name": "Morada",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.018834,
+    "longitude": -96.699888,
+    "website": "",
+    "osm": "way/1571201040"
+  },
+  {
+    "name": "Opal Legacy Central Apartments",
+    "street": "6500 Excellence Way",
+    "city": "Plano",
+    "postcode": "75023",
+    "latitude": 33.061439,
+    "longitude": -96.693269,
+    "website": "https://www.opallegacycentralapartments.com/",
+    "osm": "relation/21185760"
+  },
+  {
+    "name": "Orchards Market Plaza",
+    "street": "3640 Mapleshade Lane",
+    "city": "Plano",
+    "postcode": "75075",
+    "latitude": 33.002075,
+    "longitude": -96.758606,
+    "website": "https://www.orchardsmarketplaza.com",
+    "osm": "way/985403906"
+  },
+  {
+    "name": "Sloane Street Apartments",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.024509,
+    "longitude": -96.84125,
+    "website": "",
+    "osm": "way/996358621"
+  },
+  {
+    "name": "Summer Park",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.025162,
+    "longitude": -96.756777,
+    "website": "",
+    "osm": "way/590541896"
+  },
+  {
+    "name": "The Hathaway at Willow Bend",
+    "street": "2525 Preston Road",
+    "city": "Plano",
+    "postcode": "75093",
+    "latitude": 33.031978,
+    "longitude": -96.797037,
+    "website": "https://www.madisonapartmentgroup.com/plano/madison-willow-bend/",
+    "osm": "way/648582344"
+  },
+  {
+    "name": "The Kincaid at Legacy",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.076258,
+    "longitude": -96.823216,
+    "website": "",
+    "osm": "way/1573752727"
+  },
+  {
+    "name": "The Villa",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.023826,
+    "longitude": -96.752282,
+    "website": "",
+    "osm": "way/590541890"
+  },
+  {
+    "name": "Villas at Legacy",
+    "street": "5301 West Spring Creek Parkway",
+    "city": "Plano",
+    "postcode": "75024",
+    "latitude": 33.059296,
+    "longitude": -96.807818,
+    "website": "https://villasatlegacy-plano.com/",
+    "osm": "way/429910809"
+  },
+  {
+    "name": "Waters Edge",
+    "street": "5000 Whitestone Lane",
+    "city": "Plano",
+    "postcode": "75024",
+    "latitude": 33.058783,
+    "longitude": -96.798719,
+    "website": "https://watersedgeplano.com/",
+    "osm": "way/452572155"
+  },
+  {
+    "name": "Windrose Tower",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.084883,
+    "longitude": -96.826994,
+    "website": "",
+    "osm": "node/12520420003"
+  },
+  {
+    "name": "Windsor at Legacy",
+    "street": "6400 Windcrest Drive",
+    "city": "Plano",
+    "postcode": "75024",
+    "latitude": 33.062903,
+    "longitude": -96.80298,
+    "website": "https://www.windsoratlegacy.com/",
+    "osm": "way/429910836"
+  },
+  {
+    "name": "Windsor Metro West Apartments",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.087423,
+    "longitude": -96.82693,
+    "website": "",
+    "osm": "way/695040536"
+  },
+  {
+    "name": "1",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 33.002219,
+    "longitude": -96.731462,
+    "website": "",
+    "osm": "way/909867029"
+  },
+  {
+    "name": "10",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.983998,
+    "longitude": -96.754588,
+    "website": "",
+    "osm": "way/308344327"
+  },
+  {
+    "name": "11",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.984266,
+    "longitude": -96.754536,
+    "website": "",
+    "osm": "way/221344898"
+  },
+  {
+    "name": "12",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.984848,
+    "longitude": -96.754339,
+    "website": "",
+    "osm": "way/221344895"
+  },
+  {
+    "name": "14",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.98296,
+    "longitude": -96.756089,
+    "website": "",
+    "osm": "way/309478233"
+  },
+  {
+    "name": "15",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.983195,
+    "longitude": -96.756074,
+    "website": "",
+    "osm": "way/309478225"
+  },
+  {
+    "name": "16",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.982956,
+    "longitude": -96.755581,
+    "website": "",
+    "osm": "way/309478226"
+  },
+  {
+    "name": "17",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.983019,
+    "longitude": -96.75516,
+    "website": "",
+    "osm": "way/309478230"
+  },
+  {
+    "name": "18",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.983147,
+    "longitude": -96.754866,
+    "website": "",
+    "osm": "way/309478231"
+  },
+  {
+    "name": "19",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.982657,
+    "longitude": -96.75509,
+    "website": "",
+    "osm": "way/309478228"
+  },
+  {
+    "name": "2",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.985232,
+    "longitude": -96.754455,
+    "website": "",
+    "osm": "way/221344894"
+  },
+  {
+    "name": "2",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 33.001869,
+    "longitude": -96.732728,
+    "website": "",
+    "osm": "way/909867030"
+  },
+  {
+    "name": "20",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.982289,
+    "longitude": -96.754876,
+    "website": "",
+    "osm": "way/309478229"
+  },
+  {
+    "name": "21",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.982193,
+    "longitude": -96.75541,
+    "website": "",
+    "osm": "way/309478227"
+  },
+  {
+    "name": "22",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.982165,
+    "longitude": -96.755878,
+    "website": "",
+    "osm": "way/309478232"
+  },
+  {
+    "name": "23",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.982445,
+    "longitude": -96.756143,
+    "website": "",
+    "osm": "way/309478224"
+  },
+  {
+    "name": "24",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.98521,
+    "longitude": -96.753062,
+    "website": "",
+    "osm": "way/598197606"
+  },
+  {
+    "name": "25",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.985194,
+    "longitude": -96.752336,
+    "website": "",
+    "osm": "way/470347170"
+  },
+  {
+    "name": "26",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.985142,
+    "longitude": -96.751793,
+    "website": "",
+    "osm": "way/470347169"
+  },
+  {
+    "name": "27",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.984771,
+    "longitude": -96.751893,
+    "website": "",
+    "osm": "way/470347177"
+  },
+  {
+    "name": "28",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.984403,
+    "longitude": -96.751793,
+    "website": "",
+    "osm": "way/470347180"
+  },
+  {
+    "name": "29",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.98451,
+    "longitude": -96.75235,
+    "website": "",
+    "osm": "way/470347179"
+  },
+  {
+    "name": "3",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.985082,
+    "longitude": -96.755449,
+    "website": "",
+    "osm": "way/221344901"
+  },
+  {
+    "name": "3",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 33.001581,
+    "longitude": -96.733752,
+    "website": "",
+    "osm": "way/909867031"
+  },
+  {
+    "name": "30",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.984562,
+    "longitude": -96.752973,
+    "website": "",
+    "osm": "way/470347178"
+  },
+  {
+    "name": "31",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.984795,
+    "longitude": -96.753269,
+    "website": "",
+    "osm": "way/470347173"
+  },
+  {
+    "name": "33",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.986049,
+    "longitude": -96.755723,
+    "website": "",
+    "osm": "way/297312354"
+  },
+  {
+    "name": "34",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.986403,
+    "longitude": -96.755772,
+    "website": "",
+    "osm": "way/297312355"
+  },
+  {
+    "name": "35",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.986759,
+    "longitude": -96.755714,
+    "website": "",
+    "osm": "way/297312352"
+  },
+  {
+    "name": "36",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.986689,
+    "longitude": -96.755192,
+    "website": "",
+    "osm": "way/297312353"
+  },
+  {
+    "name": "38",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.986158,
+    "longitude": -96.754707,
+    "website": "",
+    "osm": "way/308347762"
+  },
+  {
+    "name": "39",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.98605,
+    "longitude": -96.754279,
+    "website": "",
+    "osm": "way/308347767"
+  },
+  {
+    "name": "4",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.984799,
+    "longitude": -96.754964,
+    "website": "",
+    "osm": "way/221344896"
+  },
+  {
+    "name": "4",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 33.001279,
+    "longitude": -96.73535,
+    "website": "",
+    "osm": "way/909867032"
+  },
+  {
+    "name": "40",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.986401,
+    "longitude": -96.754228,
+    "website": "",
+    "osm": "way/308347764"
+  },
+  {
+    "name": "41",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.986751,
+    "longitude": -96.754223,
+    "website": "",
+    "osm": "way/308347765"
+  },
+  {
+    "name": "43",
+    "street": "2700 Waterview Parkway",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.987321,
+    "longitude": -96.754246,
+    "website": "",
+    "osm": "way/308347759"
+  },
+  {
+    "name": "44",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.987436,
+    "longitude": -96.754775,
+    "website": "",
+    "osm": "way/308347760"
+  },
+  {
+    "name": "45",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.987918,
+    "longitude": -96.754777,
+    "website": "",
+    "osm": "way/308347774"
+  },
+  {
+    "name": "46",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.987843,
+    "longitude": -96.754222,
+    "website": "",
+    "osm": "way/308347758"
+  },
+  {
+    "name": "48",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.98742,
+    "longitude": -96.75546,
+    "website": "",
+    "osm": "way/309375456"
+  },
+  {
+    "name": "49",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.987944,
+    "longitude": -96.755444,
+    "website": "",
+    "osm": "way/309375457"
+  },
+  {
+    "name": "5",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.984685,
+    "longitude": -96.755577,
+    "website": "",
+    "osm": "way/308347769"
+  },
+  {
+    "name": "5",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 33.000998,
+    "longitude": -96.736359,
+    "website": "",
+    "osm": "way/909867033"
+  },
+  {
+    "name": "50",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.987939,
+    "longitude": -96.755783,
+    "website": "",
+    "osm": "way/309375458"
+  },
+  {
+    "name": "51",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.987436,
+    "longitude": -96.755831,
+    "website": "",
+    "osm": "way/309375455"
+  },
+  {
+    "name": "53",
+    "street": "53",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.988847,
+    "longitude": -96.753911,
+    "website": "",
+    "osm": "way/308345591"
+  },
+  {
+    "name": "54",
+    "street": "54",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.989262,
+    "longitude": -96.75383,
+    "website": "",
+    "osm": "way/308345590"
+  },
+  {
+    "name": "55",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.989354,
+    "longitude": -96.753307,
+    "website": "",
+    "osm": "way/308345589"
+  },
+  {
+    "name": "56",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.989394,
+    "longitude": -96.752749,
+    "website": "",
+    "osm": "way/308345588"
+  },
+  {
+    "name": "57",
+    "street": "57",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.9893,
+    "longitude": -96.752317,
+    "website": "",
+    "osm": "way/308345592"
+  },
+  {
+    "name": "58",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.988865,
+    "longitude": -96.75234,
+    "website": "",
+    "osm": "way/308345593"
+  },
+  {
+    "name": "59",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.988761,
+    "longitude": -96.752917,
+    "website": "",
+    "osm": "way/308345587"
+  },
+  {
+    "name": "6",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.984446,
+    "longitude": -96.754965,
+    "website": "",
+    "osm": "way/221344897"
+  },
+  {
+    "name": "6",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 33.002001,
+    "longitude": -96.736248,
+    "website": "",
+    "osm": "way/909867034"
+  },
+  {
+    "name": "61",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.988942,
+    "longitude": -96.755844,
+    "website": "",
+    "osm": "way/309478220"
+  },
+  {
+    "name": "62",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.989481,
+    "longitude": -96.755839,
+    "website": "",
+    "osm": "way/309478221"
+  },
+  {
+    "name": "63",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.989575,
+    "longitude": -96.755389,
+    "website": "",
+    "osm": "way/309478222"
+  },
+  {
+    "name": "65",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.988135,
+    "longitude": -96.75191,
+    "website": "",
+    "osm": "way/308344377"
+  },
+  {
+    "name": "66",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.988669,
+    "longitude": -96.751788,
+    "website": "",
+    "osm": "way/308344378"
+  },
+  {
+    "name": "67",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.989292,
+    "longitude": -96.751759,
+    "website": "",
+    "osm": "way/308345586"
+  },
+  {
+    "name": "7",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.984365,
+    "longitude": -96.755839,
+    "website": "",
+    "osm": "way/221344902"
+  },
+  {
+    "name": "7",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 33.002761,
+    "longitude": -96.736396,
+    "website": "",
+    "osm": "way/909867035"
+  },
+  {
+    "name": "8",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.983894,
+    "longitude": -96.756152,
+    "website": "",
+    "osm": "way/221344977"
+  },
+  {
+    "name": "9",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.984097,
+    "longitude": -96.755122,
+    "website": "",
+    "osm": "way/221344900"
+  },
+  {
+    "name": "Amber Dawn",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.938733,
+    "longitude": -96.755902,
+    "website": "",
+    "osm": "way/695121418"
+  },
+  {
+    "name": "Bdlg 14",
+    "street": "1000 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940755,
+    "longitude": -96.754734,
+    "website": "",
+    "osm": "way/221296852"
+  },
+  {
+    "name": "Bell CityLine Apartments",
+    "street": "1230 East CityLine Drive",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.998801,
+    "longitude": -96.701336,
+    "website": "",
+    "osm": "way/597520850"
+  },
+  {
+    "name": "Bell CityLine Apartments",
+    "street": "1230 East CityLine Drive",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.998766,
+    "longitude": -96.700357,
+    "website": "",
+    "osm": "way/597520852"
+  },
+  {
+    "name": "Belt & Main",
+    "street": "150 West Main Street",
+    "city": "Richardson",
+    "postcode": "75081",
+    "latitude": 32.9506,
+    "longitude": -96.732369,
+    "website": "https://beltandmain.com/",
+    "osm": "way/1451540191"
+  },
+  {
+    "name": "Bldg 11",
+    "street": "1000 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940803,
+    "longitude": -96.75509,
+    "website": "",
+    "osm": "way/221296839"
+  },
+  {
+    "name": "Bldg 13",
+    "street": "1000 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940531,
+    "longitude": -96.75473,
+    "website": "",
+    "osm": "way/221296851"
+  },
+  {
+    "name": "Bldg 15",
+    "street": "1000 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940916,
+    "longitude": -96.754733,
+    "website": "",
+    "osm": "way/221296853"
+  },
+  {
+    "name": "Bldg 16",
+    "street": "1000 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940792,
+    "longitude": -96.754372,
+    "website": "",
+    "osm": "way/221296849"
+  },
+  {
+    "name": "Bldg 3",
+    "street": "1000 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940557,
+    "longitude": -96.755678,
+    "website": "",
+    "osm": "way/221296842"
+  },
+  {
+    "name": "Bldg 5",
+    "street": "1000 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940719,
+    "longitude": -96.756187,
+    "website": "",
+    "osm": "way/221296848"
+  },
+  {
+    "name": "Bldg 6",
+    "street": "1000 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.94086,
+    "longitude": -96.755945,
+    "website": "",
+    "osm": "way/221296846"
+  },
+  {
+    "name": "Bldg 7",
+    "street": "1000 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940812,
+    "longitude": -96.75568,
+    "website": "",
+    "osm": "way/221296841"
+  },
+  {
+    "name": "Bldg 8",
+    "street": "1000 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940963,
+    "longitude": -96.755675,
+    "website": "",
+    "osm": "way/221296847"
+  },
+  {
+    "name": "Bldg 9",
+    "street": "1000 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940821,
+    "longitude": -96.75541,
+    "website": "",
+    "osm": "way/221296840"
+  },
+  {
+    "name": "Bldg A",
+    "street": "919 South Weatherred Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.94219,
+    "longitude": -96.750584,
+    "website": "",
+    "osm": "way/220536023"
+  },
+  {
+    "name": "Bldg A",
+    "street": "900 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940332,
+    "longitude": -96.753741,
+    "website": "",
+    "osm": "way/221294674"
+  },
+  {
+    "name": "Bldg B",
+    "street": "919 South Weatherred Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.942144,
+    "longitude": -96.750071,
+    "website": "",
+    "osm": "way/220534613"
+  },
+  {
+    "name": "Bldg B",
+    "street": "900 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940512,
+    "longitude": -96.753758,
+    "website": "",
+    "osm": "way/221294677"
+  },
+  {
+    "name": "Bldg C",
+    "street": "919 South Weatherred Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.941934,
+    "longitude": -96.750169,
+    "website": "",
+    "osm": "way/220534612"
+  },
+  {
+    "name": "Bldg C",
+    "street": "900 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940794,
+    "longitude": -96.753817,
+    "website": "",
+    "osm": "way/221294678"
+  },
+  {
+    "name": "Bldg D",
+    "street": "919 South Weatherred Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.941718,
+    "longitude": -96.75017,
+    "website": "",
+    "osm": "way/220534611"
+  },
+  {
+    "name": "Bldg D",
+    "street": "919 South Weatherred Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.941877,
+    "longitude": -96.750549,
+    "website": "",
+    "osm": "way/220536021"
+  },
+  {
+    "name": "Bldg D",
+    "street": "900 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.94055,
+    "longitude": -96.753414,
+    "website": "",
+    "osm": "way/221294675"
+  },
+  {
+    "name": "Bldg E",
+    "street": "900 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940802,
+    "longitude": -96.753447,
+    "website": "",
+    "osm": "way/221294676"
+  },
+  {
+    "name": "Bldg F",
+    "street": "919 South Weatherred Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.941562,
+    "longitude": -96.751009,
+    "website": "",
+    "osm": "way/220536022"
+  },
+  {
+    "name": "Bldg F",
+    "street": "900 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.941021,
+    "longitude": -96.753531,
+    "website": "",
+    "osm": "way/221294680"
+  },
+  {
+    "name": "Bldg G",
+    "street": "919 South Weatherred Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.941556,
+    "longitude": -96.750759,
+    "website": "",
+    "osm": "way/220536020"
+  },
+  {
+    "name": "Bldg G",
+    "street": "900 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.941273,
+    "longitude": -96.75331,
+    "website": "",
+    "osm": "way/221294681"
+  },
+  {
+    "name": "Bldg H",
+    "street": "919 South Weatherred Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.941503,
+    "longitude": -96.750273,
+    "website": "",
+    "osm": "way/220534610"
+  },
+  {
+    "name": "Bldg H",
+    "street": "900 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.941411,
+    "longitude": -96.753152,
+    "website": "",
+    "osm": "way/221294682"
+  },
+  {
+    "name": "Bldg I",
+    "street": "900 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.941577,
+    "longitude": -96.753058,
+    "website": "",
+    "osm": "way/221294683"
+  },
+  {
+    "name": "Bldg J",
+    "street": "900 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.941718,
+    "longitude": -96.752955,
+    "website": "",
+    "osm": "way/221294684"
+  },
+  {
+    "name": "Bldg K",
+    "street": "900 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.942042,
+    "longitude": -96.752695,
+    "website": "",
+    "osm": "way/659550840"
+  },
+  {
+    "name": "Centre Square I Condominiums",
+    "street": "919 South Weatherred Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.941945,
+    "longitude": -96.750554,
+    "website": "",
+    "osm": "way/695195011"
+  },
+  {
+    "name": "Clubhouse",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.98517,
+    "longitude": -96.754844,
+    "website": "",
+    "osm": "way/470347172"
+  },
+  {
+    "name": "Clubhouse",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 33.002553,
+    "longitude": -96.71416,
+    "website": "",
+    "osm": "way/597863480"
+  },
+  {
+    "name": "Creekside Townhomes",
+    "street": "3650 Custer Parkway",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 33.00221,
+    "longitude": -96.729247,
+    "website": "https://www.lifeatcreekside.com",
+    "osm": "relation/19945163"
+  },
+  {
+    "name": "Falls on Clearwood Apartments",
+    "street": "613 Clearwood Drive",
+    "city": "Richardson",
+    "postcode": "75081",
+    "latitude": 32.936086,
+    "longitude": -96.746436,
+    "website": "",
+    "osm": "way/597116218"
+  },
+  {
+    "name": "Fitness Center",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.992161,
+    "longitude": -96.706094,
+    "website": "",
+    "osm": "way/597869719"
+  },
+  {
+    "name": "Hillsdale Garden Apartments",
+    "street": "800 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940802,
+    "longitude": -96.752508,
+    "website": "",
+    "osm": "way/695195015"
+  },
+  {
+    "name": "Hunter's Court",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.938753,
+    "longitude": -96.754777,
+    "website": "https://www.hunterscourtapts.com/",
+    "osm": "way/695121419"
+  },
+  {
+    "name": "Jefferson Galatyn Park",
+    "street": "1050 Galatyn Parkway",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.98249,
+    "longitude": -96.707328,
+    "website": "https://www.jeffersongalatynpark.com/",
+    "osm": "relation/7633653"
+  },
+  {
+    "name": "Jefferson Routh Woods",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.990806,
+    "longitude": -96.705024,
+    "website": "",
+    "osm": "way/544051388"
+  },
+  {
+    "name": "Lakefront Villas Apartments",
+    "street": "900 South Weatherred Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.941348,
+    "longitude": -96.753187,
+    "website": "",
+    "osm": "way/695195016"
+  },
+  {
+    "name": "Lakeside On Spring Valley",
+    "street": "1000 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940742,
+    "longitude": -96.755163,
+    "website": "",
+    "osm": "way/695195017"
+  },
+  {
+    "name": "Leasing Office/Clubhouse",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.992044,
+    "longitude": -96.706469,
+    "website": "",
+    "osm": "way/597869729"
+  },
+  {
+    "name": "Madison on Melrose",
+    "street": "1520 Richardson Drive",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.969622,
+    "longitude": -96.725639,
+    "website": "",
+    "osm": "way/619918726"
+  },
+  {
+    "name": "Marquis at Waterview",
+    "street": "800 West Renner Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.998976,
+    "longitude": -96.735313,
+    "website": "https://www.marquiswaterview.com/",
+    "osm": "way/307312169"
+  },
+  {
+    "name": "Miramonte",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.942005,
+    "longitude": -96.746623,
+    "website": "",
+    "osm": "way/376269825"
+  },
+  {
+    "name": "Northgale Village",
+    "street": "912 South Weatherred Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.94164,
+    "longitude": -96.752026,
+    "website": "",
+    "osm": "way/695195014"
+  },
+  {
+    "name": "Northside Apartments",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.995077,
+    "longitude": -96.748479,
+    "website": "https://www.liveatnorthside.com",
+    "osm": "way/1118205311"
+  },
+  {
+    "name": "Northside Building 1",
+    "street": "3000 Northside Boulevard",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.99389,
+    "longitude": -96.750201,
+    "website": "",
+    "osm": "relation/7764983"
+  },
+  {
+    "name": "Northside Building 2",
+    "street": "3000 Northside Boulevard",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.993882,
+    "longitude": -96.74861,
+    "website": "",
+    "osm": "way/598197578"
+  },
+  {
+    "name": "Northside Building 5",
+    "street": "3100 Northside Boulevard",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.994847,
+    "longitude": -96.750573,
+    "website": "",
+    "osm": "way/598197587"
+  },
+  {
+    "name": "Northside Building 6",
+    "street": "3100 Northside Boulevard",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.995028,
+    "longitude": -96.74982,
+    "website": "",
+    "osm": "way/598197581"
+  },
+  {
+    "name": "Northside Building 7",
+    "street": "3100 Northside Boulevard",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.995402,
+    "longitude": -96.750268,
+    "website": "",
+    "osm": "way/598197584"
+  },
+  {
+    "name": "Northside Building 8",
+    "street": "3100 Northside Boulevard",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.995403,
+    "longitude": -96.750754,
+    "website": "",
+    "osm": "way/598197582"
+  },
+  {
+    "name": "Northside Building 9",
+    "street": "3100 Northside Boulevard",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.995009,
+    "longitude": -96.748791,
+    "website": "",
+    "osm": "way/598197591"
+  },
+  {
+    "name": "Northside Plus Building 10",
+    "street": "750 Synergy Park Boulevard",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.994626,
+    "longitude": -96.747438,
+    "website": "",
+    "osm": "way/827800364"
+  },
+  {
+    "name": "Northside Plus Building 11",
+    "street": "750 Synergy Park Boulevard",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.994536,
+    "longitude": -96.746928,
+    "website": "",
+    "osm": "way/827800362"
+  },
+  {
+    "name": "Northside Plus Building 12",
+    "street": "750 Synergy Park Boulevard",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.995021,
+    "longitude": -96.746977,
+    "website": "",
+    "osm": "way/827800363"
+  },
+  {
+    "name": "Northside Plus Building 13",
+    "street": "850 Cecil Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.996153,
+    "longitude": -96.748616,
+    "website": "",
+    "osm": "relation/13195804"
+  },
+  {
+    "name": "Northside Plus Building 14",
+    "street": "800 Cecil Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.996038,
+    "longitude": -96.747162,
+    "website": "",
+    "osm": "way/982098406"
+  },
+  {
+    "name": "Oaks at Spring Valley",
+    "street": "740 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940729,
+    "longitude": -96.75125,
+    "website": "",
+    "osm": "way/695195012"
+  },
+  {
+    "name": "Phase 2 Clubhouse",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.982736,
+    "longitude": -96.755904,
+    "website": "",
+    "osm": "way/309478234"
+  },
+  {
+    "name": "Phase 8 Clubhouse",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.988819,
+    "longitude": -96.753593,
+    "website": "",
+    "osm": "way/470346662"
+  },
+  {
+    "name": "Prestonwood Apartment Homes",
+    "street": "333 Prestonwood Drive",
+    "city": "Richardson",
+    "postcode": "75081",
+    "latitude": 32.935813,
+    "longitude": -96.743852,
+    "website": "",
+    "osm": "way/739835741"
+  },
+  {
+    "name": "Shadow Lake Condos",
+    "street": "900 South Weatherred Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.942286,
+    "longitude": -96.751729,
+    "website": "",
+    "osm": "way/695195013"
+  },
+  {
+    "name": "The Beverly",
+    "street": "900 Frances Way",
+    "city": "Richardson",
+    "postcode": "75081",
+    "latitude": 32.945148,
+    "longitude": -96.710052,
+    "website": "https://www.thebeverlyateam.com",
+    "osm": "way/597909225"
+  },
+  {
+    "name": "The Flats at Palisades",
+    "street": "2525 Empire Drive",
+    "city": "Richardson",
+    "postcode": "75082",
+    "latitude": 32.987549,
+    "longitude": -96.715246,
+    "website": "https://www.udr.com/dallas-apartments/richardson/the-flats-at-palisades/",
+    "osm": "relation/8384071"
+  },
+  {
+    "name": "The James at Canyon Creek",
+    "street": "850 Greenside Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 33.001956,
+    "longitude": -96.733904,
+    "website": "https://www.thejamesatcanyoncreek.com",
+    "osm": "relation/19945080"
+  },
+  {
+    "name": "The Knoll on canyon creek",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.989754,
+    "longitude": -96.728616,
+    "website": "",
+    "osm": "way/1119748369"
+  },
+  {
+    "name": "The Lyla Apartments",
+    "street": "3521 Wilshire Way",
+    "city": "Richardson",
+    "postcode": "75082",
+    "latitude": 32.999799,
+    "longitude": -96.69838,
+    "website": "",
+    "osm": "relation/8379647"
+  },
+  {
+    "name": "The Mallory Eastside",
+    "street": "1705 North Greenville Avenue",
+    "city": "Richardson",
+    "postcode": "75081",
+    "latitude": 32.971823,
+    "longitude": -96.7165,
+    "website": "https://www.themalloryapts.com/",
+    "osm": "relation/7854057"
+  },
+  {
+    "name": "The Pradera",
+    "street": "851 Greenside Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 33.000844,
+    "longitude": -96.733324,
+    "website": "",
+    "osm": "relation/19945646"
+  },
+  {
+    "name": "The Pradera",
+    "street": "951 Greenside Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.999675,
+    "longitude": -96.738689,
+    "website": "",
+    "osm": "relation/19948671"
+  },
+  {
+    "name": "The Pradera Information Center",
+    "street": "851 Greenside Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 33.001172,
+    "longitude": -96.732316,
+    "website": "https://thepradera.com/",
+    "osm": "way/597863842"
+  },
+  {
+    "name": "The Register",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.999767,
+    "longitude": -96.696467,
+    "website": "",
+    "osm": "relation/15925864"
+  },
+  {
+    "name": "The Riley",
+    "street": "3551 Wilshire Way",
+    "city": "Richardson",
+    "postcode": "75082",
+    "latitude": 33.000653,
+    "longitude": -96.698415,
+    "website": "",
+    "osm": "relation/15925863"
+  },
+  {
+    "name": "The Wexler",
+    "street": "935 South Waterview Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.94119,
+    "longitude": -96.756945,
+    "website": "",
+    "osm": "way/695195018"
+  },
+  {
+    "name": "Twin Rivers Senior Living",
+    "street": "201 South Glenville Drive",
+    "city": "Richardson",
+    "postcode": "75081",
+    "latitude": 32.944274,
+    "longitude": -96.704006,
+    "website": "",
+    "osm": "way/597901819"
+  },
+  {
+    "name": "University Village Leasing Office",
+    "street": "2800 Waterview Parkway",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.989381,
+    "longitude": -96.754898,
+    "website": "https://housing.utdallas.edu/contact/",
+    "osm": "way/309478223"
+  },
+  {
+    "name": "University Village Phase 1",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.984597,
+    "longitude": -96.755145,
+    "website": "",
+    "osm": "way/1058389286"
+  },
+  {
+    "name": "University Village Phase 2",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.982686,
+    "longitude": -96.755438,
+    "website": "",
+    "osm": "way/1058389287"
+  },
+  {
+    "name": "University Village Phase 3",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.984815,
+    "longitude": -96.752613,
+    "website": "",
+    "osm": "way/1058389288"
+  },
+  {
+    "name": "University Village Phase 4",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.986428,
+    "longitude": -96.755359,
+    "website": "",
+    "osm": "way/1058389289"
+  },
+  {
+    "name": "University Village Phase 5",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.986429,
+    "longitude": -96.754604,
+    "website": "",
+    "osm": "way/1058389290"
+  },
+  {
+    "name": "University Village Phase 6",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.987654,
+    "longitude": -96.754475,
+    "website": "",
+    "osm": "way/1058389292"
+  },
+  {
+    "name": "University Village Phase 7",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.987662,
+    "longitude": -96.755607,
+    "website": "",
+    "osm": "way/1058389291"
+  },
+  {
+    "name": "University Village Phase 8",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.989074,
+    "longitude": -96.753297,
+    "website": "",
+    "osm": "way/1058389294"
+  },
+  {
+    "name": "University Village Phase 8A",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.989109,
+    "longitude": -96.7554,
+    "website": "",
+    "osm": "way/1058389293"
+  },
+  {
+    "name": "University Village Phase 9",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.988824,
+    "longitude": -96.751658,
+    "website": "",
+    "osm": "way/1058389295"
+  },
+  {
+    "name": "Vantage at Spring Creek",
+    "street": "2810 Routh Creek Parkway",
+    "city": "Richardson",
+    "postcode": "75082",
+    "latitude": 32.993112,
+    "longitude": -96.705969,
+    "website": "https://www.vantagespringcreek.com",
+    "osm": "node/10828303481"
+  },
+  {
+    "name": "Windsor CityLine Apartments",
+    "street": "1250 Hunt Street",
+    "city": "Richardson",
+    "postcode": "75082",
+    "latitude": 32.99976,
+    "longitude": -96.700813,
+    "website": "",
+    "osm": "relation/8379646"
+  }
+]
