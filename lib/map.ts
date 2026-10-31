@@ -14,6 +14,8 @@ export type MapPin = {
   label?: string;
   /** Pin opens this page when tapped. */
   href?: string;
+  /** Real place, but prices aren't entered yet: drawn grey and small. */
+  unverified?: boolean;
 };
 
 /** Distance in miles between two points (straight line, not driving). */

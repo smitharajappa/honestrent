@@ -235,3 +235,9 @@
   cursor: default;
   font-weight: 600;
 }
+.map-pin-unverified {
+  background: var(--surface-muted);
+  border-color: var(--border-strong);
+  color: var(--text-muted);
+  box-shadow: var(--shadow-card);
+}

@@ -26,6 +26,7 @@ function pinElement(pin: MapPin, highlighted: boolean): HTMLElement {
   el.setAttribute("aria-label", pin.label ? `${pin.name}, ${pin.label}` : pin.name);
   el.textContent = pin.label ?? "";
   if (!pin.label) el.classList.add("map-pin-dot");
+  if (pin.unverified) el.classList.add("map-pin-unverified");
   return el;
 }
 

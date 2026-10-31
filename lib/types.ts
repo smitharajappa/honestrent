@@ -35,6 +35,10 @@ export type Building = ApprovalCriteria & {
   /** Map pin. Null until the address has been looked up. */
   latitude: number | null;
   longitude: number | null;
+  /** The community's own website, if known. */
+  website: string | null;
+  /** "osm" = real name and position from OpenStreetMap, prices not entered yet. */
+  source: "manual" | "osm";
   floor_plans: FloorPlan[];
   building_fees: Fee[];
   building_deals: Deal[];

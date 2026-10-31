@@ -32,6 +32,8 @@ function building(o: Partial<Building> = {}): Building {
     last_verified: "2026-10-20",
     latitude: null,
     longitude: null,
+    website: null,
+    source: "manual",
     min_income_multiple: 3,
     min_credit_score: 650,
     accepts_no_ssn: false,

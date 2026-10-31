@@ -96,6 +96,30 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
       }),
     [items, effectiveFilters.people, budget, moveIn],
   );
+  // Real places with no prices yet: shown grey on the map, never ranked.
+  const mapOnlyPins = useMemo<MapPin[]>(
+    () =>
+      buildings.flatMap((b) => {
+        if (b.floor_plans.length > 0 || b.latitude === null || b.longitude === null)
+          return [];
+        if (
+          effectiveFilters.cities.length > 0 &&
+          !effectiveFilters.cities.includes(b.city)
+        )
+          return [];
+        return [
+          {
+            id: b.id,
+            name: `${b.name} (prices not verified yet)`,
+            latitude: b.latitude,
+            longitude: b.longitude,
+            href: `/buildings/${b.id}`,
+            unverified: true,
+          },
+        ];
+      }),
+    [buildings, effectiveFilters.cities],
+  );
   const stats = getInsight(items);
   const filterCount = activeFilterCount(effectiveFilters);
   const cities = [...new Set(buildings.map((b) => b.city))].sort();
@@ -274,7 +298,7 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
           <div className="mt-6">
             {pins.length > 0 ? (
               <LazyMap
-                pins={pins}
+                pins={[...mapOnlyPins, ...pins]}
                 summary={`${pins.length} apartments with their real monthly cost. Switch to List to read them.`}
                 className="h-[28rem] lg:h-[34rem]"
               />
@@ -284,7 +308,9 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
               </InfoNote>
             )}
             <p className="mt-2 text-sm text-text-muted">
-              Pins show the real monthly cost. Tap a pin to open the apartment.
+              Teal pins show the real monthly cost. Tap a pin to open the apartment.
+              {mapOnlyPins.length > 0 &&
+                ` Grey dots are ${mapOnlyPins.length} more real communities whose prices we haven't verified yet.`}
             </p>
           </div>
         )}
