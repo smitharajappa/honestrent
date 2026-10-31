@@ -219,8 +219,8 @@ export default function StyleguidePage() {
         />
         <p className="mt-2 text-sm text-text-muted">
           Teal pins are buildings (tap to open). Grey dots are real places whose prices
-          aren't verified yet. The white pin is UT Dallas. Tiles from OpenFreeMap; data ©
-          OpenStreetMap contributors.
+          aren&apos;t verified yet. The white pin is UT Dallas. Tiles from OpenFreeMap;
+          data © OpenStreetMap contributors.
         </p>
       </Section>
 
