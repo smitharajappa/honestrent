@@ -10,11 +10,13 @@ import { AlertIcon, ArrowLeftIcon, MapPinIcon, TagIcon } from "@/components/ui/i
 import { VerifiedNote } from "@/components/VerifiedNote";
 import { BuildingCover } from "@/components/BuildingCover";
 import { CostBar } from "@/components/CostBar";
+import { LazyMap } from "@/components/map/LazyMap";
 import { CompareToggle, SaveButton } from "@/components/shortlist/ShortlistButtons";
 import { TrustNotes } from "@/components/TrustNotes";
 import { describeCriteria, pickCriteria } from "@/lib/approval";
 import { fetchBuilding } from "@/lib/buildings";
 import { isDealActive, planRows } from "@/lib/cost";
+import { CAMPUS, milesBetween } from "@/lib/map";
 import { bathroomLabel, bedroomLabel, formatDate, formatUsd } from "@/lib/format";
 import { todayInTexas, validateSearch } from "@/lib/validation";
 
@@ -75,7 +77,13 @@ export default async function BuildingPage({
   const cheapest = rows.find((r) => r.availableByMoveIn) ?? rows[0];
   const deals = building.building_deals.filter((d) => isDealActive(d, today));
   const totalFees = building.building_fees.reduce((sum, f) => sum + f.monthly_usd, 0);
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(building.address)}`;
+  const hasPin = building.latitude !== null && building.longitude !== null;
+  const campusMiles = hasPin
+    ? milesBetween(
+        { latitude: building.latitude!, longitude: building.longitude! },
+        CAMPUS,
+      )
+    : null;
 
   return (
     <main className="page-container pt-6 pb-16">
@@ -106,15 +114,19 @@ export default async function BuildingPage({
             <p className="mt-2 flex items-start gap-1.5 text-text-muted">
               <MapPinIcon className="mt-1 size-4 shrink-0" />
               <span>
-                {building.address} ·{" "}
-                <a
-                  href={mapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-medium text-brand-text underline underline-offset-2"
-                >
-                  Map<span className="sr-only"> (opens in a new tab)</span>
-                </a>
+                {building.address}
+                {hasPin && (
+                  <>
+                    {" "}
+                    ·{" "}
+                    <a
+                      href="#location"
+                      className="font-medium text-brand-text underline underline-offset-2"
+                    >
+                      Map
+                    </a>
+                  </>
+                )}
               </span>
             </p>
             <div className="mt-3">
@@ -161,6 +173,38 @@ export default async function BuildingPage({
               ))}
             </ul>
           </Section>
+
+          {hasPin && (
+            <Section id="location" title="Location">
+              <LazyMap
+                pins={[
+                  {
+                    id: building.id,
+                    name: building.name,
+                    latitude: building.latitude!,
+                    longitude: building.longitude!,
+                  },
+                ]}
+                highlightId={building.id}
+                summary={`${building.name} is about ${campusMiles!.toFixed(1)} miles from UT Dallas in a straight line.`}
+                className="h-72 sm:h-96"
+              />
+              <p className="mt-3 text-sm text-text-muted tabular-nums">
+                About {campusMiles!.toFixed(1)} miles from UT Dallas, measured in a
+                straight line (not a driving route). Map data ©{" "}
+                <a
+                  href="https://www.openstreetmap.org/copyright"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-brand-text underline underline-offset-2"
+                >
+                  OpenStreetMap
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>{" "}
+                contributors.
+              </p>
+            </Section>
+          )}
 
           <Section id="fees" title="Required monthly fees">
             {building.building_fees.length === 0 ? (

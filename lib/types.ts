@@ -32,6 +32,9 @@ export type Building = ApprovalCriteria & {
   address: string;
   city: "Richardson" | "Plano";
   last_verified: string; // YYYY-MM-DD
+  /** Map pin. Null until the address has been looked up. */
+  latitude: number | null;
+  longitude: number | null;
   floor_plans: FloorPlan[];
   building_fees: Fee[];
   building_deals: Deal[];

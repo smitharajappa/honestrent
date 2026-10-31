@@ -5,6 +5,7 @@ import { FitDisplay } from "./approval/FitBadge";
 import { BuildingCover } from "./BuildingCover";
 import { CostBar } from "./CostBar";
 import { CompareToggle, SaveButton } from "./shortlist/ShortlistButtons";
+import { RevealItem } from "./motion/Reveal";
 import { Badge } from "./ui/Badge";
 import { CheckIcon, PlusCircleIcon, TagIcon } from "./ui/icons";
 import { VerifiedNote } from "./VerifiedNote";
@@ -13,6 +14,8 @@ type Props = {
   item: ExploreItem;
   rank?: number;
   today: string;
+  /** Position in the list; later cards fade in a little after earlier ones. */
+  index?: number;
   detailHref: string;
   people?: number;
 };
@@ -21,14 +24,17 @@ type Props = {
  * One building in the results grid. The whole card opens the building page;
  * the save and compare controls sit above that link.
  */
-export function ResultCard({ item, rank, today, detailHref, people = 1 }: Props) {
+export function ResultCard({ item, rank, today, index, detailHref, people = 1 }: Props) {
   const { building, plan, cost, perPerson, matchingPlanCount, fit } = item;
   const difference = cost.realMonthlyCost - cost.advertisedRent;
   const availableNow = plan.available_from <= today;
   const shared = people > 1;
 
   return (
-    <li className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-card transition-[transform,box-shadow,border-color] duration-200 ease-out-soft hover:-translate-y-0.5 hover:border-border-strong hover:shadow-raised">
+    <RevealItem
+      index={index}
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-card transition-[transform,box-shadow,border-color] duration-200 ease-out-soft hover:-translate-y-0.5 hover:border-border-strong hover:shadow-raised"
+    >
       <div className="relative h-32 overflow-hidden">
         <BuildingCover
           id={building.id}
@@ -113,6 +119,6 @@ export function ResultCard({ item, rank, today, detailHref, people = 1 }: Props)
           <CompareToggle buildingId={building.id} />
         </div>
       </article>
-    </li>
+    </RevealItem>
   );
 }

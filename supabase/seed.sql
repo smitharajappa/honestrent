@@ -1,4 +1,5 @@
 -- MADE-UP sample data for testing. These buildings do not exist.
+-- Map pins are made-up spots near Richardson and Plano, not real addresses.
 -- Safe to re-run: it clears the sample tables first.
 
 truncate public.buildings cascade;
@@ -6,14 +7,15 @@ truncate public.buildings cascade;
 with b as (
   insert into public.buildings
     (name, address, city, last_verified, min_income_multiple, min_credit_score,
-     accepts_no_ssn, accepts_guarantor, accepts_international_credit)
+     accepts_no_ssn, accepts_guarantor, accepts_international_credit,
+     latitude, longitude)
   values
-    ('Maple Creek Flats',   '100 Sample Pkwy, Richardson, TX 75080', 'Richardson', '2026-10-20', 3.0, 620, true,  true,  true),
-    ('Cottonwood Commons',  '200 Example Dr, Richardson, TX 75081',  'Richardson', '2026-10-18', 3.0, 650, false, true,  false),
-    ('Bluebonnet Lofts',    '300 Demo Ave, Plano, TX 75074',         'Plano',      '2026-10-22', 2.5, null, true, true,  true),
-    ('Legacy Row Residences','400 Test Blvd, Plano, TX 75024',       'Plano',      '2026-10-15', 3.0, 680, false, false, false),
-    ('Prairie Oak Apartments','500 Mock St, Richardson, TX 75082',   'Richardson', '2026-10-21', 2.75, 600, true, true, false),
-    ('Willow Park Place',   '600 Fake Ln, Plano, TX 75075',          'Plano',      '2026-10-10', 3.0, 640, false, true,  true)
+    ('Maple Creek Flats',   '100 Sample Pkwy, Richardson, TX 75080', 'Richardson', '2026-10-20', 3.0, 620, true,  true,  true, 32.961, -96.729),
+    ('Cottonwood Commons',  '200 Example Dr, Richardson, TX 75081',  'Richardson', '2026-10-18', 3.0, 650, false, true,  false, 32.978, -96.705),
+    ('Bluebonnet Lofts',    '300 Demo Ave, Plano, TX 75074',         'Plano',      '2026-10-22', 2.5, null, true, true,  true, 33.019, -96.73),
+    ('Legacy Row Residences','400 Test Blvd, Plano, TX 75024',       'Plano',      '2026-10-15', 3.0, 680, false, false, false, 33.078, -96.821),
+    ('Prairie Oak Apartments','500 Mock St, Richardson, TX 75082',   'Richardson', '2026-10-21', 2.75, 600, true, true, false, 32.989, -96.749),
+    ('Willow Park Place',   '600 Fake Ln, Plano, TX 75075',          'Plano',      '2026-10-10', 3.0, 640, false, true,  true, 33.035, -96.745)
   returning id, name
 ),
 plans as (
