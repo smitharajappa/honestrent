@@ -5,6 +5,10 @@ import * as maplibregl from "maplibre-gl";
 import { useEffect, useRef, useState } from "react";
 import { CAMPUS, MAP_STYLE_URL, type MapPin } from "@/lib/map";
 
+// Next.js can't bundle MapLibre's background worker, so we serve it from /public/maplibre
+// (copied there by "npm install"; see package.json).
+maplibregl.setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
+
 type Props = {
   pins: MapPin[];
   /** Pin drawn larger and in front (the building you are looking at). */
@@ -107,7 +111,7 @@ export default function BuildingMap({
           ref={container}
           role="img"
           aria-label={`Map. ${summary}`}
-          className="absolute inset-0"
+          className="h-full w-full"
         />
       )}
     </div>
