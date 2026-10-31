@@ -31,7 +31,7 @@ plans as (
     ('Legacy Row Residences',  'The Elm',     1, 1.0, 1520, 12, '2026-11-01'),
     ('Legacy Row Residences',  'The Oak',     2, 2.0, 2100, 12, '2026-11-20'),
     ('Prairie Oak Apartments', 'Studio S',    0, 1.0, 995,  12, '2026-11-10'),
-    ('Prairie Oak Apartments', '1 Bed Plus',  1, 1.0, 1150, 12, '2026-11-01', 32.989, -96.749),
+    ('Prairie Oak Apartments', '1 Bed Plus',  1, 1.0, 1150, 12, '2026-11-01'),
     ('Willow Park Place',      'Willow 1',    1, 1.0, 1260, 15, '2026-11-01'),
     ('Willow Park Place',      'Willow 2',    2, 2.0, 1590, 15, '2027-01-05')
   ) as p(building, name, bedrooms, bathrooms, rent_usd, lease_months, available_from)
@@ -60,9 +60,9 @@ fees as (
 insert into public.building_deals (building_id, description, kind, amount, valid_until)
 select b.id, d.description, d.kind, d.amount, d.valid_until::date
 from b join (values
-  ('Cottonwood Commons',  '6 weeks free on a 12-month lease', 'free_weeks', 6,   '2026-12-31', 32.978, -96.705),
+  ('Cottonwood Commons',  '6 weeks free on a 12-month lease', 'free_weeks', 6,   '2026-12-31'),
   ('Bluebonnet Lofts',    '$500 off move-in',                 'fixed_usd',  500, '2026-11-30'),
   ('Legacy Row Residences','8 weeks free',                    'free_weeks', 8,   '2026-12-15'),
-  ('Willow Park Place',   '1 month free (as 4 weeks)',        'free_weeks', 4,   null, 33.035, -96.745)
+  ('Willow Park Place',   '1 month free (as 4 weeks)',        'free_weeks', 4,   null)
 ) as d(building, description, kind, amount, valid_until)
   on d.building = b.name;
