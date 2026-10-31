@@ -1,0 +1,672 @@
+[
+  {
+    "name": "1201 Park Apartment Homes",
+    "street": "1201 East Park Boulevard",
+    "city": "Plano",
+    "postcode": "75074",
+    "latitude": 33.033887,
+    "longitude": -96.696384,
+    "website": "",
+    "osm": "way/1319278878"
+  },
+  {
+    "name": "AMLI West Plano",
+    "street": "5961 West Parker Road",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.047023,
+    "longitude": -96.827561,
+    "website": "https://www.amli.com/apartments/dallas/north-dallas-apartments/amli-west-plano",
+    "osm": "relation/9045174"
+  },
+  {
+    "name": "Axis",
+    "street": "3700 Mapleshade Lane",
+    "city": "Plano",
+    "postcode": "75075",
+    "latitude": 33.002488,
+    "longitude": -96.762993,
+    "website": "",
+    "osm": "relation/8758630"
+  },
+  {
+    "name": "Bel Air Downtown",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.018791,
+    "longitude": -96.698908,
+    "website": "",
+    "osm": "way/650412100"
+  },
+  {
+    "name": "Bell Gateway Village",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.000985,
+    "longitude": -96.670193,
+    "website": "",
+    "osm": "way/1443560408"
+  },
+  {
+    "name": "Bentley Place Apartments",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.047621,
+    "longitude": -96.825787,
+    "website": "",
+    "osm": "way/429910838"
+  },
+  {
+    "name": "Broadstone Evoke",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.015246,
+    "longitude": -96.796685,
+    "website": "",
+    "osm": "way/590254130"
+  },
+  {
+    "name": "Camden Legacy Park",
+    "street": "6600 Preston Road",
+    "city": "Plano",
+    "postcode": "75024",
+    "latitude": 33.063024,
+    "longitude": -96.794973,
+    "website": "https://www.camdenliving.com/apartments/plano-tx/camden-legacy-park",
+    "osm": "way/672361113"
+  },
+  {
+    "name": "Creekside at Legacy",
+    "street": "6300 Windcrest Drive",
+    "city": "Plano",
+    "postcode": "75024",
+    "latitude": 33.0589,
+    "longitude": -96.804397,
+    "website": "https://www.creeksideatlegacy.com/",
+    "osm": "way/429910819"
+  },
+  {
+    "name": "Fairway Apartments",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.024225,
+    "longitude": -96.770406,
+    "website": "",
+    "osm": "way/514363098"
+  },
+  {
+    "name": "Ferro",
+    "street": "1005 11th Street",
+    "city": "Plano",
+    "postcode": "75074",
+    "latitude": 33.013287,
+    "longitude": -96.700046,
+    "website": "",
+    "osm": "way/1117694956"
+  },
+  {
+    "name": "Heritage At Lakeside",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.054349,
+    "longitude": -96.798861,
+    "website": "",
+    "osm": "way/429910804"
+  },
+  {
+    "name": "Huntington Apartments",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.089446,
+    "longitude": -96.803103,
+    "website": "",
+    "osm": "relation/9303079"
+  },
+  {
+    "name": "Jada Legacy Central Apartments",
+    "street": "6501 Excellence Way",
+    "city": "Plano",
+    "postcode": "75023",
+    "latitude": 33.061648,
+    "longitude": -96.694178,
+    "website": "https://www.jadalegacycentralapartments.com/",
+    "osm": "relation/10550309"
+  },
+  {
+    "name": "Junction 15 Apartments",
+    "street": "930 East 15th Street",
+    "city": "Plano",
+    "postcode": "75074",
+    "latitude": 33.01877,
+    "longitude": -96.70143,
+    "website": "",
+    "osm": "relation/9058784"
+  },
+  {
+    "name": "K Avenue Lofts",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.032503,
+    "longitude": -96.699926,
+    "website": "",
+    "osm": "way/1355046445"
+  },
+  {
+    "name": "La Ventura Apartments",
+    "street": "2600 Ventura Drive",
+    "city": "Plano",
+    "postcode": "75093",
+    "latitude": 33.034298,
+    "longitude": -96.797002,
+    "website": "",
+    "osm": "way/429910839"
+  },
+  {
+    "name": "Legacy North",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.081806,
+    "longitude": -96.8202,
+    "website": "",
+    "osm": "way/1473743038"
+  },
+  {
+    "name": "Legacy Village Apartments",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.073803,
+    "longitude": -96.820415,
+    "website": "",
+    "osm": "way/1498580641"
+  },
+  {
+    "name": "Los Rios Park Apartments",
+    "street": "4701 14th Street",
+    "city": "Plano",
+    "postcode": "75074",
+    "latitude": 33.012744,
+    "longitude": -96.646449,
+    "website": "https://www.maac.com/texas/dallas/los-rios-park/",
+    "osm": "way/664780572"
+  },
+  {
+    "name": "MAA Legacy",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.075195,
+    "longitude": -96.82057,
+    "website": "",
+    "osm": "way/1498580643"
+  },
+  {
+    "name": "Mariposa",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.06778,
+    "longitude": -96.83115,
+    "website": "",
+    "osm": "node/12620791002"
+  },
+  {
+    "name": "Mission Gate",
+    "street": "8025 Ohio Drive",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.086813,
+    "longitude": -96.797175,
+    "website": "",
+    "osm": "way/663593344"
+  },
+  {
+    "name": "Morada",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.018834,
+    "longitude": -96.699888,
+    "website": "",
+    "osm": "way/1571201040"
+  },
+  {
+    "name": "Opal Legacy Central Apartments",
+    "street": "6500 Excellence Way",
+    "city": "Plano",
+    "postcode": "75023",
+    "latitude": 33.061439,
+    "longitude": -96.693269,
+    "website": "https://www.opallegacycentralapartments.com/",
+    "osm": "relation/21185760"
+  },
+  {
+    "name": "Sloane Street Apartments",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.024509,
+    "longitude": -96.84125,
+    "website": "",
+    "osm": "way/996358621"
+  },
+  {
+    "name": "Summer Park",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.025162,
+    "longitude": -96.756777,
+    "website": "",
+    "osm": "way/590541896"
+  },
+  {
+    "name": "The Hathaway at Willow Bend",
+    "street": "2525 Preston Road",
+    "city": "Plano",
+    "postcode": "75093",
+    "latitude": 33.031978,
+    "longitude": -96.797037,
+    "website": "https://www.madisonapartmentgroup.com/plano/madison-willow-bend/",
+    "osm": "way/648582344"
+  },
+  {
+    "name": "The Kincaid at Legacy",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.076258,
+    "longitude": -96.823216,
+    "website": "",
+    "osm": "way/1573752727"
+  },
+  {
+    "name": "The Villa",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.023826,
+    "longitude": -96.752282,
+    "website": "",
+    "osm": "way/590541890"
+  },
+  {
+    "name": "Villas at Legacy",
+    "street": "5301 West Spring Creek Parkway",
+    "city": "Plano",
+    "postcode": "75024",
+    "latitude": 33.059296,
+    "longitude": -96.807818,
+    "website": "https://villasatlegacy-plano.com/",
+    "osm": "way/429910809"
+  },
+  {
+    "name": "Waters Edge",
+    "street": "5000 Whitestone Lane",
+    "city": "Plano",
+    "postcode": "75024",
+    "latitude": 33.058783,
+    "longitude": -96.798719,
+    "website": "https://watersedgeplano.com/",
+    "osm": "way/452572155"
+  },
+  {
+    "name": "Windrose Tower",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.084883,
+    "longitude": -96.826994,
+    "website": "",
+    "osm": "node/12520420003"
+  },
+  {
+    "name": "Windsor Metro West Apartments",
+    "street": "",
+    "city": "Plano",
+    "postcode": "",
+    "latitude": 33.087423,
+    "longitude": -96.82693,
+    "website": "",
+    "osm": "way/695040536"
+  },
+  {
+    "name": "Windsor at Legacy",
+    "street": "6400 Windcrest Drive",
+    "city": "Plano",
+    "postcode": "75024",
+    "latitude": 33.062903,
+    "longitude": -96.80298,
+    "website": "https://www.windsoratlegacy.com/",
+    "osm": "way/429910836"
+  },
+  {
+    "name": "Amber Dawn",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.938733,
+    "longitude": -96.755902,
+    "website": "",
+    "osm": "way/695121418"
+  },
+  {
+    "name": "Bell CityLine Apartments",
+    "street": "1230 East CityLine Drive",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.998801,
+    "longitude": -96.701336,
+    "website": "",
+    "osm": "way/597520850"
+  },
+  {
+    "name": "Belt & Main",
+    "street": "150 West Main Street",
+    "city": "Richardson",
+    "postcode": "75081",
+    "latitude": 32.9506,
+    "longitude": -96.732369,
+    "website": "https://beltandmain.com/",
+    "osm": "way/1451540191"
+  },
+  {
+    "name": "Creekside Townhomes",
+    "street": "3650 Custer Parkway",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 33.00221,
+    "longitude": -96.729247,
+    "website": "https://www.lifeatcreekside.com",
+    "osm": "relation/19945163"
+  },
+  {
+    "name": "Falls on Clearwood Apartments",
+    "street": "613 Clearwood Drive",
+    "city": "Richardson",
+    "postcode": "75081",
+    "latitude": 32.936086,
+    "longitude": -96.746436,
+    "website": "",
+    "osm": "way/597116218"
+  },
+  {
+    "name": "Hillsdale Garden Apartments",
+    "street": "800 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940802,
+    "longitude": -96.752508,
+    "website": "",
+    "osm": "way/695195015"
+  },
+  {
+    "name": "Hunter's Court",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.938753,
+    "longitude": -96.754777,
+    "website": "https://www.hunterscourtapts.com/",
+    "osm": "way/695121419"
+  },
+  {
+    "name": "Jefferson Galatyn Park",
+    "street": "1050 Galatyn Parkway",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.98249,
+    "longitude": -96.707328,
+    "website": "https://www.jeffersongalatynpark.com/",
+    "osm": "relation/7633653"
+  },
+  {
+    "name": "Jefferson Routh Woods",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.990806,
+    "longitude": -96.705024,
+    "website": "",
+    "osm": "way/544051388"
+  },
+  {
+    "name": "Lakefront Villas Apartments",
+    "street": "900 South Weatherred Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.941348,
+    "longitude": -96.753187,
+    "website": "",
+    "osm": "way/695195016"
+  },
+  {
+    "name": "Lakeside On Spring Valley",
+    "street": "1000 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940742,
+    "longitude": -96.755163,
+    "website": "",
+    "osm": "way/695195017"
+  },
+  {
+    "name": "Madison on Melrose",
+    "street": "1520 Richardson Drive",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.969622,
+    "longitude": -96.725639,
+    "website": "",
+    "osm": "way/619918726"
+  },
+  {
+    "name": "Marquis at Waterview",
+    "street": "800 West Renner Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.998976,
+    "longitude": -96.735313,
+    "website": "https://www.marquiswaterview.com/",
+    "osm": "way/307312169"
+  },
+  {
+    "name": "Miramonte",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.942005,
+    "longitude": -96.746623,
+    "website": "",
+    "osm": "way/376269825"
+  },
+  {
+    "name": "Northgale Village",
+    "street": "912 South Weatherred Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.94164,
+    "longitude": -96.752026,
+    "website": "",
+    "osm": "way/695195014"
+  },
+  {
+    "name": "Northside",
+    "street": "3000 Northside Boulevard",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.99389,
+    "longitude": -96.750201,
+    "website": "",
+    "osm": "relation/7764983"
+  },
+  {
+    "name": "Northside Apartments",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.995077,
+    "longitude": -96.748479,
+    "website": "https://www.liveatnorthside.com",
+    "osm": "way/1118205311"
+  },
+  {
+    "name": "Oaks at Spring Valley",
+    "street": "740 West Spring Valley Road",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.940729,
+    "longitude": -96.75125,
+    "website": "",
+    "osm": "way/695195012"
+  },
+  {
+    "name": "Prestonwood Apartment Homes",
+    "street": "333 Prestonwood Drive",
+    "city": "Richardson",
+    "postcode": "75081",
+    "latitude": 32.935813,
+    "longitude": -96.743852,
+    "website": "",
+    "osm": "way/739835741"
+  },
+  {
+    "name": "The Beverly",
+    "street": "900 Frances Way",
+    "city": "Richardson",
+    "postcode": "75081",
+    "latitude": 32.945148,
+    "longitude": -96.710052,
+    "website": "https://www.thebeverlyateam.com",
+    "osm": "way/597909225"
+  },
+  {
+    "name": "The Flats at Palisades",
+    "street": "2525 Empire Drive",
+    "city": "Richardson",
+    "postcode": "75082",
+    "latitude": 32.987549,
+    "longitude": -96.715246,
+    "website": "https://www.udr.com/dallas-apartments/richardson/the-flats-at-palisades/",
+    "osm": "relation/8384071"
+  },
+  {
+    "name": "The James at Canyon Creek",
+    "street": "850 Greenside Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 33.001956,
+    "longitude": -96.733904,
+    "website": "https://www.thejamesatcanyoncreek.com",
+    "osm": "relation/19945080"
+  },
+  {
+    "name": "The Knoll on canyon creek",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.989754,
+    "longitude": -96.728616,
+    "website": "",
+    "osm": "way/1119748369"
+  },
+  {
+    "name": "The Lyla Apartments",
+    "street": "3521 Wilshire Way",
+    "city": "Richardson",
+    "postcode": "75082",
+    "latitude": 32.999799,
+    "longitude": -96.69838,
+    "website": "",
+    "osm": "relation/8379647"
+  },
+  {
+    "name": "The Mallory Eastside",
+    "street": "1705 North Greenville Avenue",
+    "city": "Richardson",
+    "postcode": "75081",
+    "latitude": 32.971823,
+    "longitude": -96.7165,
+    "website": "https://www.themalloryapts.com/",
+    "osm": "relation/7854057"
+  },
+  {
+    "name": "The Pradera",
+    "street": "851 Greenside Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 33.000844,
+    "longitude": -96.733324,
+    "website": "https://thepradera.com/",
+    "osm": "relation/19945646"
+  },
+  {
+    "name": "The Register",
+    "street": "",
+    "city": "Richardson",
+    "postcode": "",
+    "latitude": 32.999767,
+    "longitude": -96.696467,
+    "website": "",
+    "osm": "relation/15925864"
+  },
+  {
+    "name": "The Riley",
+    "street": "3551 Wilshire Way",
+    "city": "Richardson",
+    "postcode": "75082",
+    "latitude": 33.000653,
+    "longitude": -96.698415,
+    "website": "",
+    "osm": "relation/15925863"
+  },
+  {
+    "name": "The Wexler",
+    "street": "935 South Waterview Drive",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.94119,
+    "longitude": -96.756945,
+    "website": "",
+    "osm": "way/695195018"
+  },
+  {
+    "name": "University Village",
+    "street": "2800 Waterview Parkway",
+    "city": "Richardson",
+    "postcode": "75080",
+    "latitude": 32.989381,
+    "longitude": -96.754898,
+    "website": "https://housing.utdallas.edu/contact/",
+    "osm": "way/309478223"
+  },
+  {
+    "name": "Vantage at Spring Creek",
+    "street": "2810 Routh Creek Parkway",
+    "city": "Richardson",
+    "postcode": "75082",
+    "latitude": 32.993112,
+    "longitude": -96.705969,
+    "website": "https://www.vantagespringcreek.com",
+    "osm": "node/10828303481"
+  },
+  {
+    "name": "Windsor CityLine Apartments",
+    "street": "1250 Hunt Street",
+    "city": "Richardson",
+    "postcode": "75082",
+    "latitude": 32.99976,
+    "longitude": -96.700813,
+    "website": "",
+    "osm": "relation/8379646"
+  }
+]
