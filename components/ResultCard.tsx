@@ -103,6 +103,11 @@ export function ResultCard({ item, rank, today, index, detailHref, people = 1 }:
         <CostBar cost={cost} />
 
         {fit && <FitDisplay fit={fit} compact />}
+        {!building.approval_known && (
+          <p className="mt-3 text-sm text-text-muted">
+            Approval rules not confirmed yet. Ask the leasing office.
+          </p>
+        )}
 
         <p className="mt-3 text-sm">
           <span className="font-medium">{plan.name}</span>

@@ -6,6 +6,7 @@ import { InterestForm } from "@/components/InterestForm";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { InfoNote } from "@/components/ui/InfoNote";
 import { AlertIcon, ArrowLeftIcon, MapPinIcon, TagIcon } from "@/components/ui/icons";
 import { VerifiedNote } from "@/components/VerifiedNote";
 import { BuildingCover } from "@/components/BuildingCover";
@@ -141,6 +142,10 @@ export default async function BuildingPage({
               )}
             </div>
           </section>
+
+          {building.notes && !mapOnly && (
+            <InfoNote className="mt-6">{building.notes}</InfoNote>
+          )}
 
           {mapOnly && (
             <Section id="unverified" title="We haven't verified this community yet">
@@ -304,7 +309,7 @@ export default async function BuildingPage({
                     </div>
                   ))}
                 </dl>
-                {cheapest && (
+                {cheapest && building.approval_known && (
                   <>
                     <FitBadge
                       criteria={pickCriteria(building)}

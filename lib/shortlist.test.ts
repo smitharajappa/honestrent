@@ -28,6 +28,8 @@ function building(id: string, plans: FloorPlan[]): Building {
     longitude: null,
     website: null,
     source: "manual",
+    approval_known: true,
+    notes: null,
     min_income_multiple: 3,
     min_credit_score: null,
     accepts_no_ssn: true,

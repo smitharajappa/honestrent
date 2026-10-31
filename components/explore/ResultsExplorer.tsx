@@ -125,12 +125,12 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
   const cities = [...new Set(buildings.map((b) => b.city))].sort();
 
   const fitCounts = profile
-    ? items.reduce((acc, i) => ({ ...acc, [i.fit!.level]: acc[i.fit!.level] + 1 }), {
-        good: 0,
-        guarantor: 0,
-        unlikely: 0,
-      })
+    ? items.reduce(
+        (acc, i) => (i.fit ? { ...acc, [i.fit.level]: acc[i.fit.level] + 1 } : acc),
+        { good: 0, guarantor: 0, unlikely: 0 },
+      )
     : null;
+  const unconfirmedCount = profile ? items.filter((i) => !i.fit).length : 0;
 
   return (
     <div className="mt-8 grid gap-8 pb-24 lg:grid-cols-[17rem_1fr] xl:grid-cols-[18rem_1fr]">
@@ -274,6 +274,8 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
                   `${fitCounts.good} good ${fitCounts.good === 1 ? "fit" : "fits"}`,
                 fitCounts.guarantor && `${fitCounts.guarantor} possible with guarantor`,
                 fitCounts.unlikely && `${fitCounts.unlikely} unlikely`,
+                unconfirmedCount > 0 &&
+                  `${unconfirmedCount} approval rules not confirmed`,
               ]
                 .filter(Boolean)
                 .join(" · ")}
