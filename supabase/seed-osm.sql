@@ -15,7 +15,6 @@ values
     ('Bell Gateway Village', 'Address not confirmed, Plano, TX', 'Plano', '2026-10-31', 33.000985, -96.670193, null, 'osm'),
     ('Bentley Place Apartments', 'Address not confirmed, Plano, TX', 'Plano', '2026-10-31', 33.047621, -96.825787, null, 'osm'),
     ('Broadstone Evoke', 'Address not confirmed, Plano, TX', 'Plano', '2026-10-31', 33.015246, -96.796685, null, 'osm'),
-    ('Camden Legacy Park', '6600 Preston Road, Plano, TX 75024', 'Plano', '2026-10-31', 33.063024, -96.794973, 'https://www.camdenliving.com/apartments/plano-tx/camden-legacy-park', 'osm'),
     ('Creekside at Legacy', '6300 Windcrest Drive, Plano, TX 75024', 'Plano', '2026-10-31', 33.0589, -96.804397, 'https://www.creeksideatlegacy.com/', 'osm'),
     ('Fairway Apartments', 'Address not confirmed, Plano, TX', 'Plano', '2026-10-31', 33.024225, -96.770406, null, 'osm'),
     ('Ferro', '1005 11th Street, Plano, TX 75074', 'Plano', '2026-10-31', 33.013287, -96.700046, null, 'osm'),

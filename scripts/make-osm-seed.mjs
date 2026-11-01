@@ -5,10 +5,12 @@
 import { readFileSync, writeFileSync } from "node:fs";
 
 const list = JSON.parse(readFileSync("research/complexes-osm-clean.json", "utf8"));
+// Communities already entered with prices in seed-live.sql: don't add them twice.
+const COVERED = new Set(["Camden Legacy Park"]);
 const q = (s) => `'${String(s).replaceAll("'", "''")}'`;
 
 const rows = list
-  .filter((r) => r.city === "Richardson" || r.city === "Plano")
+  .filter((r) => (r.city === "Richardson" || r.city === "Plano") && !COVERED.has(r.name))
   .map((r) => {
     const address = r.street
       ? `${r.street}, ${r.city}, TX${r.postcode ? ` ${r.postcode}` : ""}`
