@@ -73,7 +73,7 @@ export function BuildingLocation({
               onClick={() => toggle(kind)}
               className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border px-3.5 text-sm font-medium ${
                 on
-                  ? "border-text bg-text text-bg"
+                  ? "border-brand bg-brand text-brand-fg"
                   : "border-border-strong bg-surface text-text"
               }`}
             >
@@ -85,7 +85,7 @@ export function BuildingLocation({
               {tab}
               <span
                 className={
-                  on ? "text-bg/80 tabular-nums" : "text-text-muted tabular-nums"
+                  on ? "text-brand-fg/80 tabular-nums" : "text-text-muted tabular-nums"
                 }
               >
                 {counts[kind]}

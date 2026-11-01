@@ -1,8 +1,9 @@
 import Link from "next/link";
 import type { ExploreItem } from "@/lib/explore";
 import { bedroomLabel, formatDate, formatUsd } from "@/lib/format";
+import { isDealActive } from "@/lib/cost";
 import { SOURCE_LABELS, type UtilityView } from "@/lib/utilities";
-import { FitDisplay } from "./approval/FitBadge";
+import { FitDisplay, FitUnconfirmed } from "./approval/FitBadge";
 import { BuildingCover } from "./BuildingCover";
 import { CostBar } from "./CostBar";
 import { CompareToggle, SaveButton } from "./shortlist/ShortlistButtons";
@@ -19,6 +20,8 @@ type Props = {
   index?: number;
   detailHref: string;
   people?: number;
+  /** A nearby good fit to suggest when this building is "Unlikely". */
+  alternative?: { name: string; href: string };
 };
 
 /** One line saying what the utilities part of the price is and where it came from. */
@@ -49,7 +52,15 @@ export function UtilitiesLine({ utilities }: { utilities: UtilityView }) {
  * One building in the results grid. The whole card opens the building page;
  * the save and compare controls sit above that link.
  */
-export function ResultCard({ item, rank, today, index, detailHref, people = 1 }: Props) {
+export function ResultCard({
+  item,
+  rank,
+  today,
+  index,
+  detailHref,
+  people = 1,
+  alternative,
+}: Props) {
   const {
     building,
     plan,
@@ -64,6 +75,7 @@ export function ResultCard({ item, rank, today, index, detailHref, people = 1 }:
   const availableNow = plan.available_from <= today;
   const shared = people > 1;
   const isEstimate = utilities.known && utilities.avg > 0;
+  const deal = building.building_deals.find((d) => isDealActive(d, today));
 
   return (
     <RevealItem
@@ -80,6 +92,18 @@ export function ResultCard({ item, rank, today, index, detailHref, people = 1 }:
           {rank === 1 && <Badge tone="success">Lowest total</Badge>}
           <Badge className="bg-surface text-text">{building.city}</Badge>
         </div>
+        {deal && (
+          <Badge
+            tone="accent"
+            icon={<TagIcon className="size-3.5" />}
+            className="absolute bottom-3 left-3 max-w-[70%]"
+          >
+            <span className="truncate">Deal: {deal.description}</span>
+          </Badge>
+        )}
+        <p className="absolute right-3 bottom-2.5 text-[11px] font-medium text-text-muted">
+          Photos coming soon
+        </p>
         <SaveButton
           buildingId={building.id}
           buildingName={building.name}
@@ -102,7 +126,9 @@ export function ResultCard({ item, rank, today, index, detailHref, people = 1 }:
                 {building.name}
               </Link>
             </h3>
-            <p className="mt-0.5 truncate text-sm text-text-muted">{building.address}</p>
+            <p className="mt-0.5 line-clamp-2 text-sm text-text-muted">
+              {building.address}
+            </p>
           </div>
           <div className="shrink-0 text-right">
             <p className="text-2xl leading-none font-bold tracking-tight tabular-nums sm:text-3xl">
@@ -145,12 +171,8 @@ export function ResultCard({ item, rank, today, index, detailHref, people = 1 }:
           <UtilitiesLine utilities={utilities} />
         </p>
 
-        {fit && <FitDisplay fit={fit} compact />}
-        {!building.approval_known && (
-          <p className="mt-3 text-sm text-text-muted">
-            Approval rules not confirmed yet. Ask the leasing office.
-          </p>
-        )}
+        {fit && <FitDisplay fit={fit} compact alternative={alternative} />}
+        {!building.approval_known && <FitUnconfirmed compact />}
 
         <p className="mt-3 text-sm">
           <span className="font-medium">{plan.name}</span>

@@ -28,7 +28,7 @@ export function CostBar({
     <div role="img" aria-label={label} className="mt-3">
       <div className="relative flex h-2.5 overflow-hidden rounded-full bg-surface-muted">
         <span
-          className="h-full origin-left animate-bar-grow bg-border-strong/60"
+          className="h-full origin-left animate-bar-grow bg-brand/55"
           style={{ width: pct(cost.advertisedRent) }}
         />
         {cost.monthlyFees > 0 && (
@@ -38,7 +38,7 @@ export function CostBar({
           />
         )}
         {util > 0 && (
-          <span className="h-full bg-info-text/60" style={{ width: pct(util) }} />
+          <span className="h-full bg-warning-text/40" style={{ width: pct(util) }} />
         )}
         {cost.monthlyDealSavings > 0 && (
           <span
@@ -52,7 +52,7 @@ export function CostBar({
         className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-text-muted tabular-nums"
       >
         <span className="inline-flex items-center gap-1">
-          <span className="size-2 rounded-full bg-border-strong/60" />
+          <span className="size-2 rounded-full bg-brand/55" />
           Rent {formatUsd(cost.advertisedRent)}
         </span>
         <span className="inline-flex items-center gap-1">
@@ -61,7 +61,7 @@ export function CostBar({
         </span>
         {util > 0 && (
           <span className="inline-flex items-center gap-1">
-            <span className="size-2 rounded-full bg-info-text/60" />+ Utilities ~
+            <span className="size-2 rounded-full bg-warning-text/40" />+ Utilities ~
             {formatUsd(util)}
           </span>
         )}

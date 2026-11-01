@@ -16,6 +16,8 @@ export type MapPin = {
   href?: string;
   /** Real place, but prices aren't entered yet: drawn grey and small. */
   unverified?: boolean;
+  /** Approval fit for this renter, drawn as the pin's ring. Absent = no answers given. */
+  fit?: "good" | "guarantor" | "unlikely" | "unknown";
 };
 
 /** Distance in miles between two points (straight line, not driving). */

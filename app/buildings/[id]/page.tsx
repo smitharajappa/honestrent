@@ -282,7 +282,7 @@ export default async function BuildingPage({
                       {(() => {
                         const u = utilitiesFor(building, plan.bedrooms);
                         return u.known && u.avg > 0 ? (
-                          <p className="text-xs text-info-text">
+                          <p className="text-xs text-warning-text">
                             + ~{formatUsd(u.avg)} utilities
                           </p>
                         ) : null;
@@ -367,7 +367,7 @@ export default async function BuildingPage({
                 <Section id="safety" title="Reported incidents nearby">
                   {safety ? (
                     <>
-                      <p className="text-sm">
+                      <p className="rounded-xl bg-slate-soft p-3 text-sm text-slate-text">
                         <strong className="font-semibold">
                           {COMPARISON_TEXT[compareWithCity(safety).level]}
                         </strong>{" "}

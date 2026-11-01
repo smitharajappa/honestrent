@@ -100,10 +100,11 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
               effectiveFilters.people > 1 ? perPerson : cost.realMonthlyCost,
             ),
             href: `/buildings/${building.id}?budget=${budget}&moveIn=${moveIn}`,
+            fit: profile ? (item.fit?.level ?? "unknown") : undefined,
           },
         ];
       }),
-    [items, effectiveFilters.people, budget, moveIn],
+    [items, effectiveFilters.people, budget, moveIn, profile],
   );
   // Real places with no prices yet: shown grey on the map, never ranked.
   const mapOnlyPins = useMemo<MapPin[]>(
@@ -129,6 +130,8 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
       }),
     [buildings, effectiveFilters.cities],
   );
+  // Offered under every "Unlikely" card, so a refusal always comes with a next step.
+  const firstGoodFit = items.find((i) => i.fit?.level === "good");
   const stats = getInsight(items);
   const feesSaved = applicationFeesSaved(items, effectiveFilters.people);
   const filterCount = activeFilterCount(effectiveFilters);
@@ -266,14 +269,14 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
                 aria-pressed={view === option.value}
                 onClick={() => setView(option.value)}
                 className={`relative inline-flex min-h-11 items-center gap-1.5 rounded-lg px-4 text-sm font-semibold ${
-                  view === option.value ? "text-bg" : "text-text-muted"
+                  view === option.value ? "text-brand-fg" : "text-text-muted"
                 }`}
               >
                 {view === option.value && (
                   <motion.span
                     layoutId="view-pill"
                     transition={{ type: "spring", stiffness: 500, damping: 40 }}
-                    className="absolute inset-0 rounded-lg bg-text"
+                    className="absolute inset-0 rounded-lg bg-brand"
                   />
                 )}
                 <span className="relative inline-flex items-center gap-1.5">
@@ -365,6 +368,14 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
                 today={today}
                 people={effectiveFilters.people}
                 detailHref={`/buildings/${item.building.id}?budget=${budget}&moveIn=${moveIn}`}
+                alternative={
+                  item.fit?.level === "unlikely" && firstGoodFit
+                    ? {
+                        name: firstGoodFit.building.name,
+                        href: `/buildings/${firstGoodFit.building.id}?budget=${budget}&moveIn=${moveIn}`,
+                      }
+                    : undefined
+                }
               />
             ))}
           </ol>

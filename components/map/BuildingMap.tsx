@@ -28,7 +28,18 @@ function pinElement(pin: MapPin, highlighted: boolean): HTMLElement {
   const el = document.createElement(pin.href ? "a" : "div");
   el.className = `map-pin${highlighted ? " map-pin-main" : ""}`;
   if (pin.href) (el as HTMLAnchorElement).href = pin.href;
-  el.setAttribute("aria-label", pin.label ? `${pin.name}, ${pin.label}` : pin.name);
+  const FIT_WORDS = {
+    good: "good fit",
+    guarantor: "possible with guarantor",
+    unlikely: "unlikely",
+    unknown: "approval rules not confirmed",
+  } as const;
+  const fitText = pin.fit ? `, ${FIT_WORDS[pin.fit]}` : "";
+  el.setAttribute(
+    "aria-label",
+    (pin.label ? `${pin.name}, ${pin.label}` : pin.name) + fitText,
+  );
+  if (pin.fit) el.classList.add(`map-pin-fit-${pin.fit}`);
   el.textContent = pin.label ?? "";
   if (!pin.label) el.classList.add("map-pin-dot");
   if (pin.unverified) el.classList.add("map-pin-unverified");

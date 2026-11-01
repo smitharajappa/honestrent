@@ -23,7 +23,7 @@ export function InsightBanner({ insight }: { insight: Insight }) {
             : "Not known"
         }
         note="on average, varies month to month"
-        tone="info"
+        tone={insight.avgUtilities > 0 ? "warning" : "neutral"}
       />
       <Stat
         label="Move-in deals take off"

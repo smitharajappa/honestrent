@@ -58,7 +58,7 @@ export function SectionNav({ items }: { items: NavItem[] }) {
                 onClick={(e) => jump(e, item.id)}
                 aria-current={on ? "true" : undefined}
                 className={`inline-flex min-h-11 items-center rounded-full px-3.5 text-sm font-semibold ${
-                  on ? "bg-text text-bg" : "text-text-muted hover:text-text"
+                  on ? "bg-brand text-brand-fg" : "text-text-muted hover:text-text"
                 }`}
               >
                 {item.label}
