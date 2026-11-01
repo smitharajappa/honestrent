@@ -28,7 +28,8 @@ merged to `main`. To load data: Actions tab, **Load data into Supabase**, **Run 
 
 - Migrations never run from a branch, only from `main`, and never two at once.
 - The demo data (`seed.sql`) clears all buildings, so it only runs if you tick the box.
-- Priced communities are deleted and re-inserted by name, so a building's id changes
-  when you reload them. Leads saved for that building would no longer match it.
+- Reloading priced communities deletes and re-inserts them by name, and a lead ("I'm interested")
+  is deleted together with its building. Export leads from Supabase before pressing the data
+  workflow once real leads exist. Reloading the demo data deletes every lead.
 - The secret is the database password: only repo admins should see the Actions settings.
 - A bad migration cannot be undone by the tool. Write a new migration to fix it.
