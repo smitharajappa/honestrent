@@ -45,7 +45,13 @@ export function SiteFooter() {
           >
             Swelt Plus
           </Link>{" "}
-          adds optional extras. Search and real cost are always free.
+          adds optional extras. Search and real cost are always free.{" "}
+          <Link
+            href="/privacy"
+            className="font-semibold text-brand-text underline underline-offset-2"
+          >
+            Privacy
+          </Link>
         </p>
         <p>
           Your approval answers stay in this browser tab. Saved and compared buildings
