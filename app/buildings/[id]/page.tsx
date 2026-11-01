@@ -20,6 +20,8 @@ import { fetchBuilding } from "@/lib/buildings";
 import { isDealActive, planRows } from "@/lib/cost";
 import { CAMPUS, milesBetween } from "@/lib/map";
 import { moveInCash } from "@/lib/movein";
+import { fetchTypicalDrive } from "@/lib/traffic-server";
+import { TrafficChart } from "@/components/traffic/TrafficChart";
 import { fetchPlacesNear, nearestByKind, PLACE_KINDS, walkMinutes } from "@/lib/places";
 import { bathroomLabel, bedroomLabel, formatDate, formatUsd } from "@/lib/format";
 import { todayInTexas, validateSearch } from "@/lib/validation";
@@ -90,6 +92,12 @@ export default async function BuildingPage({
   const places = hasPin
     ? await fetchPlacesNear(building.latitude!, building.longitude!)
     : [];
+  const drive = hasPin
+    ? await fetchTypicalDrive(
+        { latitude: building.latitude!, longitude: building.longitude! },
+        CAMPUS,
+      )
+    : null;
   const nearby = hasPin
     ? nearestByKind(
         { latitude: building.latitude!, longitude: building.longitude! },
@@ -309,6 +317,17 @@ export default async function BuildingPage({
 
           {!mapOnly && (
             <>
+              {drive && (
+                <Section id="drive" title="Drive to UT Dallas">
+                  <p className="mb-4 text-sm text-text-muted">
+                    Typical weekday drive time by the hour you leave. This is based on
+                    past traffic patterns, not live traffic.
+                  </p>
+                  <TrafficChart points={drive} destination={CAMPUS.name} />
+                  <p className="mt-3 text-xs text-text-muted">Traffic data © TomTom.</p>
+                </Section>
+              )}
+
               <Section id="fees" title="Required monthly fees">
                 {building.building_fees.length === 0 ? (
                   <p className="text-sm text-text-muted">

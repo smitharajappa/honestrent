@@ -3,6 +3,7 @@ import { BuildingCover } from "@/components/BuildingCover";
 import { CostBar } from "@/components/CostBar";
 import { LazyMap } from "@/components/map/LazyMap";
 import { RevealBlock } from "@/components/motion/Reveal";
+import { TrafficChart } from "@/components/traffic/TrafficChart";
 import { TrustNotes } from "@/components/TrustNotes";
 import { Badge } from "@/components/ui/Badge";
 import { Button, ButtonLink } from "@/components/ui/Button";
@@ -222,6 +223,26 @@ export default function StyleguidePage() {
           aren&apos;t verified yet. The white pin is UT Dallas. Tiles from OpenFreeMap;
           data © OpenStreetMap contributors.
         </p>
+      </Section>
+
+      <Section title="Traffic chart (made-up numbers)">
+        <TrafficChart
+          destination="UT Dallas"
+          points={[
+            { hour: 6, minutes: 17 },
+            { hour: 7, minutes: 27 },
+            { hour: 8, minutes: 34 },
+            { hour: 9, minutes: 26 },
+            { hour: 10, minutes: 19 },
+            { hour: 12, minutes: 18 },
+            { hour: 14, minutes: 20 },
+            { hour: 16, minutes: 28 },
+            { hour: 17, minutes: 36 },
+            { hour: 18, minutes: 31 },
+            { hour: 19, minutes: 22 },
+            { hour: 21, minutes: 16 },
+          ]}
+        />
       </Section>
 
       <Section title="Motion">
