@@ -34,7 +34,9 @@ jobs:
 
       - name: Demo buildings (clears all buildings first)
         if: ${{ inputs.include_demo }}
-        run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/seed.sql
+        run: |
+          psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/seed.sql
+          psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/sample-data-round-2.sql
 
       # Order matters: later files look buildings up by name.
       - name: Real map-only complexes

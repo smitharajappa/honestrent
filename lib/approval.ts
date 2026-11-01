@@ -40,6 +40,9 @@ export type ApprovalCriteria = {
   accepts_no_ssn: boolean;
   accepts_guarantor: boolean;
   accepts_international_credit: boolean;
+  /** Finer ID rules. Missing or null = not asked yet: falls back to accepts_no_ssn. */
+  accepts_itin?: boolean | null;
+  accepts_passport_only?: boolean | null;
 };
 
 /** Copies only the approval fields, so the browser receives no more data than it needs. */
@@ -50,7 +53,34 @@ export function pickCriteria(source: ApprovalCriteria): ApprovalCriteria {
     accepts_no_ssn: source.accepts_no_ssn,
     accepts_guarantor: source.accepts_guarantor,
     accepts_international_credit: source.accepts_international_credit,
+    accepts_itin: source.accepts_itin ?? null,
+    accepts_passport_only: source.accepts_passport_only ?? null,
   };
+}
+
+/** Whether the building accepts this kind of ID, plus the reason if it doesn't. */
+export function idCheck(
+  idType: IdTypeId,
+  c: ApprovalCriteria,
+): { ok: true } | { ok: false; reason: string } {
+  if (idType === "ssn") return { ok: true };
+  const itin = c.accepts_itin ?? c.accepts_no_ssn;
+  const passport = c.accepts_passport_only ?? c.accepts_no_ssn;
+  if (idType === "itin" && itin) return { ok: true };
+  if (idType === "passport" && passport) return { ok: true };
+  if (idType === "passport" && itin) {
+    return { ok: false, reason: "This building needs an SSN or an ITIN." };
+  }
+  return { ok: false, reason: "This building requires an SSN." };
+}
+
+function ssnRuleText(c: ApprovalCriteria): string {
+  const itin = c.accepts_itin ?? c.accepts_no_ssn;
+  const passport = c.accepts_passport_only ?? c.accepts_no_ssn;
+  if (itin && passport) return "Not required (ITIN or passport OK)";
+  if (itin) return "Not required with an ITIN (passport only not accepted)";
+  if (passport) return "Not required (passport OK)";
+  return "Required";
 }
 
 /** The building's approval rules in plain words, for the detail page. */
@@ -69,7 +99,7 @@ export function describeCriteria(
     },
     {
       label: "SSN",
-      value: c.accepts_no_ssn ? "Not required (ITIN or passport OK)" : "Required",
+      value: ssnRuleText(c),
     },
     { label: "Guarantor", value: c.accepts_guarantor ? "Accepted" : "Not accepted" },
     {
@@ -107,9 +137,8 @@ export function approvalFit(
   criteria: ApprovalCriteria,
   rentUsd: number,
 ): Fit {
-  if (profile.idType !== "ssn" && !criteria.accepts_no_ssn) {
-    return { level: "unlikely", reason: "This building requires an SSN." };
-  }
+  const id = idCheck(profile.idType, criteria);
+  if (!id.ok) return { level: "unlikely", reason: id.reason };
 
   const problems: string[] = [];
 

@@ -14,9 +14,15 @@ import {
   TagIcon,
 } from "@/components/ui/icons";
 import { fetchBuildings } from "@/lib/buildings";
-import { todayInTexas, validateSearch } from "@/lib/validation";
+import { inArea } from "@/lib/explore";
+import { todayInTexas, validateArea, validateSearch } from "@/lib/validation";
+import { RequestArea } from "@/components/explore/RequestArea";
 
-type SearchParams = Promise<{ budget?: string | string[]; moveIn?: string | string[] }>;
+type SearchParams = Promise<{
+  area?: string | string[];
+  budget?: string | string[];
+  moveIn?: string | string[];
+}>;
 
 function first(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
@@ -26,10 +32,17 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
   const params = await searchParams;
   const rawBudget = first(params.budget);
   const rawMoveIn = first(params.moveIn);
+  const rawArea = first(params.area);
+  const areaCheck = validateArea(rawArea);
+  const area = areaCheck.ok ? areaCheck.value : null;
   const today = todayInTexas();
   const hasSearched = rawBudget !== undefined || rawMoveIn !== undefined;
   const validation = hasSearched ? validateSearch(rawBudget, rawMoveIn, today) : null;
-  const showingResults = validation?.ok === true;
+  const showingResults = validation?.ok === true && areaCheck.ok;
+  const formErrors = {
+    ...(validation && !validation.ok ? validation.errors : {}),
+    ...(!areaCheck.ok ? { area: areaCheck.error } : {}),
+  };
 
   return (
     <main>
@@ -61,9 +74,9 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
             </h1>
             {!showingResults && (
               <p className="mt-4 max-w-xl text-lg text-pretty text-text-muted">
-                Richardson and Plano apartments ranked by real monthly cost (rent plus
-                required fees, minus deals) and by how likely they are to approve
-                newcomers.
+                Apartments ranked by what you&apos;ll really pay each month (rent,
+                required fees and utilities, minus deals) and by how likely they are to
+                approve newcomers. Starting in Richardson and Plano.
               </p>
             )}
           </div>
@@ -82,19 +95,21 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
           className="scroll-mt-24 p-5 shadow-raised sm:p-6 lg:p-8"
         >
           <SearchForm
+            area={rawArea}
             budget={rawBudget}
             moveIn={rawMoveIn}
             today={today}
-            errors={validation && !validation.ok ? validation.errors : undefined}
+            errors={formErrors}
           />
         </Card>
 
-        {showingResults ? (
+        {showingResults && validation?.ok ? (
           <Suspense
-            key={`${validation.value.budget}-${validation.value.moveIn}`}
+            key={`${area ?? ""}-${validation.value.budget}-${validation.value.moveIn}`}
             fallback={<ResultsSkeleton />}
           >
             <Results
+              area={area}
               budget={validation.value.budget}
               moveIn={validation.value.moveIn}
               today={today}
@@ -109,10 +124,12 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
 }
 
 async function Results({
+  area,
   budget,
   moveIn,
   today,
 }: {
+  area: string | null;
   budget: number;
   moveIn: string;
   today: string;
@@ -141,9 +158,17 @@ async function Results({
     );
   }
 
+  const inSearchArea = data.buildings.filter((b) => inArea(b, area));
+  if (area && inSearchArea.length === 0) {
+    return (
+      <RequestArea area={area} coveredHref={`/?budget=${budget}&moveIn=${moveIn}`} />
+    );
+  }
+
   return (
     <ResultsExplorer
-      buildings={data.buildings}
+      buildings={inSearchArea}
+      area={area}
       budget={budget}
       moveIn={moveIn}
       today={today}

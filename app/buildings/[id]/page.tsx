@@ -7,7 +7,13 @@ import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { InfoNote } from "@/components/ui/InfoNote";
-import { AlertIcon, ArrowLeftIcon, MapPinIcon, TagIcon } from "@/components/ui/icons";
+import {
+  AlertIcon,
+  ArrowLeftIcon,
+  CheckIcon,
+  MapPinIcon,
+  TagIcon,
+} from "@/components/ui/icons";
 import { VerifiedNote } from "@/components/VerifiedNote";
 import { BuildingCover } from "@/components/BuildingCover";
 import { CostBar } from "@/components/CostBar";
@@ -19,7 +25,10 @@ import { describeCriteria, pickCriteria } from "@/lib/approval";
 import { fetchBuilding } from "@/lib/buildings";
 import { isDealActive, planRows } from "@/lib/cost";
 import { CAMPUS, milesBetween } from "@/lib/map";
-import { moveInCash } from "@/lib/movein";
+import { utilitiesFor } from "@/lib/utilities";
+import { MoveInCashCard } from "@/components/building/MoveInCashCard";
+import { UtilitiesSection } from "@/components/building/UtilitiesSection";
+import { UtilitiesLine } from "@/components/ResultCard";
 import {
   COMPARISON_TEXT,
   compareWithCity,
@@ -89,9 +98,17 @@ export default async function BuildingPage({
   // Imported real community with no prices entered yet: show where it is, nothing else.
   const mapOnly = building.floor_plans.length === 0;
   const cheapest = rows.find((r) => r.availableByMoveIn) ?? rows[0];
-  const cash = cheapest
-    ? moveInCash(building, cheapest.plan.rent_usd, cheapest.cost.monthlyFees, moveIn)
+  const cheapestUtilities = cheapest
+    ? utilitiesFor(building, cheapest.plan.bedrooms)
     : null;
+  const cheapestTotal =
+    cheapest && cheapestUtilities
+      ? cheapest.cost.realMonthlyCost + cheapestUtilities.avg
+      : 0;
+  const nextMonthFirst = (() => {
+    const [y, m] = today.split("-").map(Number);
+    return new Date(Date.UTC(y, m, 1)).toISOString().slice(0, 10);
+  })();
   const deals = building.building_deals.filter((d) => isDealActive(d, today));
   const totalFees = building.building_fees.reduce((sum, f) => sum + f.monthly_usd, 0);
   const hasPin = building.latitude !== null && building.longitude !== null;
@@ -236,6 +253,14 @@ export default async function BuildingPage({
                         {formatUsd(cost.realMonthlyCost)}
                       </p>
                       <p className="text-xs text-text-muted">real / mo</p>
+                      {(() => {
+                        const u = utilitiesFor(building, plan.bedrooms);
+                        return u.known && u.avg > 0 ? (
+                          <p className="text-xs text-info-text">
+                            + ~{formatUsd(u.avg)} utilities
+                          </p>
+                        ) : null;
+                      })()}
                       <p className="mt-1 text-sm text-text-muted">
                         Advertised {formatUsd(cost.advertisedRent)}
                       </p>
@@ -457,85 +482,78 @@ export default async function BuildingPage({
                 )}
               </Section>
 
-              {cash && (
-                <Section id="movein" title="Cash to move in">
-                  <p className="text-sm text-text-muted">
-                    What you pay before you get the keys, for {cheapest.plan.name}. Only
-                    amounts the leasing office has confirmed are counted.
-                  </p>
-                  <dl className="mt-4 space-y-2 text-sm tabular-nums">
-                    {cash.lines.map((line) => (
-                      <div key={line.label} className="flex justify-between gap-3">
-                        <dt className="text-text-muted">{line.label}</dt>
-                        <dd className={line.usd === null ? "text-text-muted" : ""}>
-                          {line.usd === null
-                            ? "Ask the leasing office"
-                            : formatUsd(line.usd)}
-                        </dd>
-                      </div>
-                    ))}
-                    <div className="flex justify-between gap-3 border-t border-border pt-2 font-semibold">
-                      <dt>{cash.complete ? "Total to move in" : "Known so far"}</dt>
-                      <dd>{formatUsd(cash.knownTotal)}</dd>
-                    </div>
-                  </dl>
-                  {!cash.complete && (
-                    <p className="mt-3 text-sm text-text-muted">
-                      This is not the full amount. Still to confirm:{" "}
-                      {cash.missing.join(", ")}.
-                    </p>
-                  )}
-                  {cash.noCreditExtra > 0 && (
-                    <p className="mt-3 text-sm text-text-muted">
-                      With no US credit, the deposit can be{" "}
-                      {formatUsd(cash.noCreditExtra)} higher.
-                    </p>
-                  )}
-                  <h3 className="mt-5 text-base font-semibold">Guarantor</h3>
-                  <p className="mt-1 text-sm text-text-muted">
-                    {building.guarantor_companies === null
-                      ? "Which guarantor companies this building accepts is not confirmed yet. Ask before you pay any guarantor fee."
-                      : building.guarantor_companies.length === 0
-                        ? "This building does not accept guarantor companies."
-                        : `Accepted: ${building.guarantor_companies.join(", ")}.`}
-                  </p>
-                  <Tip summary="How much does a guarantor cost?" className="mt-3">
-                    <p>
-                      Fees are one-time and paid before the lease starts. One guarantor
-                      company publishes about 70%–90% of one month&apos;s rent with US
-                      credit and 98%–110% with no US credit, per lease.{" "}
-                      <a
-                        href="https://www.insurent.com/renters/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-medium text-brand-text underline underline-offset-2"
-                      >
-                        Source<span className="sr-only"> (opens in a new tab)</span>
-                      </a>
-                    </p>
-                    <p>
-                      That company does not serve Texas buildings yet, so treat it as an
-                      example, not a quote.
-                    </p>
-                  </Tip>
-                  {building.terms_verified_on && (
-                    <p className="mt-3 text-xs text-text-muted">
-                      Confirmed with the leasing office on{" "}
-                      {formatDate(building.terms_verified_on)}.
-                    </p>
-                  )}
+              <Section id="utilities" title="Utilities billed by the building">
+                <UtilitiesSection building={building} />
+              </Section>
+
+              {cheapest && (
+                <Section id="move-in" title="Cash to move in">
+                  <MoveInCashCard
+                    building={building}
+                    plan={cheapest.plan}
+                    monthlyTotal={cheapestTotal}
+                    moveIn={moveIn ?? nextMonthFirst}
+                  />
                 </Section>
               )}
 
+              <Section id="documents" title="What to bring when you apply">
+                {(building.documents_required ?? []).length > 0 ? (
+                  <ul className="space-y-1.5 text-sm">
+                    {building.documents_required!.map((doc) => (
+                      <li key={doc} className="flex items-start gap-2">
+                        <CheckIcon className="mt-0.5 size-4 shrink-0 text-success-text" />
+                        {doc}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-text-muted">
+                    Not confirmed yet. Ask the leasing office before you pay an
+                    application fee.
+                  </p>
+                )}
+              </Section>
+
               <Section id="approval" title="Approval rules">
-                <dl className="space-y-2 text-sm">
-                  {describeCriteria(building).map((rule) => (
-                    <div key={rule.label} className="flex justify-between gap-3">
-                      <dt className="text-text-muted">{rule.label}</dt>
-                      <dd className="text-right font-medium">{rule.value}</dd>
+                {!building.approval_known && (
+                  <InfoNote>
+                    We haven&apos;t confirmed this community&apos;s approval rules yet, so
+                    we can&apos;t say if you&apos;d be approved. Ask the leasing office
+                    before you pay an application fee: do they accept no SSN, an ITIN or
+                    passport, a guarantor, or an international credit report?
+                  </InfoNote>
+                )}
+                {building.approval_known && (
+                  <dl className="space-y-2 text-sm">
+                    {describeCriteria(building).map((rule) => (
+                      <div key={rule.label} className="flex justify-between gap-3">
+                        <dt className="text-text-muted">{rule.label}</dt>
+                        <dd className="text-right font-medium">{rule.value}</dd>
+                      </div>
+                    ))}
+                    {building.accepts_offer_letter != null && (
+                      <div className="flex justify-between gap-3">
+                        <dt className="text-text-muted">
+                          Job offer letter as income proof
+                        </dt>
+                        <dd className="text-right font-medium">
+                          {building.accepts_offer_letter ? "Accepted" : "Not accepted"}
+                        </dd>
+                      </div>
+                    )}
+                  </dl>
+                )}
+                {(building.guarantor_companies ?? []).length > 0 && (
+                  <dl className="mt-2 space-y-2 text-sm">
+                    <div className="flex justify-between gap-3">
+                      <dt className="text-text-muted">Guarantor companies accepted</dt>
+                      <dd className="text-right font-medium">
+                        {building.guarantor_companies!.join(", ")}
+                      </dd>
                     </div>
-                  ))}
-                </dl>
+                  </dl>
+                )}
                 {cheapest && building.approval_known && (
                   <>
                     <FitBadge
@@ -584,16 +602,26 @@ export default async function BuildingPage({
         {cheapest && (
           <aside aria-label="Price summary" className="lg:sticky lg:top-24 lg:self-start">
             <Card className="p-5 shadow-raised">
-              <p className="text-sm text-text-muted">Real cost from</p>
+              <p className="text-sm text-text-muted">
+                {cheapestUtilities?.known && cheapestUtilities.avg > 0
+                  ? "Estimated total from"
+                  : "Real cost from"}
+              </p>
               <p className="text-4xl font-extrabold tracking-tight tabular-nums">
-                {formatUsd(cheapest.cost.realMonthlyCost)}
+                {cheapestUtilities?.known && cheapestUtilities.avg > 0 ? "~" : ""}
+                {formatUsd(cheapestTotal)}
                 <span className="text-base font-medium text-text-muted">/mo</span>
               </p>
               <p className="mt-0.5 text-sm text-text-muted">
                 Advertised {formatUsd(cheapest.cost.advertisedRent)} ·{" "}
                 {cheapest.plan.name}
               </p>
-              <CostBar cost={cheapest.cost} />
+              <CostBar cost={cheapest.cost} utilities={cheapestUtilities ?? undefined} />
+              {cheapestUtilities && (
+                <p className="mt-1.5 text-xs text-text-muted">
+                  <UtilitiesLine utilities={cheapestUtilities} />
+                </p>
+              )}
               <ButtonLink href="#interest" size="lg" className="mt-5 w-full">
                 I&apos;m interested
               </ButtonLink>

@@ -1,13 +1,14 @@
 import Link from "next/link";
 import type { ExploreItem } from "@/lib/explore";
 import { bedroomLabel, formatDate, formatUsd } from "@/lib/format";
+import { SOURCE_LABELS, type UtilityView } from "@/lib/utilities";
 import { FitDisplay } from "./approval/FitBadge";
 import { BuildingCover } from "./BuildingCover";
 import { CostBar } from "./CostBar";
 import { CompareToggle, SaveButton } from "./shortlist/ShortlistButtons";
 import { RevealItem } from "./motion/Reveal";
 import { Badge } from "./ui/Badge";
-import { CheckIcon, PlusCircleIcon, TagIcon } from "./ui/icons";
+import { BusIcon, CheckIcon, MapPinIcon, PlusCircleIcon, TagIcon } from "./ui/icons";
 import { VerifiedNote } from "./VerifiedNote";
 
 type Props = {
@@ -20,15 +21,49 @@ type Props = {
   people?: number;
 };
 
+/** One line saying what the utilities part of the price is and where it came from. */
+export function UtilitiesLine({ utilities }: { utilities: UtilityView }) {
+  if (utilities.source === "included") {
+    return <>Utilities included in rent.</>;
+  }
+  if (!utilities.known) {
+    return (
+      <>
+        {utilities.source === "direct"
+          ? "You pay utility providers directly; not included in the total."
+          : "Utilities billed by the building: not known yet."}
+      </>
+    );
+  }
+  return (
+    <>
+      Includes about {formatUsd(utilities.avg)} utilities (usually{" "}
+      {formatUsd(utilities.low)}–{formatUsd(utilities.high)}) ·{" "}
+      {SOURCE_LABELS[utilities.source]}
+      {utilities.reportCount ? ` (${utilities.reportCount})` : ""}
+    </>
+  );
+}
+
 /**
  * One building in the results grid. The whole card opens the building page;
  * the save and compare controls sit above that link.
  */
 export function ResultCard({ item, rank, today, index, detailHref, people = 1 }: Props) {
-  const { building, plan, cost, perPerson, matchingPlanCount, fit } = item;
-  const difference = cost.realMonthlyCost - cost.advertisedRent;
+  const {
+    building,
+    plan,
+    cost,
+    utilities,
+    estimatedTotal,
+    perPerson,
+    matchingPlanCount,
+    fit,
+  } = item;
+  const difference = estimatedTotal - cost.advertisedRent;
   const availableNow = plan.available_from <= today;
   const shared = people > 1;
+  const isEstimate = utilities.known && utilities.avg > 0;
 
   return (
     <RevealItem
@@ -42,7 +77,7 @@ export function ResultCard({ item, rank, today, index, detailHref, people = 1 }:
           className="transition-transform duration-300 group-hover:scale-[1.03]"
         />
         <div className="absolute top-3 left-3 flex gap-1.5">
-          {rank === 1 && <Badge tone="success">Lowest real cost</Badge>}
+          {rank === 1 && <Badge tone="success">Lowest total</Badge>}
           <Badge className="bg-surface text-text">{building.city}</Badge>
         </div>
         <SaveButton
@@ -71,14 +106,19 @@ export function ResultCard({ item, rank, today, index, detailHref, people = 1 }:
           </div>
           <div className="shrink-0 text-right">
             <p className="text-2xl leading-none font-bold tracking-tight tabular-nums sm:text-3xl">
-              {formatUsd(shared ? perPerson : cost.realMonthlyCost)}
+              {isEstimate ? "~" : ""}
+              {formatUsd(shared ? perPerson : estimatedTotal)}
             </p>
             <p className="mt-1 text-xs font-medium text-text-muted">
-              {shared ? "per person / mo" : "real cost / mo"}
+              {shared
+                ? "per person / mo"
+                : isEstimate
+                  ? "est. total / mo"
+                  : "real cost / mo"}
             </p>
             {shared && (
               <p className="text-xs text-text-muted tabular-nums">
-                {formatUsd(cost.realMonthlyCost)} total
+                {formatUsd(estimatedTotal)} total
               </p>
             )}
           </div>
@@ -100,7 +140,10 @@ export function ResultCard({ item, rank, today, index, detailHref, people = 1 }:
           )}
         </div>
 
-        <CostBar cost={cost} />
+        <CostBar cost={cost} utilities={utilities} />
+        <p className="mt-1.5 text-xs text-text-muted">
+          <UtilitiesLine utilities={utilities} />
+        </p>
 
         {fit && <FitDisplay fit={fit} compact />}
         {!building.approval_known && (
@@ -118,6 +161,23 @@ export function ResultCard({ item, rank, today, index, detailHref, people = 1 }:
             {matchingPlanCount > 1 && ` · ${matchingPlanCount} plans fit`}
           </span>
         </p>
+
+        {(building.miles_to_utd != null || building.bus_route) && (
+          <p className="mt-1.5 flex flex-wrap gap-x-3 text-xs text-text-muted">
+            {building.miles_to_utd != null && (
+              <span className="inline-flex items-center gap-1">
+                <MapPinIcon className="size-3.5" />
+                {building.miles_to_utd} mi to UTD
+              </span>
+            )}
+            {building.bus_route && (
+              <span className="inline-flex items-center gap-1">
+                <BusIcon className="size-3.5" />
+                DART bus {building.bus_route}
+              </span>
+            )}
+          </p>
+        )}
 
         <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-2">
           <VerifiedNote lastVerified={building.last_verified} today={today} />

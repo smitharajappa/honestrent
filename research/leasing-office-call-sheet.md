@@ -32,10 +32,11 @@ Only fill what was confirmed; leave the rest out (it stays "ask the leasing offi
 update public.buildings set
   application_fee_usd = 50,
   admin_fee_usd = 150,
-  security_deposit_usd = 300,
+  deposit_usd = 300,
   deposit_no_credit_usd = 600,
   guarantor_companies = array['Name of company'],
-  terms_verified_on = '2026-11-02'
+  documents_required = array['Passport', 'I-20 or offer letter', '3 months of bank statements'],
+  last_verified = '2026-11-02'
 where name = 'Camden Legacy Creek';
 ```
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { daysBetween, todayInTexas, validateSearch } from "./validation";
+import { daysBetween, todayInTexas, validateArea, validateSearch } from "./validation";
 
 const TODAY = "2026-10-25";
 
@@ -53,5 +53,19 @@ describe("daysBetween", () => {
     expect(daysBetween("2026-10-10", "2026-10-25")).toBe(15);
     expect(daysBetween("2026-10-31", "2026-11-01")).toBe(1);
     expect(daysBetween("2026-10-25", "2026-10-25")).toBe(0);
+  });
+});
+
+describe("validateArea", () => {
+  it("allows cities, ZIPs and neighbourhoods", () => {
+    expect(validateArea("  Fort   Worth ")).toEqual({ ok: true, value: "Fort Worth" });
+    expect(validateArea("75080")).toEqual({ ok: true, value: "75080" });
+    expect(validateArea("")).toEqual({ ok: true, value: null });
+    expect(validateArea(undefined)).toEqual({ ok: true, value: null });
+  });
+
+  it("rejects odd characters and very long text", () => {
+    expect(validateArea("<script>").ok).toBe(false);
+    expect(validateArea("x".repeat(61)).ok).toBe(false);
   });
 });

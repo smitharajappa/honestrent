@@ -10,6 +10,7 @@ import { useApproval } from "../approval/ApprovalContext";
 import { AnswersNote, FitDisplay } from "../approval/FitBadge";
 import { BuildingCover } from "../BuildingCover";
 import { CostBar } from "../CostBar";
+import { UtilitiesLine } from "../ResultCard";
 import { Badge } from "../ui/Badge";
 import { ButtonLink } from "../ui/Button";
 import { Card } from "../ui/Card";
@@ -56,22 +57,31 @@ export function CompareView({ buildings, today, moveIn }: Props) {
   }
 
   const best: BestValues = {
-    realCost: Math.min(...items.map((i) => i.cost.realMonthlyCost)),
+    realCost: Math.min(...items.map((i) => i.estimatedTotal)),
     fees: Math.min(...items.map((i) => i.cost.monthlyFees)),
     deals: Math.max(...items.map((i) => i.cost.monthlyDealSavings)),
   };
 
   const rows: Row[] = [
     {
-      label: "Real cost / mo",
+      label: "Est. total / mo",
       render: (i, b) => (
         <div>
           <p className="text-2xl font-bold tabular-nums">
-            {formatUsd(i.cost.realMonthlyCost)}
+            {i.utilities.known && i.utilities.avg > 0 ? "~" : ""}
+            {formatUsd(i.estimatedTotal)}
           </p>
-          {i.cost.realMonthlyCost === b.realCost && <Badge tone="success">Lowest</Badge>}
-          <CostBar cost={i.cost} />
+          {i.estimatedTotal === b.realCost && <Badge tone="success">Lowest</Badge>}
+          <CostBar cost={i.cost} utilities={i.utilities} />
         </div>
+      ),
+    },
+    {
+      label: "Utilities billed",
+      render: (i) => (
+        <span className="text-sm">
+          <UtilitiesLine utilities={i.utilities} />
+        </span>
       ),
     },
     { label: "Advertised rent", render: (i) => formatUsd(i.cost.advertisedRent) },
