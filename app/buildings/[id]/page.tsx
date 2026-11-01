@@ -20,6 +20,12 @@ import { fetchBuilding } from "@/lib/buildings";
 import { isDealActive, planRows } from "@/lib/cost";
 import { CAMPUS, milesBetween } from "@/lib/map";
 import { moveInCash } from "@/lib/movein";
+import {
+  COMPARISON_TEXT,
+  compareWithCity,
+  fetchSafety,
+  OFFICIAL_CRIME_MAPS,
+} from "@/lib/safety";
 import { fetchTypicalDrive } from "@/lib/traffic-server";
 import { TrafficChart } from "@/components/traffic/TrafficChart";
 import { fetchPlacesNear, nearestByKind, PLACE_KINDS, walkMinutes } from "@/lib/places";
@@ -98,6 +104,8 @@ export default async function BuildingPage({
         CAMPUS,
       )
     : null;
+  const safety = hasPin ? await fetchSafety(building.id) : null;
+  const crimeMap = OFFICIAL_CRIME_MAPS[building.city];
   const nearby = hasPin
     ? nearestByKind(
         { latitude: building.latitude!, longitude: building.longitude! },
@@ -304,6 +312,84 @@ export default async function BuildingPage({
 
           {!mapOnly && (
             <>
+              {hasPin && (
+                <Section id="safety" title="Reported incidents nearby">
+                  {safety ? (
+                    <>
+                      <p className="text-sm">
+                        <strong className="font-semibold">
+                          {COMPARISON_TEXT[compareWithCity(safety).level]}
+                        </strong>{" "}
+                        the {safety.city_name} average for an area this size. Within{" "}
+                        {safety.radius_miles} mile, {formatDate(safety.period_start)} to{" "}
+                        {formatDate(safety.period_end)}:
+                      </p>
+                      <dl className="mt-3 space-y-2 text-sm tabular-nums">
+                        <div className="flex justify-between gap-3">
+                          <dt className="text-text-muted">Against people</dt>
+                          <dd>{safety.against_people}</dd>
+                        </div>
+                        <div className="flex justify-between gap-3">
+                          <dt className="text-text-muted">
+                            Property (theft, burglary, vehicle)
+                          </dt>
+                          <dd>{safety.property}</dd>
+                        </div>
+                        <div className="flex justify-between gap-3">
+                          <dt className="text-text-muted">Other reports</dt>
+                          <dd>{safety.other}</dd>
+                        </div>
+                        <div className="flex justify-between gap-3 border-t border-border pt-2">
+                          <dt className="text-text-muted">
+                            {safety.city_name} average (people and property)
+                          </dt>
+                          <dd>{Math.round(safety.city_average_people_property)}</dd>
+                        </div>
+                      </dl>
+                    </>
+                  ) : (
+                    <p className="text-sm text-text-muted">
+                      We don&apos;t have official incident counts for {building.city} yet,
+                      because the city doesn&apos;t publish them as open data.
+                    </p>
+                  )}
+                  <InfoNote className="mt-4">
+                    These are police reports, not a safety score. Busy shopping areas and
+                    major roads usually have more reports, and a report is not the same as
+                    risk to you. We show the same facts for every building. Visit in
+                    person, at different times of day.
+                  </InfoNote>
+                  <p className="mt-3 text-xs text-text-muted">
+                    {safety && (
+                      <>
+                        Source:{" "}
+                        <a
+                          href={safety.source_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-brand-text underline underline-offset-2"
+                        >
+                          {safety.source_name}
+                          <span className="sr-only"> (opens in a new tab)</span>
+                        </a>
+                        , {safety.license}. Counts only.{" "}
+                      </>
+                    )}
+                    {crimeMap && (
+                      <a
+                        href={crimeMap.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-medium text-brand-text underline underline-offset-2"
+                      >
+                        {crimeMap.label}
+                        <span className="sr-only"> (opens in a new tab)</span>
+                      </a>
+                    )}
+                  </p>
+                </Section>
+              )}
+
               {drive && (
                 <Section id="drive" title="Drive to UT Dallas">
                   <p className="mb-4 text-sm text-text-muted">
