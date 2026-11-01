@@ -5,7 +5,9 @@ import { driveTimes, findAddress } from "@/app/actions/drive";
 import { milesBetween, CAMPUS } from "@/lib/map";
 import type { TrafficPoint } from "@/lib/traffic";
 import type { Candidate } from "@/lib/geocode";
-import { Button } from "../ui/Button";
+import { useAuth } from "../auth/AuthContext";
+import { usePlusStatus } from "../auth/usePlusStatus";
+import { Button, ButtonLink } from "../ui/Button";
 import { MAX_PLACES, useMyPlaces } from "../location/MyPlacesContext";
 import { TrafficChart } from "./TrafficChart";
 
@@ -41,12 +43,22 @@ export function DriveToPlaces({
   initial: Drive | null;
 }) {
   const { places, ready, add, remove } = useMyPlaces();
+  const { accessToken } = useAuth();
+  const { status: plus } = usePlusStatus();
   const [selected, setSelected] = useState<string>("campus");
   const [cache, setCache] = useState<Record<string, Drive | string>>(
     initial ? { campus: initial } : {},
   );
   const [loading, setLoading] = useState(false);
   const [adding, setAdding] = useState(false);
+
+  // Adding your own places needs an account and, outside the demo, a pass. Our server
+  // checks this too; this is only so the page can say what to do.
+  const gate: "sign-in" | "plus" | null = !accessToken
+    ? "sign-in"
+    : plus?.signedIn && !plus.hasPlus
+      ? "plus"
+      : null;
 
   const choices: Choice[] = [CAMPUS_CHOICE, ...places];
   const current = choices.find((c) => c.id === selected) ?? CAMPUS_CHOICE;
@@ -58,7 +70,7 @@ export function DriveToPlaces({
     if (asked.current.has(current.id)) return;
     asked.current.add(current.id);
     setLoading(true);
-    driveTimes(buildingId, current.latitude, current.longitude)
+    driveTimes(buildingId, current.latitude, current.longitude, accessToken)
       .then((r) =>
         setCache((c) => ({
           ...c,
@@ -72,7 +84,7 @@ export function DriveToPlaces({
         })),
       )
       .finally(() => setLoading(false));
-  }, [buildingId, current.id, current.latitude, current.longitude]);
+  }, [buildingId, current.id, current.latitude, current.longitude, accessToken]);
 
   return (
     <div>
@@ -117,6 +129,8 @@ export function DriveToPlaces({
 
       {adding && (
         <AddPlace
+          gate={gate}
+          accessToken={accessToken}
           onClose={() => setAdding(false)}
           onSave={(p) => {
             if (add(p)) setAdding(false);
@@ -193,9 +207,13 @@ export function DriveToPlaces({
 
 /** Add a place: type an address, pick the right match, give it a name. */
 function AddPlace({
+  gate,
+  accessToken,
   onClose,
   onSave,
 }: {
+  gate: "sign-in" | "plus" | null;
+  accessToken: string | null;
   onClose: () => void;
   onSave: (p: {
     label: string;
@@ -210,11 +228,42 @@ function AddPlace({
   const [pick, setPick] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [back, setBack] = useState("/");
+  useEffect(() => setBack(window.location.pathname + window.location.search), []);
+
+  if (gate) {
+    return (
+      <div className="mt-3 rounded-xl border border-border bg-surface-muted p-4 text-sm">
+        <p className="font-semibold">
+          {gate === "sign-in"
+            ? "Sign in to add your own places"
+            : "Adding your own places is part of Swelt Plus"}
+        </p>
+        <p className="mt-1 text-text-muted">
+          {gate === "sign-in"
+            ? "UT Dallas stays free for everyone. An account lets you add up to 5 places, like work or a grocery chain. Signing in is free and has no password."
+            : "UT Dallas stays free. A pass adds drive times to up to 5 places you choose. One payment, no auto-renew."}
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <ButtonLink
+            href={
+              gate === "sign-in" ? `/sign-in?next=${encodeURIComponent(back)}` : "/plus"
+            }
+          >
+            {gate === "sign-in" ? "Sign in" : "See Swelt Plus"}
+          </ButtonLink>
+          <Button type="button" variant="ghost" onClick={onClose}>
+            Not now
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   async function find() {
     setBusy(true);
     setError(null);
-    const r = await findAddress(address);
+    const r = await findAddress(address, accessToken);
     setBusy(false);
     if (r.ok) {
       setCandidates(r.candidates);

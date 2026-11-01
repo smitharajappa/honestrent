@@ -28,6 +28,8 @@ export type ExploreOptions = {
   sort: SortKey;
   /** The renter's position, if they shared it. Only used on their device. */
   origin?: { latitude: number; longitude: number } | null;
+  /** Only buildings within this many straight-line miles of `origin`. */
+  maxMiles?: number | null;
 };
 
 export type ExploreItem = {
@@ -143,6 +145,15 @@ export function explore(buildings: Building[], o: ExploreOptions): ExploreItem[]
         : null;
     if (o.goodFitOnly && fit?.level !== "good") continue;
 
+    const milesFromYou =
+      o.origin && building.latitude != null && building.longitude != null
+        ? milesBetween(o.origin, {
+            latitude: building.latitude,
+            longitude: building.longitude,
+          })
+        : null;
+    if (o.maxMiles != null && milesFromYou != null && milesFromYou > o.maxMiles) continue;
+
     items.push({
       building,
       plan: best.plan,
@@ -153,13 +164,7 @@ export function explore(buildings: Building[], o: ExploreOptions): ExploreItem[]
       savingsVsAd: best.cost.advertisedRent - best.estimatedTotal,
       matchingPlanCount: matches.length,
       fit,
-      milesFromYou:
-        o.origin && building.latitude != null && building.longitude != null
-          ? milesBetween(o.origin, {
-              latitude: building.latitude,
-              longitude: building.longitude,
-            })
-          : null,
+      milesFromYou,
     });
   }
 

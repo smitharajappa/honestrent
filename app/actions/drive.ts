@@ -1,12 +1,14 @@
 "use server";
 
 import { headers } from "next/headers";
+import { viewerFromToken } from "@/lib/auth-server";
 import { fetchBuilding } from "@/lib/buildings";
 import { inTexas, searchAddress, type Candidate } from "@/lib/geocode";
 import { isUuid } from "@/lib/lead";
+import { CAMPUS, milesBetween } from "@/lib/map";
 import { allow } from "@/lib/rate-limit";
-import { fetchTypicalDrive } from "@/lib/traffic-server";
 import type { TrafficPoint } from "@/lib/traffic";
+import { fetchTypicalDrive } from "@/lib/traffic-server";
 
 // Neither action saves anything. The address and the place are used for this one answer.
 
@@ -15,11 +17,34 @@ async function visitor(): Promise<string> {
   return h.get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
 }
 
-export type FindResult =
-  { ok: true; candidates: Candidate[] } | { ok: false; error: string };
+/** Why a Plus feature was refused, so the page can say the right thing. */
+export type Needs = "sign-in" | "plus";
 
-/** Finds an address the renter typed. Up to 3 places in Texas to choose from. */
-export async function findAddress(address: string): Promise<FindResult> {
+async function refusal(
+  token: string | null,
+): Promise<{ needs: Needs; error: string } | null> {
+  const viewer = await viewerFromToken(token);
+  if (!viewer) return { needs: "sign-in", error: "Sign in to add your own places." };
+  if (!viewer.hasPlus) {
+    return {
+      needs: "plus",
+      error: "Adding your own places is part of a Swelt Plus pass.",
+    };
+  }
+  return null;
+}
+
+export type FindResult =
+  { ok: true; candidates: Candidate[] } | { ok: false; error: string; needs?: Needs };
+
+/** Finds an address the renter typed. Up to 3 places in Texas to choose from. Plus feature. */
+export async function findAddress(
+  address: string,
+  token: string | null = null,
+): Promise<FindResult> {
+  const refused = await refusal(token);
+  if (refused) return { ok: false, ...refused };
+
   const text = String(address ?? "").trim();
   if (text.length < 5 || text.length > 120) {
     return {
@@ -53,16 +78,26 @@ export async function findAddress(address: string): Promise<FindResult> {
 
 export type DriveResult =
   | { ok: true; source: "tomtom" | "sample"; points: TrafficPoint[] }
-  | { ok: false; error: string };
+  | { ok: false; error: string; needs?: Needs };
 
-/** Typical weekday drive time by hour from one building to a place the renter chose. */
+/**
+ * Typical weekday drive time by hour from one building to a place the renter chose.
+ * UT Dallas is free for everyone; any other place is a Plus feature.
+ */
 export async function driveTimes(
   buildingId: string,
   latitude: number,
   longitude: number,
+  token: string | null = null,
 ): Promise<DriveResult> {
-  if (!isUuid(buildingId) || !inTexas(Number(latitude), Number(longitude))) {
+  const lat = Number(latitude);
+  const lng = Number(longitude);
+  if (!isUuid(buildingId) || !inTexas(lat, lng)) {
     return { ok: false, error: "We can't work out a drive to that place." };
+  }
+  if (milesBetween({ latitude: lat, longitude: lng }, CAMPUS) >= 0.3) {
+    const refused = await refusal(token);
+    if (refused) return { ok: false, ...refused };
   }
   if (!allow(`drive:${await visitor()}`, 20, 10 * 60_000)) {
     return {
@@ -77,7 +112,7 @@ export async function driveTimes(
   }
   const drive = await fetchTypicalDrive(
     { latitude: b.latitude, longitude: b.longitude },
-    { latitude: Number(latitude), longitude: Number(longitude) },
+    { latitude: lat, longitude: lng },
     { remember: false },
   );
   if (!drive) {

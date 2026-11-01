@@ -14,9 +14,6 @@ export function SiteHeader() {
             <HomeIcon className="size-4.5" />
           </span>
           Swelt
-          <span className="hidden text-sm font-medium text-text-muted md:inline">
-            · Dallas–Fort Worth
-          </span>
         </Link>
         <HeaderLinks />
       </div>
@@ -40,6 +37,15 @@ export function SiteFooter() {
         <p>
           Prices are entered by hand and can change. Always confirm with the building
           before you apply.
+        </p>
+        <p>
+          <Link
+            href="/plus"
+            className="font-semibold text-brand-text underline underline-offset-2"
+          >
+            Swelt Plus
+          </Link>{" "}
+          adds optional extras. Search and real cost are always free.
         </p>
         <p>
           Your approval answers stay in this browser tab. Saved and compared buildings

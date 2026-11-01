@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { ResultsExplorer } from "@/components/explore/ResultsExplorer";
-import { HeroSkyline } from "@/components/HeroSkyline";
+import { HeroArt } from "@/components/HeroArt";
 import { ResultsSkeleton } from "@/components/ResultsSkeleton";
 import { SearchForm } from "@/components/SearchForm";
 import { TrustNotes } from "@/components/TrustNotes";
@@ -14,6 +14,7 @@ import {
   TagIcon,
 } from "@/components/ui/icons";
 import { fetchBuildings } from "@/lib/buildings";
+import { searchHref } from "@/lib/links";
 import { inArea } from "@/lib/explore";
 import { todayInTexas, validateArea, validateSearch } from "@/lib/validation";
 import { RequestArea } from "@/components/explore/RequestArea";
@@ -35,6 +36,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
   const rawArea = first(params.area);
   const areaCheck = validateArea(rawArea);
   const area = areaCheck.ok ? areaCheck.value : null;
+  const nearChosen = /^near /i.test((rawArea ?? "").trim());
   const today = todayInTexas();
   const hasSearched = rawBudget !== undefined || rawMoveIn !== undefined;
   const validation = hasSearched ? validateSearch(rawBudget, rawMoveIn, today) : null;
@@ -76,13 +78,12 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
               <p className="mt-4 max-w-xl text-lg text-pretty text-text-muted">
                 Apartments ranked by what you&apos;ll really pay each month (rent,
                 required fees and utilities, minus deals) and by how likely they are to
-                approve newcomers. Starting in Richardson and Plano.
+                approve newcomers. Starting in the Dallas area: Richardson, Plano and
+                Dallas.
               </p>
             )}
           </div>
-          <HeroSkyline
-            className={`hidden w-full lg:block ${showingResults ? "max-h-32" : "max-h-56"}`}
-          />
+          <HeroArt compact={showingResults} />
         </div>
       </section>
 
@@ -110,6 +111,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
           >
             <Results
               area={area}
+              nearChosen={nearChosen}
               budget={validation.value.budget}
               moveIn={validation.value.moveIn}
               today={today}
@@ -125,11 +127,13 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
 
 async function Results({
   area,
+  nearChosen,
   budget,
   moveIn,
   today,
 }: {
   area: string | null;
+  nearChosen: boolean;
   budget: number;
   moveIn: string;
   today: string;
@@ -147,7 +151,7 @@ async function Results({
             This is on our side, not yours. Please try again in a few minutes.
           </p>
           <ButtonLink
-            href={`/?budget=${budget}&moveIn=${moveIn}`}
+            href={searchHref("/", { budget, moveIn, area })}
             variant="secondary"
             className="mt-3"
           >
@@ -160,15 +164,14 @@ async function Results({
 
   const inSearchArea = data.buildings.filter((b) => inArea(b, area));
   if (area && inSearchArea.length === 0) {
-    return (
-      <RequestArea area={area} coveredHref={`/?budget=${budget}&moveIn=${moveIn}`} />
-    );
+    return <RequestArea area={area} coveredHref={searchHref("/", { budget, moveIn })} />;
   }
 
   return (
     <ResultsExplorer
       buildings={inSearchArea}
       area={area}
+      nearChosen={nearChosen}
       budget={budget}
       moveIn={moveIn}
       today={today}

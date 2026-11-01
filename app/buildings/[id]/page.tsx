@@ -41,10 +41,15 @@ import { fetchTypicalDrive } from "@/lib/traffic-server";
 import { DriveToPlaces } from "@/components/traffic/DriveToPlaces";
 import { fetchPlacesNear, nearestByKind, PLACE_KINDS, walkMinutes } from "@/lib/places";
 import { bathroomLabel, bedroomLabel, formatDate, formatUsd } from "@/lib/format";
-import { todayInTexas, validateSearch } from "@/lib/validation";
+import { searchHref } from "@/lib/links";
+import { todayInTexas, validateArea, validateSearch } from "@/lib/validation";
 
 type Params = Promise<{ id: string }>;
-type SearchParams = Promise<{ budget?: string | string[]; moveIn?: string | string[] }>;
+type SearchParams = Promise<{
+  budget?: string | string[];
+  moveIn?: string | string[];
+  area?: string | string[];
+}>;
 
 const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
 
@@ -78,7 +83,11 @@ export default async function BuildingPage({
   const search = validateSearch(first(query.budget), first(query.moveIn), today);
   const moveIn = search.ok ? search.value.moveIn : null;
   const budget = search.ok ? search.value.budget : null;
-  const backHref = search.ok ? `/?budget=${budget}&moveIn=${moveIn}` : "/";
+  const areaCheck = validateArea(first(query.area));
+  const area = areaCheck.ok ? areaCheck.value : null;
+  const backHref = search.ok
+    ? searchHref("/", { budget: budget!, moveIn: moveIn!, area })
+    : "/";
 
   const result = await fetchBuilding(id);
   if (!result.ok) {

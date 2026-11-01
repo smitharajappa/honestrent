@@ -335,3 +335,17 @@ describe("distance from the renter's chosen place", () => {
     expect(items.map((i) => i.building.id)).toEqual(["n", "f"]);
   });
 });
+
+describe("within a number of miles of the chosen place", () => {
+  const near = building({ id: "n", name: "Near", latitude: 33.0, longitude: -96.75 });
+  const far = building({ id: "f", name: "Far", latitude: 33.2, longitude: -96.75 });
+  const origin = { latitude: 33.001, longitude: -96.75 };
+
+  it("drops buildings farther than the limit, and keeps everything with no limit", () => {
+    expect(
+      explore([near, far], opts({ origin, maxMiles: 5 })).map((i) => i.building.id),
+    ).toEqual(["n"]);
+    expect(explore([near, far], opts({ origin, maxMiles: null }))).toHaveLength(2);
+    expect(explore([near, far], opts({ maxMiles: 5 }))).toHaveLength(2); // no place chosen: no limit
+  });
+});

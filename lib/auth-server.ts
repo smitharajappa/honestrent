@@ -1,0 +1,41 @@
+// Who is asking, checked on our server. The browser sends its sign-in token; we check it
+// with Supabase and read only that person's own passes (row-level security).
+
+import { createClient } from "@supabase/supabase-js";
+import { activeUntil } from "./plus";
+import { IS_DEMO } from "./site";
+
+export type Viewer = {
+  id: string;
+  email: string | null;
+  /** When the running pass ends, or null. */
+  plusUntil: string | null;
+  /** True while the site is in demo mode: Plus features are open to signed-in renters. */
+  demoOpen: boolean;
+  /** Can use Plus features right now. */
+  hasPlus: boolean;
+};
+
+export async function viewerFromToken(token: unknown): Promise<Viewer | null> {
+  if (typeof token !== "string" || token.length < 20 || token.length > 4000) return null;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  if (!url || !key) return null;
+
+  const supabase = createClient(url, key, {
+    auth: { persistSession: false },
+    global: { headers: { Authorization: `Bearer ${token}` } },
+  });
+  const { data, error } = await supabase.auth.getUser(token);
+  if (error || !data.user) return null;
+
+  const { data: passes } = await supabase.from("plus_passes").select("ends_at");
+  const until = activeUntil(passes ?? []);
+  return {
+    id: data.user.id,
+    email: data.user.email ?? null,
+    plusUntil: until ? until.toISOString() : null,
+    demoOpen: IS_DEMO,
+    hasPlus: IS_DEMO || until !== null,
+  };
+}

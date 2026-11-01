@@ -9,7 +9,7 @@ export const IS_DEMO = process.env.NEXT_PUBLIC_DEMO_MODE !== "off";
 
 export const SITE_NAME = "Swelt";
 export const SITE_DESCRIPTION =
-  "Richardson-Plano apartments ranked by what you will really pay each month: rent plus fees, minus deals.";
+  "Dallas-area apartments ranked by what you will really pay each month: rent plus fees, minus deals.";
 
 /** The public web address. Vercel provides it; locally it's localhost. */
 export const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL

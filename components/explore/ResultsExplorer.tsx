@@ -13,6 +13,7 @@ import {
   type SortKey,
 } from "@/lib/explore";
 import { formatDate, formatUsd } from "@/lib/format";
+import { searchHref } from "@/lib/links";
 import type { MapPin } from "@/lib/map";
 import type { Building } from "@/lib/types";
 import { useApproval } from "../approval/ApprovalContext";
@@ -40,6 +41,8 @@ import { InsightBanner } from "./InsightBanner";
 type Props = {
   buildings: Building[];
   area?: string | null;
+  /** The renter picked "Near me" or "Near ZIP …" as the place. */
+  nearChosen?: boolean;
   budget: number;
   moveIn: string;
   today: string;
@@ -61,7 +64,14 @@ const NO_FILTERS: FilterState = {
   nearUtd: false,
 };
 
-export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Props) {
+export function ResultsExplorer({
+  buildings,
+  area,
+  nearChosen = false,
+  budget,
+  moveIn,
+  today,
+}: Props) {
   const { answers } = useApproval();
   const { coords, label: fromLabel } = useLocation();
   const profile = isCompleteProfile(answers) ? answers : null;
@@ -69,6 +79,7 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
   const [sort, setSort] = useState<SortKey>("cost");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [view, setView] = useState<"list" | "map">("list");
+  const [radius, setRadius] = useState<number | null>(10);
 
   // "Best fit" and "Good fit only" need the approval answers.
   const effectiveSort: SortKey =
@@ -88,8 +99,19 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
         profile,
         sort: effectiveSort,
         origin: coords,
+        maxMiles: coords ? radius : null,
       }),
-    [buildings, effectiveFilters, budget, moveIn, today, profile, effectiveSort, coords],
+    [
+      buildings,
+      effectiveFilters,
+      budget,
+      moveIn,
+      today,
+      profile,
+      effectiveSort,
+      coords,
+      radius,
+    ],
   );
   const pins = useMemo<MapPin[]>(
     () =>
@@ -105,12 +127,12 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
             label: formatUsd(
               effectiveFilters.people > 1 ? perPerson : cost.realMonthlyCost,
             ),
-            href: `/buildings/${building.id}?budget=${budget}&moveIn=${moveIn}`,
+            href: searchHref(`/buildings/${building.id}`, { budget, moveIn, area }),
             fit: profile ? (item.fit?.level ?? "unknown") : undefined,
           },
         ];
       }),
-    [items, effectiveFilters.people, budget, moveIn, profile],
+    [items, effectiveFilters.people, budget, moveIn, profile, area],
   );
   // Real places with no prices yet: shown grey on the map, never ranked.
   const mapOnlyPins = useMemo<MapPin[]>(
@@ -263,6 +285,39 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
         <div className="mt-4">
           <LocateButton compact />
         </div>
+        {coords && (
+          <div
+            role="group"
+            aria-label="Show apartments within"
+            className="mt-3 flex flex-wrap items-center gap-2"
+          >
+            <span className="text-sm font-medium text-text-muted">Within</span>
+            {[5, 10, 25, null].map((miles) => (
+              <button
+                key={miles ?? "any"}
+                type="button"
+                aria-pressed={radius === miles}
+                onClick={() => setRadius(miles)}
+                className={`min-h-11 rounded-full border px-3.5 text-sm font-medium ${
+                  radius === miles
+                    ? "border-brand bg-brand text-brand-fg"
+                    : "border-border-strong bg-surface text-text"
+                }`}
+              >
+                {miles === null ? "Any distance" : `${miles} miles`}
+              </button>
+            ))}
+            <span className="text-xs text-text-muted">
+              of {fromLabel === "you" ? "you" : fromLabel}
+            </span>
+          </div>
+        )}
+        {nearChosen && !coords && (
+          <InfoNote className="mt-3">
+            You chose to search near a place, but this tab doesn&apos;t have it any more.
+            Use my location or enter a ZIP above to see distances and filter by miles.
+          </InfoNote>
+        )}
 
         {items.length > 0 && (
           <div
@@ -381,13 +436,21 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
                 index={index}
                 today={today}
                 people={effectiveFilters.people}
-                detailHref={`/buildings/${item.building.id}?budget=${budget}&moveIn=${moveIn}`}
+                detailHref={searchHref(`/buildings/${item.building.id}`, {
+                  budget,
+                  moveIn,
+                  area,
+                })}
                 fromLabel={fromLabel}
                 alternative={
                   item.fit?.level === "unlikely" && firstGoodFit
                     ? {
                         name: firstGoodFit.building.name,
-                        href: `/buildings/${firstGoodFit.building.id}?budget=${budget}&moveIn=${moveIn}`,
+                        href: searchHref(`/buildings/${firstGoodFit.building.id}`, {
+                          budget,
+                          moveIn,
+                          area,
+                        }),
                       }
                     : undefined
                 }
@@ -409,6 +472,7 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
         ) : (
           <EmptyState
             buildings={buildings}
+            area={area}
             budget={budget}
             moveIn={moveIn}
             today={today}
@@ -425,7 +489,7 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
   );
 }
 
-function EmptyState({ buildings, budget, moveIn, today }: Omit<Props, "area">) {
+function EmptyState({ buildings, area, budget, moveIn, today }: Props) {
   const suggestion = suggestAlternatives(buildings, budget, moveIn, today);
   return (
     <Card className="mt-6 p-6 text-center">
@@ -442,7 +506,7 @@ function EmptyState({ buildings, budget, moveIn, today }: Omit<Props, "area">) {
           {suggestion.budget && (
             <ButtonLink
               variant="secondary"
-              href={`/?budget=${suggestion.budget}&moveIn=${moveIn}`}
+              href={searchHref("/", { budget: suggestion.budget, moveIn, area })}
             >
               Try a {formatUsd(suggestion.budget)} budget
             </ButtonLink>
@@ -450,7 +514,7 @@ function EmptyState({ buildings, budget, moveIn, today }: Omit<Props, "area">) {
           {suggestion.moveIn && (
             <ButtonLink
               variant="secondary"
-              href={`/?budget=${budget}&moveIn=${suggestion.moveIn}`}
+              href={searchHref("/", { budget, moveIn: suggestion.moveIn, area })}
             >
               Move in {formatDate(suggestion.moveIn)}
             </ButtonLink>
