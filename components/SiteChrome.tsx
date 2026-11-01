@@ -39,6 +39,15 @@ export function SiteFooter() {
           before you apply.
         </p>
         <p>
+          <Link
+            href="/plus"
+            className="font-semibold text-brand-text underline underline-offset-2"
+          >
+            Swelt Plus
+          </Link>{" "}
+          adds optional extras. Search and real cost are always free.
+        </p>
+        <p>
           Your approval answers stay in this browser tab. Saved and compared buildings
           stay on this device.
         </p>

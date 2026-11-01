@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/components/auth/AuthContext";
 import { LocationProvider } from "@/components/location/LocationContext";
 import { MyPlacesProvider } from "@/components/location/MyPlacesContext";
 import { MotionProvider } from "@/components/motion/Reveal";
@@ -56,17 +57,19 @@ export default function RootLayout({
         {IS_DEMO && <DemoBanner />}
         {/* Approval answers live in memory only; the shortlist is saved on this device. */}
         <MotionProvider>
-          <LocationProvider>
-            <ApprovalProvider>
-              <ShortlistProvider>
-                <MyPlacesProvider>
-                  <SiteHeader />
-                  <div className="flex-1">{children}</div>
-                  <SiteFooter />
-                </MyPlacesProvider>
-              </ShortlistProvider>
-            </ApprovalProvider>
-          </LocationProvider>
+          <AuthProvider>
+            <LocationProvider>
+              <ApprovalProvider>
+                <ShortlistProvider>
+                  <MyPlacesProvider>
+                    <SiteHeader />
+                    <div className="flex-1">{children}</div>
+                    <SiteFooter />
+                  </MyPlacesProvider>
+                </ShortlistProvider>
+              </ApprovalProvider>
+            </LocationProvider>
+          </AuthProvider>
         </MotionProvider>
       </body>
     </html>

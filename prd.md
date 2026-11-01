@@ -116,7 +116,12 @@ FEATURES
        show a link until a bulk source exists). See research/safety-data.md.
 
   Round 3 (then; needs accounts, payments and email services):
-  R3.1 "Swelt Plus" waitlist test before building payments.
+  R3.1 "Swelt Plus" waitlist test before building payments. BUILT (Nov 2026): four passes
+       (Browse 7 days $5.99, Tour 14 days $8.99, Apply 21 days $11.99, Move-in 28 days
+       $14.99; one-time, no auto-renew) shown at /plus with a join button, plus anonymous
+       daily view and join counts. Optional sign-in (Google or email link) exists. Passes
+       unlock only extras (drive times to places you add); search, real cost and approval fit
+       stay free. See docs/sign-in-setup.md.
   R3.2 Move Pass: optional paid access for 30, 60 or 90 days.
   R3.3 Price history and alerts (Move Pass): price-drop alerts and the highest
        price in the last 30 days.
