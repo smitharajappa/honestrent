@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { CAMPUS, MAP_STYLE_URL, type MapPin } from "@/lib/map";
 
 // Next.js can't bundle MapLibre's background worker, so we serve it from /public/maplibre
-// (copied there by "npm install"; see package.json).
+// (a copy of maplibre-gl/dist/maplibre-gl-worker.mjs, committed so it never depends on the build; "npm install" refreshes it).
 maplibregl.setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
 
 type Props = {
