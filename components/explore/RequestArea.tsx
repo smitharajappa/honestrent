@@ -34,8 +34,8 @@ export function RequestArea({
         We&apos;re not in {area} yet
       </h2>
       <p className="mx-auto mt-1 max-w-md text-sm text-text-muted">
-        Swelt checks every building by hand, starting with Richardson and Plano. Tell us
-        you want {area} and we&apos;ll prioritise it.
+        Swelt checks every building by hand, starting with Richardson, Plano and Dallas.
+        Tell us you want {area} and we&apos;ll prioritise it.
       </p>
 
       {state.status === "done" ? (

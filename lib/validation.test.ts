@@ -73,6 +73,11 @@ describe("validateArea", () => {
     expect(validateArea(undefined)).toEqual({ ok: true, value: null });
   });
 
+  it("accepts a chosen place to measure from", () => {
+    expect(validateArea("Near me")).toEqual({ ok: true, value: null });
+    expect(validateArea("Near ZIP 75080")).toEqual({ ok: true, value: null });
+  });
+
   it("rejects odd characters and very long text", () => {
     expect(validateArea("<script>").ok).toBe(false);
     expect(validateArea("x".repeat(61)).ok).toBe(false);

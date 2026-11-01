@@ -36,6 +36,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
   const rawArea = first(params.area);
   const areaCheck = validateArea(rawArea);
   const area = areaCheck.ok ? areaCheck.value : null;
+  const nearChosen = /^near /i.test((rawArea ?? "").trim());
   const today = todayInTexas();
   const hasSearched = rawBudget !== undefined || rawMoveIn !== undefined;
   const validation = hasSearched ? validateSearch(rawBudget, rawMoveIn, today) : null;
@@ -77,7 +78,8 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
               <p className="mt-4 max-w-xl text-lg text-pretty text-text-muted">
                 Apartments ranked by what you&apos;ll really pay each month (rent,
                 required fees and utilities, minus deals) and by how likely they are to
-                approve newcomers. Starting in Richardson and Plano.
+                approve newcomers. Starting in the Dallas area: Richardson, Plano and
+                Dallas.
               </p>
             )}
           </div>
@@ -111,6 +113,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
           >
             <Results
               area={area}
+              nearChosen={nearChosen}
               budget={validation.value.budget}
               moveIn={validation.value.moveIn}
               today={today}
@@ -126,11 +129,13 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
 
 async function Results({
   area,
+  nearChosen,
   budget,
   moveIn,
   today,
 }: {
   area: string | null;
+  nearChosen: boolean;
   budget: number;
   moveIn: string;
   today: string;
@@ -168,6 +173,7 @@ async function Results({
     <ResultsExplorer
       buildings={inSearchArea}
       area={area}
+      nearChosen={nearChosen}
       budget={budget}
       moveIn={moveIn}
       today={today}

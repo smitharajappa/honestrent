@@ -90,6 +90,9 @@ export function validateArea(
     };
   }
   if (/^(anywhere( in dfw)?|all|dfw)$/i.test(value)) return { ok: true, value: null };
+  // "Near me" or "Near ZIP 75080": the renter chose a place to measure from. The nearby
+  // filter itself runs on their device, where that place is kept.
+  if (/^near (me|zip \d{5})$/i.test(value)) return { ok: true, value: null };
   if (!AREA_PATTERN.test(value)) {
     return {
       ok: false,

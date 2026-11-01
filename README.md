@@ -1,6 +1,6 @@
 # Swelt
 
-Richardson-Plano apartments ranked by **real monthly cost** (rent + mandatory fees − deals
+Dallas-area (Richardson, Plano, Dallas) apartments ranked by **real monthly cost** (rent + mandatory fees − deals
 spread over the lease) and, later, by how likely a newcomer is to be approved.
 See [prd.md](prd.md) for the product plan.
 

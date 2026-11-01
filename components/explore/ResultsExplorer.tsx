@@ -41,6 +41,8 @@ import { InsightBanner } from "./InsightBanner";
 type Props = {
   buildings: Building[];
   area?: string | null;
+  /** The renter picked "Near me" or "Near ZIP …" as the place. */
+  nearChosen?: boolean;
   budget: number;
   moveIn: string;
   today: string;
@@ -62,7 +64,14 @@ const NO_FILTERS: FilterState = {
   nearUtd: false,
 };
 
-export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Props) {
+export function ResultsExplorer({
+  buildings,
+  area,
+  nearChosen = false,
+  budget,
+  moveIn,
+  today,
+}: Props) {
   const { answers } = useApproval();
   const { coords, label: fromLabel } = useLocation();
   const profile = isCompleteProfile(answers) ? answers : null;
@@ -70,6 +79,7 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
   const [sort, setSort] = useState<SortKey>("cost");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [view, setView] = useState<"list" | "map">("list");
+  const [radius, setRadius] = useState<number | null>(10);
 
   // "Best fit" and "Good fit only" need the approval answers.
   const effectiveSort: SortKey =
@@ -89,8 +99,19 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
         profile,
         sort: effectiveSort,
         origin: coords,
+        maxMiles: coords ? radius : null,
       }),
-    [buildings, effectiveFilters, budget, moveIn, today, profile, effectiveSort, coords],
+    [
+      buildings,
+      effectiveFilters,
+      budget,
+      moveIn,
+      today,
+      profile,
+      effectiveSort,
+      coords,
+      radius,
+    ],
   );
   const pins = useMemo<MapPin[]>(
     () =>
@@ -264,6 +285,39 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
         <div className="mt-4">
           <LocateButton compact />
         </div>
+        {coords && (
+          <div
+            role="group"
+            aria-label="Show apartments within"
+            className="mt-3 flex flex-wrap items-center gap-2"
+          >
+            <span className="text-sm font-medium text-text-muted">Within</span>
+            {[5, 10, 25, null].map((miles) => (
+              <button
+                key={miles ?? "any"}
+                type="button"
+                aria-pressed={radius === miles}
+                onClick={() => setRadius(miles)}
+                className={`min-h-11 rounded-full border px-3.5 text-sm font-medium ${
+                  radius === miles
+                    ? "border-brand bg-brand text-brand-fg"
+                    : "border-border-strong bg-surface text-text"
+                }`}
+              >
+                {miles === null ? "Any distance" : `${miles} miles`}
+              </button>
+            ))}
+            <span className="text-xs text-text-muted">
+              of {fromLabel === "you" ? "you" : fromLabel}
+            </span>
+          </div>
+        )}
+        {nearChosen && !coords && (
+          <InfoNote className="mt-3">
+            You chose to search near a place, but this tab doesn&apos;t have it any more.
+            Use my location or enter a ZIP above to see distances and filter by miles.
+          </InfoNote>
+        )}
 
         {items.length > 0 && (
           <div

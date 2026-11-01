@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/Button";
 import { MapPinIcon } from "../ui/icons";
 import { useLocation } from "./LocationContext";
@@ -13,6 +13,19 @@ export function LocateButton({ compact = false }: { compact?: boolean }) {
   const { status, label, request, setZip, clear } = useLocation();
   const [zip, setZipText] = useState("");
   const [zipError, setZipError] = useState<string | null>(null);
+
+  // Choosing a place to measure from also fills the Where-do-you-want-to-live box
+  // ("Near me", "Near ZIP 75080"), so the search can be sent. Clearing it empties that box.
+  useEffect(() => {
+    const input = document.getElementById("area") as HTMLInputElement | null;
+    if (!input) return;
+    const text = input.value.trim();
+    if (status === "on" && label && (text === "" || /^near /i.test(text))) {
+      input.value = label === "you" ? "Near me" : `Near ${label}`;
+    } else if (status !== "on" && /^near /i.test(text)) {
+      input.value = "";
+    }
+  }, [status, label]);
 
   function applyZip() {
     const result = setZip(zip);
