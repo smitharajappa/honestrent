@@ -42,19 +42,22 @@ if (!settings) {
     "Couldn't read the sign-in settings. Check your internet connection and npm run check:env.",
   );
 } else {
-  settings.external?.email
-    ? ok("Email sign-in is on.")
-    : bad(
-        "Email sign-in is OFF. Supabase, Authentication, Providers, Email: switch it on.",
-      );
-  settings.disable_signup
-    ? bad("New sign-ups are switched off in Supabase, so new people can't get a link.")
-    : ok("New people are allowed to sign up.");
-  settings.external?.google
-    ? ok("Google sign-in is on.")
-    : console.log(
-        "• Google sign-in is off. That's fine: the site hides the Google button until you switch it on.",
-      );
+  if (settings.external?.email) ok("Email sign-in is on.");
+  else
+    bad(
+      "Email sign-in is OFF. Supabase, Authentication, Providers, Email: switch it on.",
+    );
+  if (settings.disable_signup) {
+    bad("New sign-ups are switched off in Supabase, so new people can't get a link.");
+  } else {
+    ok("New people are allowed to sign up.");
+  }
+  if (settings.external?.google) ok("Google sign-in is on.");
+  else {
+    console.log(
+      "• Google sign-in is off. That's fine: the site hides the Google button until you switch it on.",
+    );
+  }
 }
 
 // Where does a sign-in link send people? A fake link makes Supabase say, without sending anything.
