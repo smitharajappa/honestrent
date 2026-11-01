@@ -18,6 +18,8 @@ type Value = {
   ready: boolean;
   /** False if the site isn't connected to Supabase. */
   available: boolean;
+  /** True only when Google sign-in is switched on in Supabase. */
+  googleEnabled: boolean;
   signInWithEmail: (email: string, next?: string) => Promise<string | null>;
   signInWithGoogle: (next?: string) => Promise<string | null>;
   signOut: () => Promise<void>;
@@ -37,11 +39,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(false);
   const [available, setAvailable] = useState(false);
+  const [googleEnabled, setGoogleEnabled] = useState(false);
   const supabase = getBrowserSupabase();
 
   // Decided after the page loads, so the server and the browser always agree on first paint.
   useEffect(() => {
     setAvailable(supabase !== null);
+    // Ask Supabase which sign-in methods are switched on, so we never show a button that can't work.
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+    if (url && key) {
+      fetch(`${url}/auth/v1/settings`, { headers: { apikey: key } })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((s) => setGoogleEnabled(Boolean(s?.external?.google)))
+        .catch(() => setGoogleEnabled(false));
+    }
     if (!supabase) {
       setReady(true);
       return;
@@ -90,11 +102,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       accessToken: session?.access_token ?? null,
       ready,
       available,
+      googleEnabled,
       signInWithEmail,
       signInWithGoogle,
       signOut,
     }),
-    [session, ready, available, signInWithEmail, signInWithGoogle, signOut],
+    [
+      session,
+      ready,
+      available,
+      googleEnabled,
+      signInWithEmail,
+      signInWithGoogle,
+      signOut,
+    ],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

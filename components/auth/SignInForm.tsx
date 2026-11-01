@@ -8,7 +8,8 @@ import { useAuth } from "./AuthContext";
 
 /** Google or an email link. No passwords: we never store one. */
 export function SignInForm({ next }: { next?: string }) {
-  const { signInWithEmail, signInWithGoogle, available, ready } = useAuth();
+  const { signInWithEmail, signInWithGoogle, available, googleEnabled, ready } =
+    useAuth();
   const [email, setEmail] = useState("");
   const [state, setState] = useState<"idle" | "sending" | "sent">("idle");
   const [error, setError] = useState<string | null>(null);
@@ -66,19 +67,23 @@ export function SignInForm({ next }: { next?: string }) {
 
   return (
     <div className="space-y-5">
-      <Button
-        type="button"
-        variant="secondary"
-        size="lg"
-        className="w-full"
-        onClick={async () => {
-          const problem = await signInWithGoogle(next);
-          if (problem) setError(problem);
-        }}
-      >
-        Continue with Google
-      </Button>
-      <p className="text-center text-xs text-text-muted">or</p>
+      {googleEnabled && (
+        <>
+          <Button
+            type="button"
+            variant="secondary"
+            size="lg"
+            className="w-full"
+            onClick={async () => {
+              const problem = await signInWithGoogle(next);
+              if (problem) setError(problem);
+            }}
+          >
+            Continue with Google
+          </Button>
+          <p className="text-center text-xs text-text-muted">or</p>
+        </>
+      )}
       <form onSubmit={sendLink} noValidate className="space-y-3">
         <Field
           id="signin-email"
