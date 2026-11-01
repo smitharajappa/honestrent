@@ -22,6 +22,8 @@ type Props = {
   people?: number;
   /** A nearby good fit to suggest when this building is "Unlikely". */
   alternative?: { name: string; href: string };
+  /** "you" or "ZIP 75080": where distances are measured from. */
+  fromLabel?: string | null;
 };
 
 /** One line saying what the utilities part of the price is and where it came from. */
@@ -60,6 +62,7 @@ export function ResultCard({
   detailHref,
   people = 1,
   alternative,
+  fromLabel,
 }: Props) {
   const {
     building,
@@ -183,6 +186,14 @@ export function ResultCard({
             {matchingPlanCount > 1 && ` · ${matchingPlanCount} plans fit`}
           </span>
         </p>
+
+        {item.milesFromYou != null && (
+          <p className="mt-1.5 flex items-center gap-1 text-xs font-medium text-text">
+            <MapPinIcon className="size-3.5" />
+            {item.milesFromYou.toFixed(1)} mi from {fromLabel ?? "you"}
+            <span className="font-normal text-text-muted"> (straight line)</span>
+          </p>
+        )}
 
         {(building.miles_to_utd != null || building.bus_route) && (
           <p className="mt-1.5 flex flex-wrap gap-x-3 text-xs text-text-muted">

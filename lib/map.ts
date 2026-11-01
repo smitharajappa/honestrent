@@ -5,6 +5,9 @@ export const MAP_STYLE_URL = "https://tiles.openfreemap.org/styles/liberty";
 /** UT Dallas main campus (public landmark), used as the first "place that matters". */
 export const CAMPUS = { name: "UT Dallas", latitude: 32.9886, longitude: -96.748 };
 
+/** Where the renter is, when they chose to share it. Drawn only on their screen. */
+export type YouAreHere = { latitude: number; longitude: number };
+
 export type MapPin = {
   id: string;
   name: string;

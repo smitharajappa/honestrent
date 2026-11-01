@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { BuildingCover } from "@/components/BuildingCover";
 import { CostBar } from "@/components/CostBar";
 import { FitDisplay, FitUnconfirmed } from "@/components/approval/FitBadge";
+import { LocateButton } from "@/components/location/LocateButton";
 import { HiddenCostBanner } from "@/components/building/HiddenCostBanner";
 import { SectionNav } from "@/components/building/SectionNav";
 import { BuildingLocation } from "@/components/map/BuildingLocation";
 import { LazyMap } from "@/components/map/LazyMap";
 import { RevealBlock } from "@/components/motion/Reveal";
+import { DriveToPlaces } from "@/components/traffic/DriveToPlaces";
 import { TrafficChart } from "@/components/traffic/TrafficChart";
 import { TrustNotes } from "@/components/TrustNotes";
 import { Badge } from "@/components/ui/Badge";
@@ -236,6 +238,14 @@ export default function StyleguidePage() {
         </p>
       </Section>
 
+      <Section title="Where to measure distances from">
+        <LocateButton />
+        <p className="mt-3 text-sm text-text-muted">
+          Either the device location (asked only when pressed) or a ZIP code for people
+          who have not moved yet. Kept in this tab only.
+        </p>
+      </Section>
+
       <Section title="Approval fit: four states">
         <div className="grid gap-x-6 sm:grid-cols-2">
           <FitDisplay
@@ -312,6 +322,30 @@ export default function StyleguidePage() {
             latitude: 33.0 + (dLat as number),
             longitude: -96.75 + (dLng as number),
           }))}
+        />
+      </Section>
+
+      <Section title="Drive to places that matter (made-up building)">
+        <DriveToPlaces
+          buildingId="00000000-0000-4000-8000-000000000000"
+          from={{ latitude: 32.961, longitude: -96.729 }}
+          initial={{
+            source: "sample",
+            points: [
+              { hour: 6, minutes: 17 },
+              { hour: 7, minutes: 27 },
+              { hour: 8, minutes: 34 },
+              { hour: 9, minutes: 26 },
+              { hour: 10, minutes: 19 },
+              { hour: 12, minutes: 18 },
+              { hour: 14, minutes: 20 },
+              { hour: 16, minutes: 28 },
+              { hour: 17, minutes: 36 },
+              { hour: 18, minutes: 31 },
+              { hour: 19, minutes: 22 },
+              { hour: 21, minutes: 16 },
+            ],
+          }}
         />
       </Section>
 

@@ -1,12 +1,13 @@
 // Filtering, sorting, roommate split and insight numbers for the results page.
 // Pure functions, so they're tested and run the same in the browser and on the server.
 
+import { milesBetween } from "./map";
 import { approvalFit, type ApprovalProfile, type Fit, type FitLevel } from "./approval";
 import { isDealActive, realMonthlyCost, type CostBreakdown } from "./cost";
 import type { Building, FloorPlan } from "./types";
 import { utilitiesFor, type UtilityView } from "./utilities";
 
-export type SortKey = "cost" | "savings" | "fit";
+export type SortKey = "cost" | "savings" | "fit" | "near";
 export type BedroomFilter = 0 | 1 | 2 | 3; // 3 means "3 or more"
 
 /** "Near UTD" means within this many miles. */
@@ -25,6 +26,8 @@ export type ExploreOptions = {
   nearUtd: boolean;
   profile: ApprovalProfile | null;
   sort: SortKey;
+  /** The renter's position, if they shared it. Only used on their device. */
+  origin?: { latitude: number; longitude: number } | null;
 };
 
 export type ExploreItem = {
@@ -42,6 +45,8 @@ export type ExploreItem = {
   savingsVsAd: number;
   matchingPlanCount: number;
   fit: Fit | null;
+  /** Straight-line miles from the renter, when their location is on. */
+  milesFromYou: number | null;
 };
 
 export const DEFAULT_OPTIONS: Omit<
@@ -68,6 +73,12 @@ export function hasActiveDeal(building: Building, today: string): boolean {
   return building.building_deals.some((d) => isDealActive(d, today));
 }
 
+/** The building's ZIP: the saved one, or the one at the end of its address. */
+export function zipOf(building: Building): string | null {
+  if (building.zip) return building.zip;
+  return building.address.match(/\b(\d{5})\s*$/)?.[1] ?? null;
+}
+
 /**
  * True when the building is in the searched area: a city name (any letter case)
  * or a 5-digit ZIP. An empty area matches everything.
@@ -75,7 +86,7 @@ export function hasActiveDeal(building: Building, today: string): boolean {
 export function inArea(building: Building, area: string | null | undefined): boolean {
   const q = (area ?? "").trim().toLowerCase();
   if (q === "") return true;
-  if (/^\d{5}$/.test(q)) return building.zip === q;
+  if (/^\d{5}$/.test(q)) return zipOf(building) === q;
   return building.city.toLowerCase() === q;
 }
 
@@ -142,6 +153,13 @@ export function explore(buildings: Building[], o: ExploreOptions): ExploreItem[]
       savingsVsAd: best.cost.advertisedRent - best.estimatedTotal,
       matchingPlanCount: matches.length,
       fit,
+      milesFromYou:
+        o.origin && building.latitude != null && building.longitude != null
+          ? milesBetween(o.origin, {
+              latitude: building.latitude,
+              longitude: building.longitude,
+            })
+          : null,
     });
   }
 
@@ -149,6 +167,9 @@ export function explore(buildings: Building[], o: ExploreOptions): ExploreItem[]
     a.estimatedTotal - b.estimatedTotal || a.building.name.localeCompare(b.building.name);
 
   return items.sort((a, b) => {
+    if (o.sort === "near" && a.milesFromYou != null && b.milesFromYou != null) {
+      return a.milesFromYou - b.milesFromYou || byTotal(a, b);
+    }
     if (o.sort === "savings") return b.savingsVsAd - a.savingsVsAd || byTotal(a, b);
     if (o.sort === "fit" && a.fit && b.fit) {
       return FIT_ORDER[a.fit.level] - FIT_ORDER[b.fit.level] || byTotal(a, b);

@@ -38,7 +38,7 @@ import {
   OFFICIAL_CRIME_MAPS,
 } from "@/lib/safety";
 import { fetchTypicalDrive } from "@/lib/traffic-server";
-import { TrafficChart } from "@/components/traffic/TrafficChart";
+import { DriveToPlaces } from "@/components/traffic/DriveToPlaces";
 import { fetchPlacesNear, nearestByKind, PLACE_KINDS, walkMinutes } from "@/lib/places";
 import { bathroomLabel, bedroomLabel, formatDate, formatUsd } from "@/lib/format";
 import { todayInTexas, validateSearch } from "@/lib/validation";
@@ -128,7 +128,7 @@ export default async function BuildingPage({
     !mapOnly && { id: "plans", label: "Plans" },
     hasPin && { id: "location", label: "Location" },
     hasPin && { id: "safety", label: "Safety" },
-    drive && { id: "drive", label: "Drive" },
+    hasPin && { id: "drive", label: "Drive" },
     !mapOnly && { id: "fees", label: "Fees" },
     !mapOnly && { id: "deals", label: "Deals" },
     !mapOnly && { id: "utilities", label: "Utilities" },
@@ -390,6 +390,25 @@ export default async function BuildingPage({
                           <dt className="text-text-muted">Other reports</dt>
                           <dd>{safety.other}</dd>
                         </div>
+                        {safety.vehicle_break_ins !== null &&
+                          safety.vehicle_thefts !== null && (
+                            <>
+                              <div className="flex justify-between gap-3 border-t border-border pt-2">
+                                <dt className="text-text-muted">
+                                  Break-ins and thefts from vehicles, within{" "}
+                                  {safety.vehicle_radius_miles} mile
+                                </dt>
+                                <dd>{safety.vehicle_break_ins}</dd>
+                              </div>
+                              <div className="flex justify-between gap-3">
+                                <dt className="text-text-muted">
+                                  Vehicles stolen or taken, within{" "}
+                                  {safety.vehicle_radius_miles} mile
+                                </dt>
+                                <dd>{safety.vehicle_thefts}</dd>
+                              </div>
+                            </>
+                          )}
                         <div className="flex justify-between gap-3 border-t border-border pt-2">
                           <dt className="text-text-muted">
                             {safety.city_name} average (people and property)
@@ -441,19 +460,16 @@ export default async function BuildingPage({
                 </Section>
               )}
 
-              {drive && (
-                <Section id="drive" title="Drive to UT Dallas">
-                  <p className="mb-4 text-sm text-text-muted">
-                    {drive.source === "tomtom"
-                      ? "Typical weekday drive time by the hour you leave. This is based on past traffic patterns, not live traffic."
-                      : "Sample estimate for the demo: a typical weekday rush-hour pattern, not real traffic data."}
-                  </p>
-                  <TrafficChart points={drive.points} destination={CAMPUS.name} />
-                  <p className="mt-3 text-xs text-text-muted">
-                    {drive.source === "tomtom"
-                      ? "Traffic data © TomTom."
-                      : "Sample data. Real traffic appears once a traffic data key is added."}
-                  </p>
+              {hasPin && (
+                <Section id="drive" title="Drive to places that matter">
+                  <DriveToPlaces
+                    buildingId={building.id}
+                    from={{
+                      latitude: building.latitude!,
+                      longitude: building.longitude!,
+                    }}
+                    initial={drive}
+                  />
                 </Section>
               )}
 

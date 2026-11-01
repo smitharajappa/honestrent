@@ -25,6 +25,7 @@ async function minutesAt(
   date: string,
   hour: number,
   key: string,
+  remember: boolean,
 ): Promise<number | null> {
   const locations = `${from.latitude},${from.longitude}:${to.latitude},${to.longitude}`;
   const params = new URLSearchParams({
@@ -35,9 +36,11 @@ async function minutesAt(
     routeType: "fastest",
   });
   try {
-    const res = await fetch(`${ROUTE_URL}/${locations}/json?${params}`, {
-      next: { revalidate: WEEK_SECONDS },
-    });
+    // A place a renter typed is never kept in our host's cache; our own fixed campus is.
+    const res = await fetch(
+      `${ROUTE_URL}/${locations}/json?${params}`,
+      remember ? { next: { revalidate: WEEK_SECONDS } } : { cache: "no-store" },
+    );
     if (!res.ok) return null;
     const json = await res.json();
     const seconds = json?.routes?.[0]?.summary?.travelTimeInSeconds;
@@ -60,6 +63,7 @@ export type TypicalDrive = {
 export async function fetchTypicalDrive(
   from: Point,
   to: Point,
+  { remember = true }: { remember?: boolean } = {},
 ): Promise<TypicalDrive | null> {
   const key = process.env.TOMTOM_API_KEY;
   if (!key) {
@@ -71,7 +75,7 @@ export async function fetchTypicalDrive(
   const results = await Promise.all(
     SAMPLE_HOURS.map(async (hour) => ({
       hour: hour as number,
-      minutes: await minutesAt(from, to, date, hour, key),
+      minutes: await minutesAt(from, to, date, hour, key, remember),
     })),
   );
   const points: TrafficPoint[] = [];

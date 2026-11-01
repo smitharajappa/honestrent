@@ -19,6 +19,23 @@ source and a link to the police department's own map. Counts only. No score or g
   No link shown until we verify an official address.
 - Aggregators (SpotCrime, US Crime Review, OpenCrime): not official, terms unclear. Not used.
 
+## Vehicle incidents (parking lots and streets)
+
+There is no public dataset by apartment. For Dallas we count, within 0.25 mile and 12 months,
+"theft from motor vehicle" plus "theft of motor vehicle parts or accessories" (break-ins), and
+"UUMV" (vehicle taken without permission). Worded as "reported near this address", never as
+a claim about the building.
+
+## Checked against the sources (1 Nov 2026)
+
+- Dallas data has latitude and longitude on every record and is about a day behind: confirmed.
+- Richardson: LexisNexis Community Crime Map only, no open data: confirmed.
+- Plano: annual reports and daily summaries found; monthly PDFs with response times: not confirmed.
+- FBI per-100,000 city figures quoted by aggregators (146.7 Richardson, 151.6 Plano): not
+  verified, not used. We show counts with a source and date.
+- Management responsiveness: no public dataset. Needs resident reports and a lawyer first
+  (defamation risk when naming a management company).
+
 ## How the comparison is made
 
 City average = (all Dallas people + property incidents in the period) x (circle area /
