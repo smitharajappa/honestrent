@@ -241,3 +241,14 @@
   color: var(--text-muted);
   box-shadow: var(--shadow-card);
 }
+.map-pin-place {
+  width: 0.875rem;
+  height: 0.875rem;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  background: var(--surface);
+  border: 2px solid var(--text);
+  box-shadow: var(--shadow-card);
+  cursor: default;
+}

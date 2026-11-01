@@ -27,6 +27,10 @@ function pinElement(pin: MapPin, highlighted: boolean): HTMLElement {
   el.textContent = pin.label ?? "";
   if (!pin.label) el.classList.add("map-pin-dot");
   if (pin.unverified) el.classList.add("map-pin-unverified");
+  if (pin.place) {
+    el.classList.add("map-pin-place");
+    el.title = pin.name;
+  }
   return el;
 }
 
@@ -81,7 +85,7 @@ export default function BuildingMap({
       new maplibregl.Marker({ element: pinElement(pin, pin.id === highlightId) })
         .setLngLat([pin.longitude, pin.latitude])
         .addTo(map);
-      bounds.extend([pin.longitude, pin.latitude]);
+      if (!pin.place) bounds.extend([pin.longitude, pin.latitude]);
     }
     if (showCampus) {
       const el = document.createElement("div");

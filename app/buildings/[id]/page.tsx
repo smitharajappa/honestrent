@@ -18,6 +18,7 @@ import { describeCriteria, pickCriteria } from "@/lib/approval";
 import { fetchBuilding } from "@/lib/buildings";
 import { isDealActive, planRows } from "@/lib/cost";
 import { CAMPUS, milesBetween } from "@/lib/map";
+import { fetchPlacesNear, nearestByKind, PLACE_KINDS, walkMinutes } from "@/lib/places";
 import { bathroomLabel, bedroomLabel, formatDate, formatUsd } from "@/lib/format";
 import { todayInTexas, validateSearch } from "@/lib/validation";
 
@@ -81,6 +82,24 @@ export default async function BuildingPage({
   const deals = building.building_deals.filter((d) => isDealActive(d, today));
   const totalFees = building.building_fees.reduce((sum, f) => sum + f.monthly_usd, 0);
   const hasPin = building.latitude !== null && building.longitude !== null;
+  const places = hasPin
+    ? await fetchPlacesNear(building.latitude!, building.longitude!)
+    : [];
+  const nearby = hasPin
+    ? nearestByKind(
+        { latitude: building.latitude!, longitude: building.longitude! },
+        places,
+      )
+    : null;
+  const placePins = nearby
+    ? PLACE_KINDS.flatMap(({ kind }) => nearby[kind]).map((p) => ({
+        id: p.id,
+        name: p.name,
+        latitude: p.latitude,
+        longitude: p.longitude,
+        place: true,
+      }))
+    : [];
   const campusMiles = hasPin
     ? milesBetween(
         { latitude: building.latitude!, longitude: building.longitude! },
@@ -225,6 +244,7 @@ export default async function BuildingPage({
                     latitude: building.latitude!,
                     longitude: building.longitude!,
                   },
+                  ...placePins,
                 ]}
                 highlightId={building.id}
                 summary={`${building.name} is about ${campusMiles!.toFixed(1)} miles from UT Dallas in a straight line.`}
@@ -244,6 +264,41 @@ export default async function BuildingPage({
                 </a>{" "}
                 contributors.
               </p>
+              {nearby && placePins.length > 0 && (
+                <div className="mt-5 border-t border-border pt-4">
+                  <h3 className="text-base font-semibold">Nearby</h3>
+                  <p className="mt-1 text-sm text-text-muted">
+                    Closest places within 2 miles. Walking time is a rough guess from
+                    straight-line distance. Small dots on the map.
+                  </p>
+                  <dl className="mt-3 grid gap-4 sm:grid-cols-2">
+                    {PLACE_KINDS.map(({ kind, label }) => (
+                      <div key={kind}>
+                        <dt className="text-sm font-semibold">{label}</dt>
+                        <dd className="mt-1">
+                          {nearby[kind].length === 0 ? (
+                            <span className="text-sm text-text-muted">
+                              None found within 2 miles
+                            </span>
+                          ) : (
+                            <ul className="space-y-1 text-sm tabular-nums">
+                              {nearby[kind].map((p) => (
+                                <li key={p.id} className="flex justify-between gap-3">
+                                  <span className="min-w-0 truncate">{p.name}</span>
+                                  <span className="shrink-0 text-text-muted">
+                                    {p.miles.toFixed(1)} mi · {walkMinutes(p.miles)} min
+                                    walk
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              )}
             </Section>
           )}
 
