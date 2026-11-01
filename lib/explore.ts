@@ -68,6 +68,12 @@ export function hasActiveDeal(building: Building, today: string): boolean {
   return building.building_deals.some((d) => isDealActive(d, today));
 }
 
+/** The building's ZIP: the saved one, or the one at the end of its address. */
+export function zipOf(building: Building): string | null {
+  if (building.zip) return building.zip;
+  return building.address.match(/\b(\d{5})\s*$/)?.[1] ?? null;
+}
+
 /**
  * True when the building is in the searched area: a city name (any letter case)
  * or a 5-digit ZIP. An empty area matches everything.
@@ -75,7 +81,7 @@ export function hasActiveDeal(building: Building, today: string): boolean {
 export function inArea(building: Building, area: string | null | undefined): boolean {
   const q = (area ?? "").trim().toLowerCase();
   if (q === "") return true;
-  if (/^\d{5}$/.test(q)) return building.zip === q;
+  if (/^\d{5}$/.test(q)) return zipOf(building) === q;
   return building.city.toLowerCase() === q;
 }
 

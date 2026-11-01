@@ -301,3 +301,17 @@ describe("activeFilterCount with near UTD", () => {
     expect(activeFilterCount({ ...DEFAULT_OPTIONS, nearUtd: true })).toBe(1);
   });
 });
+
+describe("inArea", () => {
+  it("matches a ZIP from the address when no ZIP is saved", () => {
+    const b = building({ address: "6400 Ohio Dr, Plano, TX 75024", zip: undefined });
+    expect(inArea(b, "75024")).toBe(true);
+    expect(inArea(b, "75080")).toBe(false);
+  });
+  it("matches a city in any letter case and everything when blank", () => {
+    const b = building({ city: "Plano" });
+    expect(inArea(b, "plano")).toBe(true);
+    expect(inArea(b, "")).toBe(true);
+    expect(inArea(b, "Dallas")).toBe(false);
+  });
+});
