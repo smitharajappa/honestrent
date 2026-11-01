@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { ResultsExplorer } from "@/components/explore/ResultsExplorer";
-import { HeroSkyline } from "@/components/HeroSkyline";
+import { HeroArt } from "@/components/HeroArt";
 import { ResultsSkeleton } from "@/components/ResultsSkeleton";
 import { SearchForm } from "@/components/SearchForm";
 import { TrustNotes } from "@/components/TrustNotes";
@@ -83,9 +83,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
               </p>
             )}
           </div>
-          <HeroSkyline
-            className={`hidden w-full lg:block ${showingResults ? "max-h-32" : "max-h-56"}`}
-          />
+          <HeroArt compact={showingResults} />
         </div>
       </section>
 
