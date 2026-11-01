@@ -78,3 +78,31 @@ export function hourLabel(hour: number): string {
 export function shortHourLabel(hour: number): string {
   return `${hour % 12 === 0 ? 12 : hour % 12}${hour < 12 ? "a" : "p"}`;
 }
+
+/**
+ * A made-up but realistic weekday curve, used only when no real traffic source is set up
+ * (demo mode). Free-flow speed about 28 mph, with a morning and evening rush.
+ * It is always labelled "sample" in the app.
+ */
+const RUSH_MULTIPLIER: Record<number, number> = {
+  6: 1.1,
+  7: 1.5,
+  8: 1.8,
+  9: 1.4,
+  10: 1.15,
+  12: 1.2,
+  14: 1.2,
+  16: 1.55,
+  17: 1.85,
+  18: 1.6,
+  19: 1.25,
+  21: 1.0,
+};
+
+export function sampleDrive(miles: number): TrafficPoint[] {
+  const base = Math.max(4, (miles * 1.25 * 60) / 28); // road distance ~25% over straight line
+  return SAMPLE_HOURS.map((hour) => ({
+    hour,
+    minutes: Math.max(1, Math.round(base * (RUSH_MULTIPLIER[hour] ?? 1))),
+  }));
+}

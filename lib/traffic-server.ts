@@ -1,12 +1,15 @@
 // Fetches typical weekday drive times from TomTom's Routing API.
-// Server only. Needs TOMTOM_API_KEY; without it we simply show no chart.
+// Server only. Needs TOMTOM_API_KEY. Without it: a labelled sample in demo mode, otherwise no chart.
 //
 // We do NOT store TomTom's answers in our database (their terms limit storage).
 // The web host reuses an answer for up to 7 days, which is ordinary short-term caching.
 
+import { milesBetween } from "./map";
+import { IS_DEMO } from "./site";
 import {
   departAtIso,
   nextTypicalWeekday,
+  sampleDrive,
   SAMPLE_HOURS,
   type TrafficPoint,
 } from "./traffic";
@@ -44,13 +47,26 @@ async function minutesAt(
   }
 }
 
-/** Drive time by hour on a typical weekday, or null if unavailable. */
+export type TypicalDrive = {
+  points: TrafficPoint[];
+  /** "tomtom" = real predicted traffic. "sample" = made-up demo curve. */
+  source: "tomtom" | "sample";
+};
+
+/**
+ * Drive time by hour on a typical weekday. Uses TomTom when a key is set; in demo mode
+ * with no key it returns a clearly labelled sample curve; otherwise null (no chart).
+ */
 export async function fetchTypicalDrive(
   from: Point,
   to: Point,
-): Promise<TrafficPoint[] | null> {
+): Promise<TypicalDrive | null> {
   const key = process.env.TOMTOM_API_KEY;
-  if (!key) return null;
+  if (!key) {
+    return IS_DEMO
+      ? { points: sampleDrive(milesBetween(from, to)), source: "sample" }
+      : null;
+  }
   const date = nextTypicalWeekday(new Date());
   const results = await Promise.all(
     SAMPLE_HOURS.map(async (hour) => ({
@@ -64,5 +80,6 @@ export async function fetchTypicalDrive(
       points.push({ hour: r.hour, minutes: r.minutes });
   }
   // A chart with only a few hours would mislead.
-  return points.length >= SAMPLE_HOURS.length - 2 ? points : null;
+  if (points.length < SAMPLE_HOURS.length - 2) return null;
+  return { points, source: "tomtom" };
 }

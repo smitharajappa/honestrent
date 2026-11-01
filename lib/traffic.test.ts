@@ -3,6 +3,7 @@ import {
   departAtIso,
   hourLabel,
   nextTypicalWeekday,
+  sampleDrive,
   shortHourLabel,
   summarize,
 } from "./traffic";
@@ -65,5 +66,18 @@ describe("shortHourLabel", () => {
     expect(shortHourLabel(6)).toBe("6a");
     expect(shortHourLabel(12)).toBe("12p");
     expect(shortHourLabel(21)).toBe("9p");
+  });
+});
+
+describe("sampleDrive", () => {
+  it("has a morning and evening rush and is quietest at night", () => {
+    const points = sampleDrive(8);
+    const at = (h: number) => points.find((p) => p.hour === h)!.minutes;
+    expect(at(8)).toBeGreaterThan(at(10));
+    expect(at(17)).toBeGreaterThan(at(14));
+    expect(at(21)).toBeLessThanOrEqual(at(10));
+  });
+  it("takes longer for farther buildings", () => {
+    expect(sampleDrive(10)[2].minutes).toBeGreaterThan(sampleDrive(3)[2].minutes);
   });
 });

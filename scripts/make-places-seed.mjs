@@ -3,7 +3,35 @@
 
 import { readFileSync, writeFileSync } from "node:fs";
 
-const places = JSON.parse(readFileSync("research/places-osm.json", "utf8"));
+const all = JSON.parse(readFileSync("research/places-osm.json", "utf8"));
+
+// Keep only places within 2.5 miles of a building we list (the building pages show
+// 2 miles), so the SQL stays small enough to paste into Supabase.
+const MAX_MILES = 2.5;
+const buildingPoints = [];
+for (const file of ["seed.sql", "seed-live.sql", "seed-osm.sql"]) {
+  const sql = readFileSync(`supabase/${file}`, "utf8");
+  for (const m of sql.matchAll(/(3[23]\.\d+),\s*(-9[5-8]\.\d+)/g)) {
+    buildingPoints.push({ latitude: Number(m[1]), longitude: Number(m[2]) });
+  }
+}
+function miles(a, b) {
+  const R = 3958.8;
+  const r = (d) => (d * Math.PI) / 180;
+  const h =
+    Math.sin(r(b.latitude - a.latitude) / 2) ** 2 +
+    Math.cos(r(a.latitude)) *
+      Math.cos(r(b.latitude)) *
+      Math.sin(r(b.longitude - a.longitude) / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+const places =
+  buildingPoints.length === 0
+    ? all
+    : all.filter((p) => buildingPoints.some((b) => miles(b, p) <= MAX_MILES));
+console.log(
+  `Keeping ${places.length} of ${all.length} places near ${buildingPoints.length} building points.`,
+);
 const q = (s) => `'${String(s).replaceAll("'", "''")}'`;
 const rows = places.map(
   (p) => `  (${q(p.kind)}, ${q(p.name)}, ${p.latitude}, ${p.longitude}, ${q(p.osm)})`,

@@ -11,7 +11,7 @@ import { AlertIcon, ArrowLeftIcon, MapPinIcon, TagIcon } from "@/components/ui/i
 import { VerifiedNote } from "@/components/VerifiedNote";
 import { BuildingCover } from "@/components/BuildingCover";
 import { CostBar } from "@/components/CostBar";
-import { LazyMap } from "@/components/map/LazyMap";
+import { BuildingLocation } from "@/components/map/BuildingLocation";
 import { RevealOnScroll } from "@/components/motion/Reveal";
 import { CompareToggle, SaveButton } from "@/components/shortlist/ShortlistButtons";
 import { TrustNotes } from "@/components/TrustNotes";
@@ -104,15 +104,6 @@ export default async function BuildingPage({
         places,
       )
     : null;
-  const placePins = nearby
-    ? PLACE_KINDS.flatMap(({ kind }) => nearby[kind]).map((p) => ({
-        id: p.id,
-        name: p.name,
-        latitude: p.latitude,
-        longitude: p.longitude,
-        place: true,
-      }))
-    : [];
   const campusMiles = hasPin
     ? milesBetween(
         { latitude: building.latitude!, longitude: building.longitude! },
@@ -249,19 +240,15 @@ export default async function BuildingPage({
 
           {hasPin && (
             <Section id="location" title="Location">
-              <LazyMap
-                pins={[
-                  {
-                    id: building.id,
-                    name: building.name,
-                    latitude: building.latitude!,
-                    longitude: building.longitude!,
-                  },
-                  ...placePins,
-                ]}
-                highlightId={building.id}
-                summary={`${building.name} is about ${campusMiles!.toFixed(1)} miles from UT Dallas in a straight line.`}
-                className="h-72 sm:h-96"
+              <BuildingLocation
+                pin={{
+                  id: building.id,
+                  name: building.name,
+                  latitude: building.latitude!,
+                  longitude: building.longitude!,
+                }}
+                places={places}
+                miles={campusMiles!}
               />
               <p className="mt-3 text-sm text-text-muted tabular-nums">
                 About {campusMiles!.toFixed(1)} miles from UT Dallas, measured in a
@@ -277,7 +264,7 @@ export default async function BuildingPage({
                 </a>{" "}
                 contributors.
               </p>
-              {nearby && placePins.length > 0 && (
+              {nearby && places.length > 0 && (
                 <div className="mt-5 border-t border-border pt-4">
                   <h3 className="text-base font-semibold">Nearby</h3>
                   <p className="mt-1 text-sm text-text-muted">
@@ -320,11 +307,16 @@ export default async function BuildingPage({
               {drive && (
                 <Section id="drive" title="Drive to UT Dallas">
                   <p className="mb-4 text-sm text-text-muted">
-                    Typical weekday drive time by the hour you leave. This is based on
-                    past traffic patterns, not live traffic.
+                    {drive.source === "tomtom"
+                      ? "Typical weekday drive time by the hour you leave. This is based on past traffic patterns, not live traffic."
+                      : "Sample estimate for the demo: a typical weekday rush-hour pattern, not real traffic data."}
                   </p>
-                  <TrafficChart points={drive} destination={CAMPUS.name} />
-                  <p className="mt-3 text-xs text-text-muted">Traffic data © TomTom.</p>
+                  <TrafficChart points={drive.points} destination={CAMPUS.name} />
+                  <p className="mt-3 text-xs text-text-muted">
+                    {drive.source === "tomtom"
+                      ? "Traffic data © TomTom."
+                      : "Sample data. Real traffic appears once a traffic data key is added."}
+                  </p>
                 </Section>
               )}
 
