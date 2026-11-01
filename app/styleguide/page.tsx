@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { BuildingCover } from "@/components/BuildingCover";
 import { CostBar } from "@/components/CostBar";
+import { HiddenCostBanner } from "@/components/building/HiddenCostBanner";
+import { SectionNav } from "@/components/building/SectionNav";
 import { BuildingLocation } from "@/components/map/BuildingLocation";
 import { LazyMap } from "@/components/map/LazyMap";
 import { RevealBlock } from "@/components/motion/Reveal";
@@ -224,6 +226,40 @@ export default function StyleguidePage() {
           aren&apos;t verified yet. The white pin is UT Dallas. Tiles from OpenFreeMap;
           data © OpenStreetMap contributors.
         </p>
+      </Section>
+
+      <Section title="Hidden-cost banner and section bar (made-up numbers)">
+        <HiddenCostBanner
+          planName="1 Bed, 700 sq ft"
+          total={1210}
+          cost={{
+            advertisedRent: 963,
+            monthlyFees: 90,
+            monthlyDealSavings: 74,
+            realMonthlyCost: 979,
+          }}
+          utilities={{
+            known: true,
+            avg: 231,
+            low: 190,
+            high: 280,
+            source: "renters",
+            reportCount: 3,
+            asOf: "2026-10-31",
+          }}
+        />
+        <div className="mt-4">
+          <SectionNav
+            items={[
+              { id: "a", label: "Plans" },
+              { id: "b", label: "Location" },
+              { id: "c", label: "Safety" },
+              { id: "d", label: "Fees" },
+              { id: "e", label: "Move-in cash" },
+              { id: "f", label: "Apply" },
+            ]}
+          />
+        </div>
       </Section>
 
       <Section title="Location with nearby tabs (made-up places)">

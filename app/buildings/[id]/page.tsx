@@ -26,7 +26,9 @@ import { fetchBuilding } from "@/lib/buildings";
 import { isDealActive, planRows } from "@/lib/cost";
 import { CAMPUS, milesBetween } from "@/lib/map";
 import { utilitiesFor } from "@/lib/utilities";
+import { HiddenCostBanner } from "@/components/building/HiddenCostBanner";
 import { MoveInCashCard } from "@/components/building/MoveInCashCard";
+import { SectionNav, type NavItem } from "@/components/building/SectionNav";
 import { UtilitiesSection } from "@/components/building/UtilitiesSection";
 import { UtilitiesLine } from "@/components/ResultCard";
 import {
@@ -122,6 +124,19 @@ export default async function BuildingPage({
       )
     : null;
   const safety = hasPin ? await fetchSafety(building.id) : null;
+  const navItems: NavItem[] = [
+    !mapOnly && { id: "plans", label: "Plans" },
+    hasPin && { id: "location", label: "Location" },
+    hasPin && { id: "safety", label: "Safety" },
+    drive && { id: "drive", label: "Drive" },
+    !mapOnly && { id: "fees", label: "Fees" },
+    !mapOnly && { id: "deals", label: "Deals" },
+    !mapOnly && { id: "utilities", label: "Utilities" },
+    !mapOnly && cheapest && { id: "move-in", label: "Move-in cash" },
+    !mapOnly && { id: "documents", label: "Documents" },
+    !mapOnly && { id: "approval", label: "Approval" },
+    !mapOnly && { id: "interest", label: "Apply" },
+  ].filter((i): i is NavItem => Boolean(i));
   const crimeMap = OFFICIAL_CRIME_MAPS[building.city];
   const nearby = hasPin
     ? nearestByKind(
@@ -153,6 +168,8 @@ export default async function BuildingPage({
           />
         )}
       </div>
+
+      <SectionNav items={navItems} />
 
       <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_22rem]">
         <div className="min-w-0">
@@ -193,6 +210,15 @@ export default async function BuildingPage({
 
           {building.notes && !mapOnly && (
             <InfoNote className="mt-6">{building.notes}</InfoNote>
+          )}
+
+          {!mapOnly && cheapest && (
+            <HiddenCostBanner
+              cost={cheapest.cost}
+              utilities={cheapestUtilities}
+              total={cheapestTotal}
+              planName={cheapest.plan.name}
+            />
           )}
 
           {mapOnly && (
@@ -653,7 +679,7 @@ function Section({
       <Card
         as="section"
         aria-labelledby={`${id}-heading`}
-        className="mt-6 scroll-mt-20 p-5 sm:p-6"
+        className="mt-6 scroll-mt-32 p-5 sm:p-6"
         id={id}
       >
         <h2 id={`${id}-heading`} className="mb-3 text-lg font-semibold">
