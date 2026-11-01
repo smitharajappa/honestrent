@@ -10,6 +10,10 @@ export type BuildingSafety = {
   against_people: number;
   property: number;
   other: number;
+  /** Smaller 0.25-mile circle for parking-lot and street vehicle incidents. Null if not counted. */
+  vehicle_radius_miles: number | null;
+  vehicle_break_ins: number | null;
+  vehicle_thefts: number | null;
   city_average_people_property: number;
   city_name: string;
   source_name: string;
@@ -52,7 +56,7 @@ export async function fetchSafety(buildingId: string): Promise<BuildingSafety | 
   const { data, error } = await supabase
     .from("building_safety")
     .select(
-      "period_start, period_end, radius_miles, against_people, property, other, city_average_people_property, city_name, source_name, source_url, license",
+      "period_start, period_end, radius_miles, against_people, property, other, vehicle_radius_miles, vehicle_break_ins, vehicle_thefts, city_average_people_property, city_name, source_name, source_url, license",
     )
     .eq("building_id", buildingId)
     .maybeSingle();
@@ -64,6 +68,8 @@ export async function fetchSafety(buildingId: string): Promise<BuildingSafety | 
   return {
     ...data,
     radius_miles: Number(data.radius_miles),
+    vehicle_radius_miles:
+      data.vehicle_radius_miles == null ? null : Number(data.vehicle_radius_miles),
     city_average_people_property: Number(data.city_average_people_property),
   } as BuildingSafety;
 }

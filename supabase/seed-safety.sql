@@ -4,12 +4,16 @@
 
 insert into public.building_safety
   (building_id, period_start, period_end, radius_miles, against_people, property, other,
+   vehicle_radius_miles, vehicle_break_ins, vehicle_thefts,
    city_average_people_property, city_name, source_name, source_url, license, checked_on)
-select id, '2025-10-31', '2026-10-30', 0.5, 12, 147, 121,
+select id, '2025-11-01', '2026-10-31', 0.5, 12, 146, 120,
+  0.25, 21, 20,
   150.5, 'Dallas', 'City of Dallas Police Incidents (open data)', 'https://www.dallasopendata.com/Public-Safety/Police-Incidents/qv6i-rri7',
   'Open Data Commons Attribution License (ODC-BY)', '2026-11-01'
 from public.buildings where name = 'Maya at White Rock' and city = 'Dallas'
 on conflict (building_id) do update set
   period_start = excluded.period_start, period_end = excluded.period_end,
   against_people = excluded.against_people, property = excluded.property, other = excluded.other,
+  vehicle_radius_miles = excluded.vehicle_radius_miles, vehicle_break_ins = excluded.vehicle_break_ins,
+  vehicle_thefts = excluded.vehicle_thefts,
   city_average_people_property = excluded.city_average_people_property, checked_on = excluded.checked_on;

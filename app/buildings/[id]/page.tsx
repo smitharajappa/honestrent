@@ -390,6 +390,25 @@ export default async function BuildingPage({
                           <dt className="text-text-muted">Other reports</dt>
                           <dd>{safety.other}</dd>
                         </div>
+                        {safety.vehicle_break_ins !== null &&
+                          safety.vehicle_thefts !== null && (
+                            <>
+                              <div className="flex justify-between gap-3 border-t border-border pt-2">
+                                <dt className="text-text-muted">
+                                  Break-ins and thefts from vehicles, within{" "}
+                                  {safety.vehicle_radius_miles} mile
+                                </dt>
+                                <dd>{safety.vehicle_break_ins}</dd>
+                              </div>
+                              <div className="flex justify-between gap-3">
+                                <dt className="text-text-muted">
+                                  Vehicles stolen or taken, within{" "}
+                                  {safety.vehicle_radius_miles} mile
+                                </dt>
+                                <dd>{safety.vehicle_thefts}</dd>
+                              </div>
+                            </>
+                          )}
                         <div className="flex justify-between gap-3 border-t border-border pt-2">
                           <dt className="text-text-muted">
                             {safety.city_name} average (people and property)
