@@ -22,6 +22,19 @@ In the Supabase dashboard, open **SQL Editor** and run these files in order:
 3. `supabase/migrations/20261026000000_create_leads.sql` creates the "I'm interested"
    leads table. The public key can add leads but never read, change or delete them.
    View leads in the dashboard under **Table Editor → leads**.
+4. `supabase/migrations/20261030000000_round_2_costs_and_approval.sql` adds move-in
+   costs, finer approval rules, utilities billed by the building, anonymous renter bills
+   (`renter_bill_reports`, insert-only) and "Request my area" (`area_requests`,
+   insert-only).
+5. `supabase/sample-data-round-2.sql` fills the Round 2 fields for the **made-up**
+   sample buildings. Safe to re-run.
+
+Reviewing renter bills: in **Table Editor → renter_bill_reports**, set `status` to
+`accepted` or `rejected`. A building's range appears once 3 reports for the same size
+are accepted. See demand by area in **Table Editor → area_requests**.
+
+Real building data is collected with the "Swelt building check (10 buildings)" Google
+Sheet (questions, call script and floor plans tabs).
 
 Any later change to the tables goes in a new, dated file in `supabase/migrations/`.
 Never edit a migration that has already been run.

@@ -2,19 +2,21 @@ import Form from "next/form";
 import { ApprovalFooter, ApprovalSelects } from "./approval/ApprovalFields";
 import { BudgetChips, SearchButton } from "./SearchFormControls";
 import { Field } from "./ui/Field";
+import { DFW_SUGGESTIONS } from "@/lib/areas";
 
 type Props = {
+  area?: string;
   budget?: string;
   moveIn?: string;
   today: string;
-  errors?: { budget?: string; moveIn?: string };
+  errors?: { area?: string; budget?: string; moveIn?: string };
 };
 
 /**
  * One search for everything: budget and move-in (kept in the URL so results can
  * be bookmarked) plus the optional approval questions (kept in memory only).
  */
-export function SearchForm({ budget, moveIn, today, errors = {} }: Props) {
+export function SearchForm({ area, budget, moveIn, today, errors = {} }: Props) {
   return (
     <Form action="/" noValidate className="space-y-5">
       <div className="grid gap-6 lg:grid-cols-[2fr_3fr] lg:gap-8">
@@ -26,12 +28,30 @@ export function SearchForm({ budget, moveIn, today, errors = {} }: Props) {
             Your search
           </p>
           <div className="grid gap-5 sm:grid-cols-2">
+            <div className="sm:col-span-2">
+              <Field
+                id="area"
+                name="area"
+                label="Area"
+                hint="City, ZIP or neighbourhood in Dallas–Fort Worth (optional)"
+                placeholder="Richardson, Plano, 75080…"
+                autoComplete="off"
+                list="area-suggestions"
+                defaultValue={area}
+                error={errors.area}
+              />
+              <datalist id="area-suggestions">
+                {DFW_SUGGESTIONS.map((city) => (
+                  <option key={city} value={city} />
+                ))}
+              </datalist>
+            </div>
             <div>
               <Field
                 id="budget"
                 name="budget"
                 label="Monthly budget"
-                hint="Your share of rent + fees"
+                hint="Your share of rent, fees and utilities"
                 prefix="$"
                 inputMode="numeric"
                 autoComplete="off"

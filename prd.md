@@ -108,6 +108,13 @@ FEATURES
        neighbourhood anywhere in DFW. Areas without data yet show a
        "Request my area" button that records demand (area name and date only).
 
+  R2.12 Reported incidents nearby - done means: each building shows counts of reported
+       incidents within half a mile over the last 12 months (against people, property,
+       other), compared with the city average for an area that size, with the source and
+       a link to the police department's own map. Counts only: no score, grade or
+       ranking. Only where the city publishes open data (Dallas now; Richardson and Plano
+       show a link until a bulk source exists). See research/safety-data.md.
+
   Round 3 (then; needs accounts, payments and email services):
   R3.1 "Swelt Plus" waitlist test before building payments.
   R3.2 Move Pass: optional paid access for 30, 60 or 90 days.
@@ -179,6 +186,10 @@ LEGAL AND TRUST GUARDRAILS:
   - Approval predictions use documents, credit and income only, never national
     origin or other protected traits (fair housing).
   - Roommate matching uses lifestyle preferences only.
+  - Neighbourhood incident counts are shown the same way for every building and every
+    renter. We never use victim, suspect, race, sex or any personal field from police
+    data, never publish a safety score or grade, and never filter or rank buildings by
+    who lives nearby. Get fair housing advice before adding a "safest first" sort.
   - Swelt does not lend money or act as a guarantor.
   - No copying photos or data from other websites or Google Maps.
   - Demo mode stays on until building data is real.

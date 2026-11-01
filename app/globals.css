@@ -251,14 +251,19 @@
   color: var(--text-muted);
   box-shadow: var(--shadow-card);
 }
-.map-pin-place {
-  width: 0.875rem;
-  height: 0.875rem;
-  min-width: 0;
-  min-height: 0;
-  padding: 0;
-  background: var(--surface);
-  border: 2px solid var(--text);
-  box-shadow: var(--shadow-card);
-  cursor: default;
+
+/*
+ * Nearby-place colors on the map. Decorative: every kind also has a text label
+ * in the tabs and in the pop-up, so color is never the only signal.
+ * The map picture stays light in dark mode, so these are the same in both modes.
+ */
+:root {
+  --place-grocery: #2f8f4e;
+  --place-bus: #3b6fd4;
+  --place-food: #d9622b;
+  --place-cafe: #8a5a34;
+  --place-bank: #5b6b7a;
+  --place-school: #7a4fc2;
+  --place-gym: #c2307a;
+  --place-worship: #a87a00;
 }

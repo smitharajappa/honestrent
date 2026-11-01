@@ -7,11 +7,17 @@ import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { InfoNote } from "@/components/ui/InfoNote";
-import { AlertIcon, ArrowLeftIcon, MapPinIcon, TagIcon } from "@/components/ui/icons";
+import {
+  AlertIcon,
+  ArrowLeftIcon,
+  CheckIcon,
+  MapPinIcon,
+  TagIcon,
+} from "@/components/ui/icons";
 import { VerifiedNote } from "@/components/VerifiedNote";
 import { BuildingCover } from "@/components/BuildingCover";
 import { CostBar } from "@/components/CostBar";
-import { LazyMap } from "@/components/map/LazyMap";
+import { BuildingLocation } from "@/components/map/BuildingLocation";
 import { RevealOnScroll } from "@/components/motion/Reveal";
 import { CompareToggle, SaveButton } from "@/components/shortlist/ShortlistButtons";
 import { TrustNotes } from "@/components/TrustNotes";
@@ -19,6 +25,20 @@ import { describeCriteria, pickCriteria } from "@/lib/approval";
 import { fetchBuilding } from "@/lib/buildings";
 import { isDealActive, planRows } from "@/lib/cost";
 import { CAMPUS, milesBetween } from "@/lib/map";
+import { utilitiesFor } from "@/lib/utilities";
+import { HiddenCostBanner } from "@/components/building/HiddenCostBanner";
+import { MoveInCashCard } from "@/components/building/MoveInCashCard";
+import { SectionNav, type NavItem } from "@/components/building/SectionNav";
+import { UtilitiesSection } from "@/components/building/UtilitiesSection";
+import { UtilitiesLine } from "@/components/ResultCard";
+import {
+  COMPARISON_TEXT,
+  compareWithCity,
+  fetchSafety,
+  OFFICIAL_CRIME_MAPS,
+} from "@/lib/safety";
+import { fetchTypicalDrive } from "@/lib/traffic-server";
+import { TrafficChart } from "@/components/traffic/TrafficChart";
 import { fetchPlacesNear, nearestByKind, PLACE_KINDS, walkMinutes } from "@/lib/places";
 import { bathroomLabel, bedroomLabel, formatDate, formatUsd } from "@/lib/format";
 import { todayInTexas, validateSearch } from "@/lib/validation";
@@ -80,27 +100,50 @@ export default async function BuildingPage({
   // Imported real community with no prices entered yet: show where it is, nothing else.
   const mapOnly = building.floor_plans.length === 0;
   const cheapest = rows.find((r) => r.availableByMoveIn) ?? rows[0];
+  const cheapestUtilities = cheapest
+    ? utilitiesFor(building, cheapest.plan.bedrooms)
+    : null;
+  const cheapestTotal =
+    cheapest && cheapestUtilities
+      ? cheapest.cost.realMonthlyCost + cheapestUtilities.avg
+      : 0;
+  const nextMonthFirst = (() => {
+    const [y, m] = today.split("-").map(Number);
+    return new Date(Date.UTC(y, m, 1)).toISOString().slice(0, 10);
+  })();
   const deals = building.building_deals.filter((d) => isDealActive(d, today));
   const totalFees = building.building_fees.reduce((sum, f) => sum + f.monthly_usd, 0);
   const hasPin = building.latitude !== null && building.longitude !== null;
   const places = hasPin
     ? await fetchPlacesNear(building.latitude!, building.longitude!)
     : [];
+  const drive = hasPin
+    ? await fetchTypicalDrive(
+        { latitude: building.latitude!, longitude: building.longitude! },
+        CAMPUS,
+      )
+    : null;
+  const safety = hasPin ? await fetchSafety(building.id) : null;
+  const navItems: NavItem[] = [
+    !mapOnly && { id: "plans", label: "Plans" },
+    hasPin && { id: "location", label: "Location" },
+    hasPin && { id: "safety", label: "Safety" },
+    drive && { id: "drive", label: "Drive" },
+    !mapOnly && { id: "fees", label: "Fees" },
+    !mapOnly && { id: "deals", label: "Deals" },
+    !mapOnly && { id: "utilities", label: "Utilities" },
+    !mapOnly && cheapest && { id: "move-in", label: "Move-in cash" },
+    !mapOnly && { id: "documents", label: "Documents" },
+    !mapOnly && { id: "approval", label: "Approval" },
+    !mapOnly && { id: "interest", label: "Apply" },
+  ].filter((i): i is NavItem => Boolean(i));
+  const crimeMap = OFFICIAL_CRIME_MAPS[building.city];
   const nearby = hasPin
     ? nearestByKind(
         { latitude: building.latitude!, longitude: building.longitude! },
         places,
       )
     : null;
-  const placePins = nearby
-    ? PLACE_KINDS.flatMap(({ kind }) => nearby[kind]).map((p) => ({
-        id: p.id,
-        name: p.name,
-        latitude: p.latitude,
-        longitude: p.longitude,
-        place: true,
-      }))
-    : [];
   const campusMiles = hasPin
     ? milesBetween(
         { latitude: building.latitude!, longitude: building.longitude! },
@@ -125,6 +168,8 @@ export default async function BuildingPage({
           />
         )}
       </div>
+
+      <SectionNav items={navItems} />
 
       <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_22rem]">
         <div className="min-w-0">
@@ -165,6 +210,15 @@ export default async function BuildingPage({
 
           {building.notes && !mapOnly && (
             <InfoNote className="mt-6">{building.notes}</InfoNote>
+          )}
+
+          {!mapOnly && cheapest && (
+            <HiddenCostBanner
+              cost={cheapest.cost}
+              utilities={cheapestUtilities}
+              total={cheapestTotal}
+              planName={cheapest.plan.name}
+            />
           )}
 
           {mapOnly && (
@@ -225,6 +279,14 @@ export default async function BuildingPage({
                         {formatUsd(cost.realMonthlyCost)}
                       </p>
                       <p className="text-xs text-text-muted">real / mo</p>
+                      {(() => {
+                        const u = utilitiesFor(building, plan.bedrooms);
+                        return u.known && u.avg > 0 ? (
+                          <p className="text-xs text-info-text">
+                            + ~{formatUsd(u.avg)} utilities
+                          </p>
+                        ) : null;
+                      })()}
                       <p className="mt-1 text-sm text-text-muted">
                         Advertised {formatUsd(cost.advertisedRent)}
                       </p>
@@ -237,19 +299,15 @@ export default async function BuildingPage({
 
           {hasPin && (
             <Section id="location" title="Location">
-              <LazyMap
-                pins={[
-                  {
-                    id: building.id,
-                    name: building.name,
-                    latitude: building.latitude!,
-                    longitude: building.longitude!,
-                  },
-                  ...placePins,
-                ]}
-                highlightId={building.id}
-                summary={`${building.name} is about ${campusMiles!.toFixed(1)} miles from UT Dallas in a straight line.`}
-                className="h-72 sm:h-96"
+              <BuildingLocation
+                pin={{
+                  id: building.id,
+                  name: building.name,
+                  latitude: building.latitude!,
+                  longitude: building.longitude!,
+                }}
+                places={places}
+                miles={campusMiles!}
               />
               <p className="mt-3 text-sm text-text-muted tabular-nums">
                 About {campusMiles!.toFixed(1)} miles from UT Dallas, measured in a
@@ -265,7 +323,7 @@ export default async function BuildingPage({
                 </a>{" "}
                 contributors.
               </p>
-              {nearby && placePins.length > 0 && (
+              {nearby && places.length > 0 && (
                 <div className="mt-5 border-t border-border pt-4">
                   <h3 className="text-base font-semibold">Nearby</h3>
                   <p className="mt-1 text-sm text-text-muted">
@@ -305,6 +363,100 @@ export default async function BuildingPage({
 
           {!mapOnly && (
             <>
+              {hasPin && (
+                <Section id="safety" title="Reported incidents nearby">
+                  {safety ? (
+                    <>
+                      <p className="text-sm">
+                        <strong className="font-semibold">
+                          {COMPARISON_TEXT[compareWithCity(safety).level]}
+                        </strong>{" "}
+                        the {safety.city_name} average for an area this size. Within{" "}
+                        {safety.radius_miles} mile, {formatDate(safety.period_start)} to{" "}
+                        {formatDate(safety.period_end)}:
+                      </p>
+                      <dl className="mt-3 space-y-2 text-sm tabular-nums">
+                        <div className="flex justify-between gap-3">
+                          <dt className="text-text-muted">Against people</dt>
+                          <dd>{safety.against_people}</dd>
+                        </div>
+                        <div className="flex justify-between gap-3">
+                          <dt className="text-text-muted">
+                            Property (theft, burglary, vehicle)
+                          </dt>
+                          <dd>{safety.property}</dd>
+                        </div>
+                        <div className="flex justify-between gap-3">
+                          <dt className="text-text-muted">Other reports</dt>
+                          <dd>{safety.other}</dd>
+                        </div>
+                        <div className="flex justify-between gap-3 border-t border-border pt-2">
+                          <dt className="text-text-muted">
+                            {safety.city_name} average (people and property)
+                          </dt>
+                          <dd>{Math.round(safety.city_average_people_property)}</dd>
+                        </div>
+                      </dl>
+                    </>
+                  ) : (
+                    <p className="text-sm text-text-muted">
+                      We don&apos;t have official incident counts for {building.city} yet,
+                      because the city doesn&apos;t publish them as open data.
+                    </p>
+                  )}
+                  <InfoNote className="mt-4">
+                    These are police reports, not a safety score. Busy shopping areas and
+                    major roads usually have more reports, and a report is not the same as
+                    risk to you. We show the same facts for every building. Visit in
+                    person, at different times of day.
+                  </InfoNote>
+                  <p className="mt-3 text-xs text-text-muted">
+                    {safety && (
+                      <>
+                        Source:{" "}
+                        <a
+                          href={safety.source_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-brand-text underline underline-offset-2"
+                        >
+                          {safety.source_name}
+                          <span className="sr-only"> (opens in a new tab)</span>
+                        </a>
+                        , {safety.license}. Counts only.{" "}
+                      </>
+                    )}
+                    {crimeMap && (
+                      <a
+                        href={crimeMap.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-medium text-brand-text underline underline-offset-2"
+                      >
+                        {crimeMap.label}
+                        <span className="sr-only"> (opens in a new tab)</span>
+                      </a>
+                    )}
+                  </p>
+                </Section>
+              )}
+
+              {drive && (
+                <Section id="drive" title="Drive to UT Dallas">
+                  <p className="mb-4 text-sm text-text-muted">
+                    {drive.source === "tomtom"
+                      ? "Typical weekday drive time by the hour you leave. This is based on past traffic patterns, not live traffic."
+                      : "Sample estimate for the demo: a typical weekday rush-hour pattern, not real traffic data."}
+                  </p>
+                  <TrafficChart points={drive.points} destination={CAMPUS.name} />
+                  <p className="mt-3 text-xs text-text-muted">
+                    {drive.source === "tomtom"
+                      ? "Traffic data © TomTom."
+                      : "Sample data. Real traffic appears once a traffic data key is added."}
+                  </p>
+                </Section>
+              )}
+
               <Section id="fees" title="Required monthly fees">
                 {building.building_fees.length === 0 ? (
                   <p className="text-sm text-text-muted">
@@ -356,15 +508,78 @@ export default async function BuildingPage({
                 )}
               </Section>
 
+              <Section id="utilities" title="Utilities billed by the building">
+                <UtilitiesSection building={building} />
+              </Section>
+
+              {cheapest && (
+                <Section id="move-in" title="Cash to move in">
+                  <MoveInCashCard
+                    building={building}
+                    plan={cheapest.plan}
+                    monthlyTotal={cheapestTotal}
+                    moveIn={moveIn ?? nextMonthFirst}
+                  />
+                </Section>
+              )}
+
+              <Section id="documents" title="What to bring when you apply">
+                {(building.documents_required ?? []).length > 0 ? (
+                  <ul className="space-y-1.5 text-sm">
+                    {building.documents_required!.map((doc) => (
+                      <li key={doc} className="flex items-start gap-2">
+                        <CheckIcon className="mt-0.5 size-4 shrink-0 text-success-text" />
+                        {doc}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-text-muted">
+                    Not confirmed yet. Ask the leasing office before you pay an
+                    application fee.
+                  </p>
+                )}
+              </Section>
+
               <Section id="approval" title="Approval rules">
-                <dl className="space-y-2 text-sm">
-                  {describeCriteria(building).map((rule) => (
-                    <div key={rule.label} className="flex justify-between gap-3">
-                      <dt className="text-text-muted">{rule.label}</dt>
-                      <dd className="text-right font-medium">{rule.value}</dd>
+                {!building.approval_known && (
+                  <InfoNote>
+                    We haven&apos;t confirmed this community&apos;s approval rules yet, so
+                    we can&apos;t say if you&apos;d be approved. Ask the leasing office
+                    before you pay an application fee: do they accept no SSN, an ITIN or
+                    passport, a guarantor, or an international credit report?
+                  </InfoNote>
+                )}
+                {building.approval_known && (
+                  <dl className="space-y-2 text-sm">
+                    {describeCriteria(building).map((rule) => (
+                      <div key={rule.label} className="flex justify-between gap-3">
+                        <dt className="text-text-muted">{rule.label}</dt>
+                        <dd className="text-right font-medium">{rule.value}</dd>
+                      </div>
+                    ))}
+                    {building.accepts_offer_letter != null && (
+                      <div className="flex justify-between gap-3">
+                        <dt className="text-text-muted">
+                          Job offer letter as income proof
+                        </dt>
+                        <dd className="text-right font-medium">
+                          {building.accepts_offer_letter ? "Accepted" : "Not accepted"}
+                        </dd>
+                      </div>
+                    )}
+                  </dl>
+                )}
+                {(building.guarantor_companies ?? []).length > 0 && (
+                  <dl className="mt-2 space-y-2 text-sm">
+                    <div className="flex justify-between gap-3">
+                      <dt className="text-text-muted">Guarantor companies accepted</dt>
+                      <dd className="text-right font-medium">
+                        {building.guarantor_companies!.join(", ")}
+                      </dd>
                     </div>
-                  ))}
-                </dl>
+                  </dl>
+                )}
                 {cheapest && building.approval_known && (
                   <>
                     <FitBadge
@@ -413,16 +628,26 @@ export default async function BuildingPage({
         {cheapest && (
           <aside aria-label="Price summary" className="lg:sticky lg:top-24 lg:self-start">
             <Card className="p-5 shadow-raised">
-              <p className="text-sm text-text-muted">Real cost from</p>
+              <p className="text-sm text-text-muted">
+                {cheapestUtilities?.known && cheapestUtilities.avg > 0
+                  ? "Estimated total from"
+                  : "Real cost from"}
+              </p>
               <p className="text-4xl font-extrabold tracking-tight tabular-nums">
-                {formatUsd(cheapest.cost.realMonthlyCost)}
+                {cheapestUtilities?.known && cheapestUtilities.avg > 0 ? "~" : ""}
+                {formatUsd(cheapestTotal)}
                 <span className="text-base font-medium text-text-muted">/mo</span>
               </p>
               <p className="mt-0.5 text-sm text-text-muted">
                 Advertised {formatUsd(cheapest.cost.advertisedRent)} ·{" "}
                 {cheapest.plan.name}
               </p>
-              <CostBar cost={cheapest.cost} />
+              <CostBar cost={cheapest.cost} utilities={cheapestUtilities ?? undefined} />
+              {cheapestUtilities && (
+                <p className="mt-1.5 text-xs text-text-muted">
+                  <UtilitiesLine utilities={cheapestUtilities} />
+                </p>
+              )}
               <ButtonLink href="#interest" size="lg" className="mt-5 w-full">
                 I&apos;m interested
               </ButtonLink>
@@ -454,7 +679,7 @@ function Section({
       <Card
         as="section"
         aria-labelledby={`${id}-heading`}
-        className="mt-6 scroll-mt-20 p-5 sm:p-6"
+        className="mt-6 scroll-mt-32 p-5 sm:p-6"
         id={id}
       >
         <h2 id={`${id}-heading`} className="mb-3 text-lg font-semibold">

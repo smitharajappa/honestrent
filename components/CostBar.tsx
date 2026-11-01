@@ -1,16 +1,28 @@
 import type { CostBreakdown } from "@/lib/cost";
 import { formatUsd } from "@/lib/format";
+import type { UtilityView } from "@/lib/utilities";
 
 /**
- * Rent, plus fees, minus deals, drawn as one bar so the gap between the ad and
- * the real cost is visible at a glance. Screen readers get the same numbers as text.
+ * Rent, plus fees, plus utilities billed by the building, minus deals, drawn as
+ * one bar so the gap between the ad and the real total is visible at a glance.
+ * Screen readers get the same numbers as text.
  */
-export function CostBar({ cost }: { cost: CostBreakdown }) {
-  const total = cost.advertisedRent + cost.monthlyFees;
+export function CostBar({
+  cost,
+  utilities,
+}: {
+  cost: CostBreakdown;
+  utilities?: UtilityView;
+}) {
+  const util = utilities?.known ? utilities.avg : 0;
+  const total = cost.advertisedRent + cost.monthlyFees + util;
   const pct = (n: number) => `${Math.max(0, Math.min(100, (n / total) * 100))}%`;
   const label =
-    `Advertised rent ${formatUsd(cost.advertisedRent)}, plus fees ${formatUsd(cost.monthlyFees)}, ` +
-    `minus deals ${formatUsd(cost.monthlyDealSavings)}, equals ${formatUsd(cost.realMonthlyCost)} a month.`;
+    `Advertised rent ${formatUsd(cost.advertisedRent)}, plus fees ${formatUsd(cost.monthlyFees)}` +
+    (util > 0 ? `, plus about ${formatUsd(util)} utilities` : "") +
+    `, minus deals ${formatUsd(cost.monthlyDealSavings)}, equals about ${formatUsd(
+      cost.realMonthlyCost + util,
+    )} a month.`;
 
   return (
     <div role="img" aria-label={label} className="mt-3">
@@ -24,6 +36,9 @@ export function CostBar({ cost }: { cost: CostBreakdown }) {
             className="h-full origin-left animate-bar-grow bg-warning-text/70 [animation-delay:150ms]"
             style={{ width: pct(cost.monthlyFees) }}
           />
+        )}
+        {util > 0 && (
+          <span className="h-full bg-info-text/60" style={{ width: pct(util) }} />
         )}
         {cost.monthlyDealSavings > 0 && (
           <span
@@ -44,6 +59,12 @@ export function CostBar({ cost }: { cost: CostBreakdown }) {
           <span className="size-2 rounded-full bg-warning-text/70" />+ Fees{" "}
           {formatUsd(cost.monthlyFees)}
         </span>
+        {util > 0 && (
+          <span className="inline-flex items-center gap-1">
+            <span className="size-2 rounded-full bg-info-text/60" />+ Utilities ~
+            {formatUsd(util)}
+          </span>
+        )}
         <span className="inline-flex items-center gap-1">
           <span className="size-2 rounded-full bg-success-text" />− Deals{" "}
           {formatUsd(cost.monthlyDealSavings)}

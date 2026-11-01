@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { BuildingCover } from "@/components/BuildingCover";
 import { CostBar } from "@/components/CostBar";
+import { HiddenCostBanner } from "@/components/building/HiddenCostBanner";
+import { SectionNav } from "@/components/building/SectionNav";
+import { BuildingLocation } from "@/components/map/BuildingLocation";
 import { LazyMap } from "@/components/map/LazyMap";
 import { RevealBlock } from "@/components/motion/Reveal";
+import { TrafficChart } from "@/components/traffic/TrafficChart";
 import { TrustNotes } from "@/components/TrustNotes";
 import { Badge } from "@/components/ui/Badge";
 import { Button, ButtonLink } from "@/components/ui/Button";
@@ -222,6 +226,85 @@ export default function StyleguidePage() {
           aren&apos;t verified yet. The white pin is UT Dallas. Tiles from OpenFreeMap;
           data © OpenStreetMap contributors.
         </p>
+      </Section>
+
+      <Section title="Hidden-cost banner and section bar (made-up numbers)">
+        <HiddenCostBanner
+          planName="1 Bed, 700 sq ft"
+          total={1210}
+          cost={{
+            advertisedRent: 963,
+            monthlyFees: 90,
+            monthlyDealSavings: 74,
+            realMonthlyCost: 979,
+          }}
+          utilities={{
+            known: true,
+            avg: 231,
+            low: 190,
+            high: 280,
+            source: "renters",
+            reportCount: 3,
+            asOf: "2026-10-31",
+          }}
+        />
+        <div className="mt-4">
+          <SectionNav
+            items={[
+              { id: "a", label: "Plans" },
+              { id: "b", label: "Location" },
+              { id: "c", label: "Safety" },
+              { id: "d", label: "Fees" },
+              { id: "e", label: "Move-in cash" },
+              { id: "f", label: "Apply" },
+            ]}
+          />
+        </div>
+      </Section>
+
+      <Section title="Location with nearby tabs (made-up places)">
+        <BuildingLocation
+          pin={{ id: "x", name: "Sample building", latitude: 33.0, longitude: -96.75 }}
+          miles={2.2}
+          places={[
+            ["grocery", "Sample Market", 0.004, 0.006],
+            ["grocery", "Corner Grocer", -0.006, 0.003],
+            ["bus_stop", "Main St Stop", 0.002, -0.004],
+            ["bus_stop", "Oak Ave Stop", 0.0025, -0.0035],
+            ["bus_stop", "Oak Ave Stop 2", 0.003, -0.003],
+            ["gym", "Sample Fitness", -0.004, -0.006],
+            ["cafe", "Sample Coffee", 0.007, 0.002],
+            ["restaurant", "Sample Diner", -0.003, 0.008],
+            ["school", "Sample Elementary", 0.009, -0.007],
+            ["bank", "Sample Bank", -0.008, 0.001],
+          ].map(([kind, name, dLat, dLng], i) => ({
+            id: `p${i}`,
+            kind: kind as "grocery",
+            name: name as string,
+            latitude: 33.0 + (dLat as number),
+            longitude: -96.75 + (dLng as number),
+          }))}
+        />
+      </Section>
+
+      <Section title="Traffic chart (made-up numbers)">
+        <TrafficChart
+          destination="UT Dallas"
+          points={[
+            { hour: 6, minutes: 17 },
+            { hour: 7, minutes: 27 },
+            { hour: 8, minutes: 34 },
+            { hour: 9, minutes: 26 },
+            { hour: 10, minutes: 19 },
+            { hour: 12, minutes: 18 },
+            { hour: 14, minutes: 20 },
+            { hour: 16, minutes: 28 },
+            { hour: 17, minutes: 36 },
+            { hour: 18, minutes: 31 },
+            { hour: 19, minutes: 22 },
+            { hour: 21, minutes: 16 },
+          ]}
+        />
       </Section>
 
       <Section title="Motion">

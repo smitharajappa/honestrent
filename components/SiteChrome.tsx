@@ -15,7 +15,7 @@ export function SiteHeader() {
           </span>
           Swelt
           <span className="hidden text-sm font-medium text-text-muted md:inline">
-            · Richardson &amp; Plano
+            · Dallas–Fort Worth
           </span>
         </Link>
         <HeaderLinks />

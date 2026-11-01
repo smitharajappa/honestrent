@@ -1,0 +1,57 @@
+name: Supabase migrations
+
+# Applies new files from supabase/migrations to the hosted database.
+# Runs by itself when migrations change on main, or by hand from the Actions tab.
+on:
+  push:
+    branches: [main]
+    paths: ["supabase/migrations/**"]
+  workflow_dispatch:
+    inputs:
+      baseline:
+        description: "ONE TIME ONLY: mark every migration already in the repo as applied (use if you ran them by hand)"
+        type: boolean
+        default: false
+
+# Never run two database updates at once.
+concurrency:
+  group: supabase-database
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the database secret exists
+        run: |
+          if [ -z "$SUPABASE_DB_URL" ]; then
+            echo "::error::Add the SUPABASE_DB_URL secret first (see docs/supabase-automation.md)."
+            exit 1
+          fi
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Mark existing migrations as already applied (one time)
+        if: ${{ inputs.baseline }}
+        run: |
+          for f in supabase/migrations/*.sql; do
+            version=$(basename "$f" | cut -d_ -f1)
+            echo "Marking $version as applied"
+            supabase migration repair --status applied "$version" --db-url "$SUPABASE_DB_URL"
+          done
+
+      - name: Show what is pending
+        run: supabase db push --dry-run --db-url "$SUPABASE_DB_URL"
+
+      - name: Apply new migrations
+        if: ${{ !inputs.baseline }}
+        run: supabase db push --yes --db-url "$SUPABASE_DB_URL"

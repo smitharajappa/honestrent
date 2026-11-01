@@ -15,8 +15,8 @@ const SOUTH = 32.78,
   WEST = -96.92,
   NORTH = 33.12,
   EAST = -96.6;
-const ROWS = 4,
-  COLS = 4;
+const ROWS = 6,
+  COLS = 6;
 
 const ENDPOINTS = [
   "https://overpass-api.de/api/interpreter",
@@ -46,6 +46,10 @@ const query = (bbox) => `[out:json][timeout:60];
   nwr["leisure"="fitness_centre"](${bbox});
   nwr["amenity"="place_of_worship"](${bbox});
   node["highway"="bus_stop"](${bbox});
+  nwr["amenity"="restaurant"](${bbox});
+  nwr["amenity"="cafe"](${bbox});
+  nwr["amenity"="bank"](${bbox});
+  nwr["amenity"="school"](${bbox});
 );
 out center tags;`;
 
@@ -54,6 +58,10 @@ function kindOf(t) {
   if (t.shop === "supermarket" || t.shop === "grocery") return "grocery";
   if (t.leisure === "fitness_centre") return "gym";
   if (t.amenity === "place_of_worship") return "worship";
+  if (t.amenity === "restaurant") return "restaurant";
+  if (t.amenity === "cafe") return "cafe";
+  if (t.amenity === "bank") return "bank";
+  if (t.amenity === "school") return "school";
   return null;
 }
 
@@ -104,6 +112,10 @@ for (const [i, bbox] of all.entries()) {
       grocery: "Grocery store",
       gym: "Gym",
       worship: "Place of worship",
+      restaurant: "Restaurant",
+      cafe: "Coffee shop",
+      bank: "Bank",
+      school: "School",
     };
     byOsm.set(`${el.type}/${el.id}`, {
       kind,

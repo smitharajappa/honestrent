@@ -16,8 +16,6 @@ export type MapPin = {
   href?: string;
   /** Real place, but prices aren't entered yet: drawn grey and small. */
   unverified?: boolean;
-  /** A nearby store, bus stop and so on: small neutral dot, not a building. */
-  place?: boolean;
 };
 
 /** Distance in miles between two points (straight line, not driving). */
