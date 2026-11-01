@@ -37,3 +37,20 @@ export function RevealBlock({
 }: React.ComponentProps<typeof motion.div> & { index?: number }) {
   return <motion.div {...MOTION.reveal(index)} {...rest} />;
 }
+
+/** A block that fades up the first time it scrolls into view. */
+export function RevealOnScroll({
+  index = 0,
+  ...rest
+}: React.ComponentProps<typeof motion.div> & { index?: number }) {
+  const { initial, transition } = MOTION.reveal(index);
+  return (
+    <motion.div
+      initial={initial}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "0px 0px -60px 0px" }}
+      transition={transition}
+      {...rest}
+    />
+  );
+}

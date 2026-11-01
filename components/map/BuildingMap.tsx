@@ -5,6 +5,10 @@ import * as maplibregl from "maplibre-gl";
 import { useEffect, useRef, useState } from "react";
 import { CAMPUS, MAP_STYLE_URL, type MapPin } from "@/lib/map";
 
+// Next.js can't bundle MapLibre's background worker, so we serve it from /public/maplibre
+// (a copy of maplibre-gl/dist/maplibre-gl-worker.mjs, committed so it never depends on the build; "npm install" refreshes it).
+maplibregl.setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
+
 type Props = {
   pins: MapPin[];
   /** Pin drawn larger and in front (the building you are looking at). */
@@ -22,6 +26,11 @@ function pinElement(pin: MapPin, highlighted: boolean): HTMLElement {
   el.setAttribute("aria-label", pin.label ? `${pin.name}, ${pin.label}` : pin.name);
   el.textContent = pin.label ?? "";
   if (!pin.label) el.classList.add("map-pin-dot");
+  if (pin.unverified) el.classList.add("map-pin-unverified");
+  if (pin.place) {
+    el.classList.add("map-pin-place");
+    el.title = pin.name;
+  }
   return el;
 }
 
@@ -76,7 +85,7 @@ export default function BuildingMap({
       new maplibregl.Marker({ element: pinElement(pin, pin.id === highlightId) })
         .setLngLat([pin.longitude, pin.latitude])
         .addTo(map);
-      bounds.extend([pin.longitude, pin.latitude]);
+      if (!pin.place) bounds.extend([pin.longitude, pin.latitude]);
     }
     if (showCampus) {
       const el = document.createElement("div");
@@ -107,7 +116,7 @@ export default function BuildingMap({
           ref={container}
           role="img"
           aria-label={`Map. ${summary}`}
-          className="absolute inset-0"
+          className="h-full w-full"
         />
       )}
     </div>

@@ -206,13 +206,21 @@ export default function StyleguidePage() {
               longitude: -96.73,
               label: "$1,420",
             },
+            {
+              id: "c",
+              name: "Sample community, prices not verified yet",
+              latitude: 33.0,
+              longitude: -96.76,
+              unverified: true,
+            },
           ]}
           summary="Two sample buildings and UT Dallas."
           className="h-72"
         />
         <p className="mt-2 text-sm text-text-muted">
-          Teal pins are buildings (tap to open). The white pin is UT Dallas. Tiles from
-          OpenFreeMap; data © OpenStreetMap contributors.
+          Teal pins are buildings (tap to open). Grey dots are real places whose prices
+          aren&apos;t verified yet. The white pin is UT Dallas. Tiles from OpenFreeMap;
+          data © OpenStreetMap contributors.
         </p>
       </Section>
 

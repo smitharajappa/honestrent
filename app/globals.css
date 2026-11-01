@@ -139,6 +139,16 @@
 
   /* Motion: short and gentle. */
   --ease-out-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-bar-grow: bar-grow 0.6s var(--ease-out-soft) both;
+
+  @keyframes bar-grow {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
 }
 
 @layer base {
@@ -234,4 +244,21 @@
   border-color: var(--border-strong);
   cursor: default;
   font-weight: 600;
+}
+.map-pin-unverified {
+  background: var(--surface-muted);
+  border-color: var(--border-strong);
+  color: var(--text-muted);
+  box-shadow: var(--shadow-card);
+}
+.map-pin-place {
+  width: 0.875rem;
+  height: 0.875rem;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  background: var(--surface);
+  border: 2px solid var(--text);
+  box-shadow: var(--shadow-card);
+  cursor: default;
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import { useMemo, useState } from "react";
 import { isCompleteProfile } from "@/lib/approval";
 import { suggestAlternatives } from "@/lib/cost";
@@ -96,17 +97,41 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
       }),
     [items, effectiveFilters.people, budget, moveIn],
   );
+  // Real places with no prices yet: shown grey on the map, never ranked.
+  const mapOnlyPins = useMemo<MapPin[]>(
+    () =>
+      buildings.flatMap((b) => {
+        if (b.floor_plans.length > 0 || b.latitude === null || b.longitude === null)
+          return [];
+        if (
+          effectiveFilters.cities.length > 0 &&
+          !effectiveFilters.cities.includes(b.city)
+        )
+          return [];
+        return [
+          {
+            id: b.id,
+            name: `${b.name} (prices not verified yet)`,
+            latitude: b.latitude,
+            longitude: b.longitude,
+            href: `/buildings/${b.id}`,
+            unverified: true,
+          },
+        ];
+      }),
+    [buildings, effectiveFilters.cities],
+  );
   const stats = getInsight(items);
   const filterCount = activeFilterCount(effectiveFilters);
   const cities = [...new Set(buildings.map((b) => b.city))].sort();
 
   const fitCounts = profile
-    ? items.reduce((acc, i) => ({ ...acc, [i.fit!.level]: acc[i.fit!.level] + 1 }), {
-        good: 0,
-        guarantor: 0,
-        unlikely: 0,
-      })
+    ? items.reduce(
+        (acc, i) => (i.fit ? { ...acc, [i.fit.level]: acc[i.fit.level] + 1 } : acc),
+        { good: 0, guarantor: 0, unlikely: 0 },
+      )
     : null;
+  const unconfirmedCount = profile ? items.filter((i) => !i.fit).length : 0;
 
   return (
     <div className="mt-8 grid gap-8 pb-24 lg:grid-cols-[17rem_1fr] xl:grid-cols-[18rem_1fr]">
@@ -231,12 +256,21 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
                 type="button"
                 aria-pressed={view === option.value}
                 onClick={() => setView(option.value)}
-                className={`inline-flex min-h-11 items-center gap-1.5 rounded-lg px-4 text-sm font-semibold ${
-                  view === option.value ? "bg-text text-bg" : "text-text-muted"
+                className={`relative inline-flex min-h-11 items-center gap-1.5 rounded-lg px-4 text-sm font-semibold ${
+                  view === option.value ? "text-bg" : "text-text-muted"
                 }`}
               >
-                <option.icon className="size-4" />
-                {option.label}
+                {view === option.value && (
+                  <motion.span
+                    layoutId="view-pill"
+                    transition={{ type: "spring", stiffness: 500, damping: 40 }}
+                    className="absolute inset-0 rounded-lg bg-text"
+                  />
+                )}
+                <span className="relative inline-flex items-center gap-1.5">
+                  <option.icon className="size-4" />
+                  {option.label}
+                </span>
               </button>
             ))}
           </div>
@@ -250,6 +284,8 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
                   `${fitCounts.good} good ${fitCounts.good === 1 ? "fit" : "fits"}`,
                 fitCounts.guarantor && `${fitCounts.guarantor} possible with guarantor`,
                 fitCounts.unlikely && `${fitCounts.unlikely} unlikely`,
+                unconfirmedCount > 0 &&
+                  `${unconfirmedCount} approval rules not confirmed`,
               ]
                 .filter(Boolean)
                 .join(" · ")}
@@ -271,10 +307,15 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
         )}
 
         {items.length > 0 && view === "map" && (
-          <div className="mt-6">
+          <motion.div
+            className="mt-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.25 }}
+          >
             {pins.length > 0 ? (
               <LazyMap
-                pins={pins}
+                pins={[...mapOnlyPins, ...pins]}
                 summary={`${pins.length} apartments with their real monthly cost. Switch to List to read them.`}
                 className="h-[28rem] lg:h-[34rem]"
               />
@@ -284,9 +325,11 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
               </InfoNote>
             )}
             <p className="mt-2 text-sm text-text-muted">
-              Pins show the real monthly cost. Tap a pin to open the apartment.
+              Teal pins show the real monthly cost. Tap a pin to open the apartment.
+              {mapOnlyPins.length > 0 &&
+                ` Grey dots are ${mapOnlyPins.length} more real communities whose prices we haven't verified yet.`}
             </p>
-          </div>
+          </motion.div>
         )}
 
         {items.length > 0 && view === "list" ? (

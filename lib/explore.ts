@@ -90,9 +90,11 @@ export function explore(buildings: Building[], o: ExploreOptions): ExploreItem[]
     const best = matches[0];
 
     // Approval is checked against each person's share of the rent.
-    const fit = o.profile
-      ? approvalFit(o.profile, building, Math.round(best.plan.rent_usd / people))
-      : null;
+    // Buildings whose approval rules we haven't confirmed get no fit badge.
+    const fit =
+      o.profile && building.approval_known
+        ? approvalFit(o.profile, building, Math.round(best.plan.rent_usd / people))
+        : null;
     if (o.goodFitOnly && fit?.level !== "good") continue;
 
     items.push({

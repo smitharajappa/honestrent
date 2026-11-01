@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import { useState } from "react";
 import { cn } from "../ui/cn";
 import { CompareIcon, HeartIcon } from "../ui/icons";
@@ -18,19 +19,29 @@ export function SaveButton({
   const { isSaved, toggleSaved } = useShortlist();
   const saved = isSaved(buildingId);
   return (
-    <button
+    <motion.button
       type="button"
+      whileTap={{ scale: 0.9 }}
       onClick={() => toggleSaved(buildingId)}
       aria-pressed={saved}
       aria-label={saved ? `Remove ${buildingName} from saved` : `Save ${buildingName}`}
       className={cn(
-        "z-10 grid size-11 place-items-center rounded-full bg-surface shadow-card transition-transform duration-150 hover:scale-105 active:scale-95",
+        "z-10 grid size-11 place-items-center rounded-full bg-surface shadow-card transition-transform duration-150 hover:scale-105",
         saved ? "text-danger-text" : "text-text",
         className,
       )}
     >
-      <HeartIcon className="size-5" filled={saved} />
-    </button>
+      {/* Pops once each time the heart is filled. */}
+      <motion.span
+        key={saved ? "saved" : "unsaved"}
+        initial={saved ? { scale: 0.6 } : false}
+        animate={{ scale: 1 }}
+        transition={{ type: "spring", stiffness: 500, damping: 12 }}
+        className="grid place-items-center"
+      >
+        <HeartIcon className="size-5" filled={saved} />
+      </motion.span>
+    </motion.button>
   );
 }
 

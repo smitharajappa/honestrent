@@ -16,12 +16,12 @@ export function CostBar({ cost }: { cost: CostBreakdown }) {
     <div role="img" aria-label={label} className="mt-3">
       <div className="relative flex h-2.5 overflow-hidden rounded-full bg-surface-muted">
         <span
-          className="h-full bg-border-strong/60"
+          className="h-full origin-left animate-bar-grow bg-border-strong/60"
           style={{ width: pct(cost.advertisedRent) }}
         />
         {cost.monthlyFees > 0 && (
           <span
-            className="h-full bg-warning-text/70"
+            className="h-full origin-left animate-bar-grow bg-warning-text/70 [animation-delay:150ms]"
             style={{ width: pct(cost.monthlyFees) }}
           />
         )}

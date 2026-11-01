@@ -32,6 +32,10 @@ function building(o: Partial<Building> = {}): Building {
     last_verified: "2026-10-20",
     latitude: null,
     longitude: null,
+    website: null,
+    source: "manual",
+    approval_known: true,
+    notes: null,
     min_income_multiple: 3,
     min_credit_score: 650,
     accepts_no_ssn: false,
@@ -138,6 +142,19 @@ describe("explore", () => {
     expect(
       explore([richardsonDeal, planoFees], opts({ profile, goodFitOnly: true })),
     ).toHaveLength(1);
+  });
+
+  it("gives no fit badge when the approval rules aren't confirmed", () => {
+    const profile = {
+      income: "45-60k",
+      credit: "no-us-credit",
+      idType: "passport",
+    } as const;
+    const unconfirmed = building({ id: "u", approval_known: false });
+    const items = explore([unconfirmed], opts({ profile }));
+    expect(items).toHaveLength(1);
+    expect(items[0].fit).toBeNull();
+    expect(explore([unconfirmed], opts({ profile, goodFitOnly: true }))).toHaveLength(0);
   });
 
   it("checks approval against each person's share of the rent", () => {
