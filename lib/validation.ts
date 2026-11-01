@@ -70,19 +70,30 @@ export function daysBetween(from: string, to: string): number {
 
 const AREA_PATTERN = /^[\p{L}\p{N} .,'-]{2,60}$/u;
 
+/** What a renter picks when they don't mind where. Shown in the Area box. */
+export const ANYWHERE_LABEL = "Anywhere in DFW";
+
 /**
- * The optional "Area" search (city, ZIP or neighbourhood). Returns null when
- * empty, or an error message when it contains anything unusual.
+ * The "Area" search: a city, a ZIP, or "Anywhere in DFW". A place must be chosen when a
+ * search is sent (a blank box is an error). A web address with no area at all is an older
+ * link and means everywhere. Returns null for "everywhere".
  */
 export function validateArea(
   raw: string | undefined,
 ): { ok: true; value: string | null } | { ok: false; error: string } {
-  const value = (raw ?? "").trim().replace(/\s+/g, " ");
-  if (value === "") return { ok: true, value: null };
+  if (raw === undefined) return { ok: true, value: null };
+  const value = raw.trim().replace(/\s+/g, " ");
+  if (value === "") {
+    return {
+      ok: false,
+      error: `Choose where you want to live: a city or ZIP, or ${ANYWHERE_LABEL}.`,
+    };
+  }
+  if (/^(anywhere( in dfw)?|all|dfw)$/i.test(value)) return { ok: true, value: null };
   if (!AREA_PATTERN.test(value)) {
     return {
       ok: false,
-      error: "Enter a city, ZIP or neighbourhood, like Plano or 75080.",
+      error: "Enter a city or ZIP, like Plano or 75080.",
     };
   }
   return { ok: true, value };

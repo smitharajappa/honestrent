@@ -13,6 +13,7 @@ import {
   type SortKey,
 } from "@/lib/explore";
 import { formatDate, formatUsd } from "@/lib/format";
+import { searchHref } from "@/lib/links";
 import type { MapPin } from "@/lib/map";
 import type { Building } from "@/lib/types";
 import { useApproval } from "../approval/ApprovalContext";
@@ -105,12 +106,12 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
             label: formatUsd(
               effectiveFilters.people > 1 ? perPerson : cost.realMonthlyCost,
             ),
-            href: `/buildings/${building.id}?budget=${budget}&moveIn=${moveIn}`,
+            href: searchHref(`/buildings/${building.id}`, { budget, moveIn, area }),
             fit: profile ? (item.fit?.level ?? "unknown") : undefined,
           },
         ];
       }),
-    [items, effectiveFilters.people, budget, moveIn, profile],
+    [items, effectiveFilters.people, budget, moveIn, profile, area],
   );
   // Real places with no prices yet: shown grey on the map, never ranked.
   const mapOnlyPins = useMemo<MapPin[]>(
@@ -381,13 +382,21 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
                 index={index}
                 today={today}
                 people={effectiveFilters.people}
-                detailHref={`/buildings/${item.building.id}?budget=${budget}&moveIn=${moveIn}`}
+                detailHref={searchHref(`/buildings/${item.building.id}`, {
+                  budget,
+                  moveIn,
+                  area,
+                })}
                 fromLabel={fromLabel}
                 alternative={
                   item.fit?.level === "unlikely" && firstGoodFit
                     ? {
                         name: firstGoodFit.building.name,
-                        href: `/buildings/${firstGoodFit.building.id}?budget=${budget}&moveIn=${moveIn}`,
+                        href: searchHref(`/buildings/${firstGoodFit.building.id}`, {
+                          budget,
+                          moveIn,
+                          area,
+                        }),
                       }
                     : undefined
                 }
@@ -409,6 +418,7 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
         ) : (
           <EmptyState
             buildings={buildings}
+            area={area}
             budget={budget}
             moveIn={moveIn}
             today={today}
@@ -425,7 +435,7 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
   );
 }
 
-function EmptyState({ buildings, budget, moveIn, today }: Omit<Props, "area">) {
+function EmptyState({ buildings, area, budget, moveIn, today }: Props) {
   const suggestion = suggestAlternatives(buildings, budget, moveIn, today);
   return (
     <Card className="mt-6 p-6 text-center">
@@ -442,7 +452,7 @@ function EmptyState({ buildings, budget, moveIn, today }: Omit<Props, "area">) {
           {suggestion.budget && (
             <ButtonLink
               variant="secondary"
-              href={`/?budget=${suggestion.budget}&moveIn=${moveIn}`}
+              href={searchHref("/", { budget: suggestion.budget, moveIn, area })}
             >
               Try a {formatUsd(suggestion.budget)} budget
             </ButtonLink>
@@ -450,7 +460,7 @@ function EmptyState({ buildings, budget, moveIn, today }: Omit<Props, "area">) {
           {suggestion.moveIn && (
             <ButtonLink
               variant="secondary"
-              href={`/?budget=${budget}&moveIn=${suggestion.moveIn}`}
+              href={searchHref("/", { budget, moveIn: suggestion.moveIn, area })}
             >
               Move in {formatDate(suggestion.moveIn)}
             </ButtonLink>

@@ -1,6 +1,6 @@
 import Form from "next/form";
 import { ApprovalFooter, ApprovalSelects } from "./approval/ApprovalFields";
-import { BudgetChips, SearchButton } from "./SearchFormControls";
+import { AreaChips, BudgetChips, SearchButton } from "./SearchFormControls";
 import { LocateButton } from "./location/LocateButton";
 import { Field } from "./ui/Field";
 import { DFW_SUGGESTIONS } from "@/lib/areas";
@@ -33,14 +33,15 @@ export function SearchForm({ area, budget, moveIn, today, errors = {} }: Props) 
               <Field
                 id="area"
                 name="area"
-                label="Area"
-                hint="City or ZIP in Dallas–Fort Worth. Leave blank to see everything."
+                label="Where do you want to live?"
+                hint="A city or ZIP in Dallas–Fort Worth, or pick Anywhere in DFW."
                 placeholder="Richardson, Plano, 75080…"
                 autoComplete="off"
                 list="area-suggestions"
                 defaultValue={area}
                 error={errors.area}
               />
+              <AreaChips inputId="area" />
               <datalist id="area-suggestions">
                 {DFW_SUGGESTIONS.map((city) => (
                   <option key={city} value={city} />

@@ -5,6 +5,7 @@ import { Button } from "./ui/Button";
 import { SearchIcon } from "./ui/icons";
 
 const QUICK_BUDGETS = [1200, 1500, 2000];
+const QUICK_AREAS = ["Richardson", "Plano", "Dallas", "Anywhere in DFW"];
 
 /** Shows "Searching…" while results load (Nielsen #1: visibility of system status). */
 export function SearchButton() {
@@ -53,6 +54,30 @@ export function BudgetChips({ inputId }: { inputId: string }) {
           className="min-h-11 rounded-full border border-border-strong bg-surface px-3 text-sm font-medium tabular-nums transition-colors duration-150 hover:border-brand hover:text-brand-text"
         >
           ${amount.toLocaleString("en-US")}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** One-tap places. Fills the Area box; nothing is sent until the search is submitted. */
+export function AreaChips({ inputId }: { inputId: string }) {
+  return (
+    <div className="mt-2 flex flex-wrap gap-2" role="group" aria-label="Quick places">
+      {QUICK_AREAS.map((place) => (
+        <button
+          key={place}
+          type="button"
+          onClick={() => {
+            const input = document.getElementById(inputId) as HTMLInputElement | null;
+            if (input) {
+              input.value = place;
+              input.focus();
+            }
+          }}
+          className="min-h-11 rounded-full border border-border-strong bg-surface px-3 text-sm font-medium transition-colors duration-150 hover:border-brand hover:text-brand-text"
+        >
+          {place}
         </button>
       ))}
     </div>

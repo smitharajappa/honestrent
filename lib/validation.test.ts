@@ -57,10 +57,19 @@ describe("daysBetween", () => {
 });
 
 describe("validateArea", () => {
-  it("allows cities, ZIPs and neighbourhoods", () => {
+  it("allows cities and ZIPs", () => {
     expect(validateArea("  Fort   Worth ")).toEqual({ ok: true, value: "Fort Worth" });
     expect(validateArea("75080")).toEqual({ ok: true, value: "75080" });
-    expect(validateArea("")).toEqual({ ok: true, value: null });
+  });
+
+  it("asks for a place when the box is left empty", () => {
+    expect(validateArea("").ok).toBe(false);
+    expect(validateArea("   ").ok).toBe(false);
+  });
+
+  it("treats 'Anywhere in DFW' and an older link with no area as everywhere", () => {
+    expect(validateArea("Anywhere in DFW")).toEqual({ ok: true, value: null });
+    expect(validateArea("anywhere")).toEqual({ ok: true, value: null });
     expect(validateArea(undefined)).toEqual({ ok: true, value: null });
   });
 

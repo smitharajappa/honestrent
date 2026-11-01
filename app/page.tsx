@@ -14,6 +14,7 @@ import {
   TagIcon,
 } from "@/components/ui/icons";
 import { fetchBuildings } from "@/lib/buildings";
+import { searchHref } from "@/lib/links";
 import { inArea } from "@/lib/explore";
 import { todayInTexas, validateArea, validateSearch } from "@/lib/validation";
 import { RequestArea } from "@/components/explore/RequestArea";
@@ -147,7 +148,7 @@ async function Results({
             This is on our side, not yours. Please try again in a few minutes.
           </p>
           <ButtonLink
-            href={`/?budget=${budget}&moveIn=${moveIn}`}
+            href={searchHref("/", { budget, moveIn, area })}
             variant="secondary"
             className="mt-3"
           >
@@ -160,9 +161,7 @@ async function Results({
 
   const inSearchArea = data.buildings.filter((b) => inArea(b, area));
   if (area && inSearchArea.length === 0) {
-    return (
-      <RequestArea area={area} coveredHref={`/?budget=${budget}&moveIn=${moveIn}`} />
-    );
+    return <RequestArea area={area} coveredHref={searchHref("/", { budget, moveIn })} />;
   }
 
   return (

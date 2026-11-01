@@ -14,9 +14,6 @@ export function SiteHeader() {
             <HomeIcon className="size-4.5" />
           </span>
           Swelt
-          <span className="hidden text-sm font-medium text-text-muted md:inline">
-            · Dallas–Fort Worth
-          </span>
         </Link>
         <HeaderLinks />
       </div>
