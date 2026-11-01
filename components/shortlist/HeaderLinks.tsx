@@ -34,6 +34,9 @@ export function HeaderLinks() {
       </Link>
       {available && authReady && (
         <>
+          <Link href="/roommates" className={`${link} max-md:hidden`}>
+            Roommates
+          </Link>
           <Link href="/plus" className={`${link} max-sm:hidden`}>
             Plus
           </Link>

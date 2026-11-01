@@ -47,6 +47,12 @@ export function SiteFooter() {
           </Link>{" "}
           adds optional extras. Search and real cost are always free.{" "}
           <Link
+            href="/roommates"
+            className="font-semibold text-brand-text underline underline-offset-2"
+          >
+            Find a roommate
+          </Link>{" "}
+          <Link
             href="/privacy"
             className="font-semibold text-brand-text underline underline-offset-2"
           >

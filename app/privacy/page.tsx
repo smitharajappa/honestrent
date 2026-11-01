@@ -62,6 +62,17 @@ export default function PrivacyPage() {
             stores them. We do not ask for or show a name. We store no password.
           </li>
           <li>
+            <strong className="text-text">A roommate profile (optional):</strong> the
+            nickname, city, budget, move-in date, languages, interests, habits and short
+            note you choose. Other signed-in renters in your city can see those, never
+            your email or account. You can hide or remove it any time. If you ask someone
+            for an introduction and they accept, your chat messages are stored so you both
+            can read them, Our team can technically see stored messages, and only looks at
+            chats that are reported. We never ask about race, ethnicity, religion,
+            nationality, sex, family status or disability, and we never keep a copy of an
+            ID.
+          </li>
+          <li>
             <strong className="text-text">Passes:</strong> the type and dates of any pass
             on your account.
           </li>
