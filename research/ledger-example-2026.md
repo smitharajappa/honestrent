@@ -4,6 +4,11 @@
 team on Oct 29, 2026. The resident's name, building and unit are deliberately **not**
 recorded. Amounts only. One data point, not a sample.
 
+**Added 1 Nov 2026:** the renter confirmed this is a 2-bedroom, 2-bath at a BH Live
+community in Dallas (operator and city only; the building is still not recorded).
+The screenshots show the resident's name in the payment line. It is not copied here.
+Blur names before sharing screenshots anywhere else.
+
 ## August 2026 charges
 
 | Type                       | Line item                         | Amount    |
