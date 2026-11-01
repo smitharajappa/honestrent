@@ -11,13 +11,13 @@ import {
   type FitLevel,
 } from "@/lib/approval";
 import { Badge, type Tone } from "../ui/Badge";
-import { CheckIcon, UsersIcon, XCircleIcon } from "../ui/icons";
+import { CheckIcon, InfoIcon, UsersIcon, XCircleIcon } from "../ui/icons";
 import { useApproval } from "./ApprovalContext";
 
 const STYLE: Record<FitLevel, { tone: Tone; icon: React.ReactNode }> = {
   good: { tone: "success", icon: <CheckIcon className="size-3.5" /> },
   guarantor: { tone: "warning", icon: <UsersIcon className="size-3.5" /> },
-  unlikely: { tone: "danger", icon: <XCircleIcon className="size-3.5" /> },
+  unlikely: { tone: "unlikely", icon: <XCircleIcon className="size-3.5" /> },
 };
 
 /** Approval fit for one building. Shows nothing (or a hint) until all 3 answers are given. */
@@ -39,8 +39,37 @@ export function FitBadge({
   return <FitDisplay fit={approvalFit(answers, criteria, rentUsd)} />;
 }
 
-/** Shows a fit that was already worked out (badge plus one-line reason). */
-export function FitDisplay({ fit, compact = false }: { fit: Fit; compact?: boolean }) {
+/** The fourth state: we don't know this building's rules yet. Grey, with an icon and a reason. */
+export function FitUnconfirmed({ compact = false }: { compact?: boolean }) {
+  return (
+    <div className="mt-3">
+      <Badge tone="neutral" icon={<InfoIcon className="size-3.5" />}>
+        Rules not confirmed
+      </Badge>
+      <p
+        className={
+          compact ? "mt-1 text-xs text-text-muted" : "mt-1.5 text-sm text-text-muted"
+        }
+      >
+        Ask the leasing office before you pay an application fee.
+      </p>
+    </div>
+  );
+}
+
+/**
+ * Shows a fit that was already worked out (badge plus one-line reason). For "Unlikely",
+ * a nearby good fit can be offered, so a refusal always comes with a next step.
+ */
+export function FitDisplay({
+  fit,
+  compact = false,
+  alternative,
+}: {
+  fit: Fit;
+  compact?: boolean;
+  alternative?: { name: string; href: string };
+}) {
   const { tone, icon } = STYLE[fit.level];
   return (
     <div className="mt-3">
@@ -54,6 +83,16 @@ export function FitDisplay({ fit, compact = false }: { fit: Fit; compact?: boole
       >
         {fit.reason}
       </p>
+      {fit.level === "unlikely" && alternative && (
+        <p className={compact ? "mt-1 text-xs" : "mt-1.5 text-sm"}>
+          <Link
+            href={alternative.href}
+            className="relative z-10 font-semibold text-brand-text underline underline-offset-2"
+          >
+            Try {alternative.name}, a good fit
+          </Link>
+        </p>
+      )}
     </div>
   );
 }

@@ -31,13 +31,22 @@ interface.
 
 - **60% neutrals:** page background `bg-bg`, text `text-text`, borders.
 - **30% surfaces:** cards `bg-surface`, inner panels `bg-surface-muted`.
-- **10% brand teal:** only for **actions**: primary buttons, links, focus ring. Not for
-  decoration, labels or info boxes.
-- **Semantic colors** mean one thing each, always with words and an icon:
-  - green `success`: good fit, savings, "ready";
-  - amber `warning`: extra fees, possible with guarantor, data may be stale;
-  - red `danger`: errors, unlikely;
-  - blue `info`: explanations and tips.
+- **10% brand teal:** the one brand color. Used for actions (primary buttons, links, focus
+  ring) and **selected states** (List/Map toggle, filter chips, section bar, map tabs) and
+  the rent part of the cost bar. Not for labels or info boxes.
+- **One meaning per color**, always with words and an icon:
+  - green `success`: savings, deals taken off, good fit, "ready";
+  - amber `warning`: costs added (fees, utilities), possible with guarantor, data may be stale;
+  - soft rose `unlikely`: "Unlikely" approval. Never alarm red: our renters have often
+    been refused already, so it always comes with the reason and a nearby good fit;
+  - grey `neutral`: unknown or unconfirmed ("Rules not confirmed", "Not known"). Never
+    blue, so the eye isn't drawn to the one thing we can't confirm;
+  - red `danger`: errors only;
+  - blue `info`: explanations and tips;
+  - slate `slate`: neighbourhood facts (incident counts). Never red or graded.
+- **Warm accent** `accent` (amber #E8A33D): deal tags and small highlights only.
+- **Approval fit has four states:** Good fit (green), Possible with guarantor (amber),
+  Unlikely (soft rose), Rules not confirmed (grey), each with an icon and a one-line reason.
 - **Decorative colors** (`--cover-1` to `--cover-6`, `--hero-*`) are only for building
   covers and the hero illustration. Never use them for text, status or actions.
 - Never write raw hex colors in components. Add or change a token in `globals.css`.

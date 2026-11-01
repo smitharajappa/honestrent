@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { BuildingCover } from "@/components/BuildingCover";
 import { CostBar } from "@/components/CostBar";
+import { FitDisplay, FitUnconfirmed } from "@/components/approval/FitBadge";
 import { HiddenCostBanner } from "@/components/building/HiddenCostBanner";
 import { SectionNav } from "@/components/building/SectionNav";
 import { BuildingLocation } from "@/components/map/BuildingLocation";
@@ -47,6 +48,13 @@ const COLORS: { name: string; className: string; use: string }[] = [
   { name: "warning", className: "bg-warning-soft", use: "Extra fees, guarantor, stale" },
   { name: "danger", className: "bg-danger-soft", use: "Errors, unlikely" },
   { name: "info", className: "bg-info-soft", use: "Explanations and tips" },
+  {
+    name: "unlikely",
+    className: "bg-unlikely-soft",
+    use: "Unlikely (soft rose, never alarm red)",
+  },
+  { name: "slate", className: "bg-slate-soft", use: "Neighbourhood facts" },
+  { name: "accent", className: "bg-accent", use: "Deals and small highlights" },
 ];
 
 export default function StyleguidePage() {
@@ -225,6 +233,26 @@ export default function StyleguidePage() {
           Teal pins are buildings (tap to open). Grey dots are real places whose prices
           aren&apos;t verified yet. The white pin is UT Dallas. Tiles from OpenFreeMap;
           data © OpenStreetMap contributors.
+        </p>
+      </Section>
+
+      <Section title="Approval fit: four states">
+        <div className="grid gap-x-6 sm:grid-cols-2">
+          <FitDisplay
+            fit={{ level: "good", reason: "Accepts a passport and no US credit." }}
+          />
+          <FitDisplay
+            fit={{ level: "guarantor", reason: "Needs a guarantor at your income." }}
+          />
+          <FitDisplay
+            fit={{ level: "unlikely", reason: "This building requires an SSN." }}
+            alternative={{ name: "Sample Flats", href: "#" }}
+          />
+          <FitUnconfirmed />
+        </div>
+        <p className="mt-3 text-sm text-text-muted">
+          Always an icon, a label and one line of reason. Green, amber, soft rose and
+          grey.
         </p>
       </Section>
 

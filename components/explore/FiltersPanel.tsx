@@ -139,8 +139,8 @@ function Chip({
         "min-h-11 rounded-full border px-3.5 text-sm font-medium transition-colors duration-150",
         "disabled:cursor-not-allowed disabled:opacity-50",
         on
-          ? "border-text bg-text text-bg"
-          : "border-border-strong bg-surface text-text hover:border-text",
+          ? "border-brand bg-brand text-brand-fg"
+          : "border-border-strong bg-surface text-text hover:border-brand",
       )}
     >
       {children}

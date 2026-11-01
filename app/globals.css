@@ -32,11 +32,21 @@
   --success-soft: #e7f6ec;
   --success-text: #17663f;
   --warning-soft: #fdf3d7;
-  --warning-text: #7c4a03;
+  --warning-text: #8f5400;
   --danger-soft: #fdecec;
   --danger-text: #b42318;
   --info-soft: #eaf1fd;
   --info-text: #1d4ed8;
+
+  /* "Unlikely": a muted rose, not alarm red. People searching have often been refused already. */
+  --unlikely-soft: #fbeef0;
+  --unlikely-text: #9b3a4a;
+  /* Neighbourhood facts: calm slate-blue, never red or graded. */
+  --slate-soft: #eaf0f6;
+  --slate-text: #3b4d61;
+  /* One warm accent for deals and small highlights. */
+  --accent: #e8a33d;
+  --accent-fg: #3a2600;
 
   /* Decorative: building covers and the hero. Never used for text or actions. */
   --cover-1-bg: #e3edf8;
@@ -60,29 +70,33 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0f1113;
-    --surface: #181a1d;
-    --surface-muted: #212428;
-    --border: #2e3237;
-    --border-strong: #6b737c;
+    --bg: #0f1418;
+    --surface: #161c22;
+    --surface-muted: #1e262d;
+    --border: #2a333b;
+    --border-strong: #6b7680;
 
     --text: #eceef0;
     --text-muted: #a9afb7;
 
-    --brand: #2dd4bf;
-    --brand-hover: #5eead4;
-    --brand-fg: #042f2e;
-    --brand-soft: #0f2e2b;
-    --brand-text: #5eead4;
+    --brand: #2db3a6;
+    --brand-hover: #4cc7bb;
+    --brand-fg: #04201e;
+    --brand-soft: #10302e;
+    --brand-text: #4fcfc3;
 
     --success-soft: #0f2a1c;
     --success-text: #6ee7a8;
-    --warning-soft: #2e2205;
-    --warning-text: #fbd27a;
+    --warning-soft: #2e2308;
+    --warning-text: #f5c76a;
     --danger-soft: #331414;
     --danger-text: #fca5a5;
     --info-soft: #10203a;
     --info-text: #9cc3ff;
+    --unlikely-soft: #2b1a1e;
+    --unlikely-text: #f0a9b4;
+    --slate-soft: #1a2430;
+    --slate-text: #aebfd2;
 
     --cover-1-bg: #172435;
     --cover-1-ink: #2f4c6c;
@@ -100,7 +114,7 @@
     --hero-to: #15140f;
     --hero-ink: #23322f;
 
-    --ring: #5eead4;
+    --ring: #4fcfc3;
   }
 }
 
@@ -129,6 +143,12 @@
   --color-danger-text: var(--danger-text);
   --color-info-soft: var(--info-soft);
   --color-info-text: var(--info-text);
+  --color-unlikely-soft: var(--unlikely-soft);
+  --color-unlikely-text: var(--unlikely-text);
+  --color-slate-soft: var(--slate-soft);
+  --color-slate-text: var(--slate-text);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
   --color-ring: var(--ring);
 }
 
@@ -266,4 +286,21 @@
   --place-school: #7a4fc2;
   --place-gym: #c2307a;
   --place-worship: #a87a00;
+}
+
+/* Map pin ring shows approval fit (words are in the pin's label for screen readers). */
+.map-pin-fit-good {
+  border-color: var(--success-text);
+}
+.map-pin-fit-guarantor {
+  border-color: var(--accent);
+}
+.map-pin-fit-unlikely {
+  border-color: var(--unlikely-text);
+}
+.map-pin-fit-unknown {
+  border-color: var(--border-strong);
+}
+.map-pin[class*="map-pin-fit-"] {
+  border-width: 3px;
 }
