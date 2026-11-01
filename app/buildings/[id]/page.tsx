@@ -38,7 +38,7 @@ import {
   OFFICIAL_CRIME_MAPS,
 } from "@/lib/safety";
 import { fetchTypicalDrive } from "@/lib/traffic-server";
-import { TrafficChart } from "@/components/traffic/TrafficChart";
+import { DriveToPlaces } from "@/components/traffic/DriveToPlaces";
 import { fetchPlacesNear, nearestByKind, PLACE_KINDS, walkMinutes } from "@/lib/places";
 import { bathroomLabel, bedroomLabel, formatDate, formatUsd } from "@/lib/format";
 import { todayInTexas, validateSearch } from "@/lib/validation";
@@ -128,7 +128,7 @@ export default async function BuildingPage({
     !mapOnly && { id: "plans", label: "Plans" },
     hasPin && { id: "location", label: "Location" },
     hasPin && { id: "safety", label: "Safety" },
-    drive && { id: "drive", label: "Drive" },
+    hasPin && { id: "drive", label: "Drive" },
     !mapOnly && { id: "fees", label: "Fees" },
     !mapOnly && { id: "deals", label: "Deals" },
     !mapOnly && { id: "utilities", label: "Utilities" },
@@ -441,19 +441,16 @@ export default async function BuildingPage({
                 </Section>
               )}
 
-              {drive && (
-                <Section id="drive" title="Drive to UT Dallas">
-                  <p className="mb-4 text-sm text-text-muted">
-                    {drive.source === "tomtom"
-                      ? "Typical weekday drive time by the hour you leave. This is based on past traffic patterns, not live traffic."
-                      : "Sample estimate for the demo: a typical weekday rush-hour pattern, not real traffic data."}
-                  </p>
-                  <TrafficChart points={drive.points} destination={CAMPUS.name} />
-                  <p className="mt-3 text-xs text-text-muted">
-                    {drive.source === "tomtom"
-                      ? "Traffic data © TomTom."
-                      : "Sample data. Real traffic appears once a traffic data key is added."}
-                  </p>
+              {hasPin && (
+                <Section id="drive" title="Drive to places that matter">
+                  <DriveToPlaces
+                    buildingId={building.id}
+                    from={{
+                      latitude: building.latitude!,
+                      longitude: building.longitude!,
+                    }}
+                    initial={drive}
+                  />
                 </Section>
               )}
 

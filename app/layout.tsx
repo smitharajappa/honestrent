@@ -1,4 +1,5 @@
 import { LocationProvider } from "@/components/location/LocationContext";
+import { MyPlacesProvider } from "@/components/location/MyPlacesContext";
 import { MotionProvider } from "@/components/motion/Reveal";
 import type { Metadata, Viewport } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
@@ -58,9 +59,11 @@ export default function RootLayout({
           <LocationProvider>
             <ApprovalProvider>
               <ShortlistProvider>
-                <SiteHeader />
-                <div className="flex-1">{children}</div>
-                <SiteFooter />
+                <MyPlacesProvider>
+                  <SiteHeader />
+                  <div className="flex-1">{children}</div>
+                  <SiteFooter />
+                </MyPlacesProvider>
               </ShortlistProvider>
             </ApprovalProvider>
           </LocationProvider>
