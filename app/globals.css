@@ -304,3 +304,18 @@
 .map-pin[class*="map-pin-fit-"] {
   border-width: 3px;
 }
+
+/* "You are here": a calm blue-grey dot with a white ring, clearly not a building. */
+.map-pin-you {
+  width: 1.125rem;
+  height: 1.125rem;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  background: var(--slate-text);
+  border: 3px solid var(--surface);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--slate-text) 25%, transparent),
+    var(--shadow-card);
+  cursor: default;
+}

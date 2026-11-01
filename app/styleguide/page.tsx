@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { BuildingCover } from "@/components/BuildingCover";
 import { CostBar } from "@/components/CostBar";
 import { FitDisplay, FitUnconfirmed } from "@/components/approval/FitBadge";
+import { LocateButton } from "@/components/location/LocateButton";
 import { HiddenCostBanner } from "@/components/building/HiddenCostBanner";
 import { SectionNav } from "@/components/building/SectionNav";
 import { BuildingLocation } from "@/components/map/BuildingLocation";
@@ -233,6 +234,14 @@ export default function StyleguidePage() {
           Teal pins are buildings (tap to open). Grey dots are real places whose prices
           aren&apos;t verified yet. The white pin is UT Dallas. Tiles from OpenFreeMap;
           data © OpenStreetMap contributors.
+        </p>
+      </Section>
+
+      <Section title="Where to measure distances from">
+        <LocateButton />
+        <p className="mt-3 text-sm text-text-muted">
+          Either the device location (asked only when pressed) or a ZIP code for people
+          who have not moved yet. Kept in this tab only.
         </p>
       </Section>
 

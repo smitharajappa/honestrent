@@ -315,3 +315,23 @@ describe("inArea", () => {
     expect(inArea(b, "Dallas")).toBe(false);
   });
 });
+
+describe("distance from the renter's chosen place", () => {
+  const near = building({ id: "n", name: "Near", latitude: 33.0, longitude: -96.75 });
+  const far = building({ id: "f", name: "Far", latitude: 33.2, longitude: -96.75 });
+  const origin = { latitude: 33.001, longitude: -96.75 };
+
+  it("works out straight-line miles, only when a place is chosen", () => {
+    const withPlace = explore([near, far], opts({ origin }));
+    expect(withPlace.find((i) => i.building.id === "n")!.milesFromYou).toBeLessThan(0.2);
+    expect(withPlace.find((i) => i.building.id === "f")!.milesFromYou).toBeGreaterThan(
+      10,
+    );
+    expect(explore([near], opts({}))[0].milesFromYou).toBeNull();
+  });
+
+  it("sorts nearest first, with ties broken by price", () => {
+    const items = explore([far, near], opts({ origin, sort: "near" }));
+    expect(items.map((i) => i.building.id)).toEqual(["n", "f"]);
+  });
+});

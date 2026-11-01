@@ -1,3 +1,4 @@
+import { LocationProvider } from "@/components/location/LocationContext";
 import { MotionProvider } from "@/components/motion/Reveal";
 import type { Metadata, Viewport } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
@@ -54,13 +55,15 @@ export default function RootLayout({
         {IS_DEMO && <DemoBanner />}
         {/* Approval answers live in memory only; the shortlist is saved on this device. */}
         <MotionProvider>
-          <ApprovalProvider>
-            <ShortlistProvider>
-              <SiteHeader />
-              <div className="flex-1">{children}</div>
-              <SiteFooter />
-            </ShortlistProvider>
-          </ApprovalProvider>
+          <LocationProvider>
+            <ApprovalProvider>
+              <ShortlistProvider>
+                <SiteHeader />
+                <div className="flex-1">{children}</div>
+                <SiteFooter />
+              </ShortlistProvider>
+            </ApprovalProvider>
+          </LocationProvider>
         </MotionProvider>
       </body>
     </html>

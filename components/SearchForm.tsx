@@ -1,6 +1,7 @@
 import Form from "next/form";
 import { ApprovalFooter, ApprovalSelects } from "./approval/ApprovalFields";
 import { BudgetChips, SearchButton } from "./SearchFormControls";
+import { LocateButton } from "./location/LocateButton";
 import { Field } from "./ui/Field";
 import { DFW_SUGGESTIONS } from "@/lib/areas";
 
@@ -45,6 +46,9 @@ export function SearchForm({ area, budget, moveIn, today, errors = {} }: Props) 
                   <option key={city} value={city} />
                 ))}
               </datalist>
+              <div className="mt-3">
+                <LocateButton />
+              </div>
             </div>
             <div>
               <Field

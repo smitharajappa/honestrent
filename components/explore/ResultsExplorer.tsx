@@ -17,6 +17,8 @@ import type { MapPin } from "@/lib/map";
 import type { Building } from "@/lib/types";
 import { useApproval } from "../approval/ApprovalContext";
 import { AnswersNote } from "../approval/FitBadge";
+import { LocateButton } from "../location/LocateButton";
+import { useLocation } from "../location/LocationContext";
 import { LazyMap } from "../map/LazyMap";
 import { ResultCard } from "../ResultCard";
 import { CompareTray } from "../shortlist/CompareTray";
@@ -47,6 +49,7 @@ const SORTS: { value: SortKey; label: string }[] = [
   { value: "cost", label: "Lowest real cost" },
   { value: "savings", label: "Biggest savings vs. ad" },
   { value: "fit", label: "Best approval fit" },
+  { value: "near", label: "Nearest to my place" },
 ];
 
 const NO_FILTERS: FilterState = {
@@ -60,6 +63,7 @@ const NO_FILTERS: FilterState = {
 
 export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Props) {
   const { answers } = useApproval();
+  const { coords, label: fromLabel } = useLocation();
   const profile = isCompleteProfile(answers) ? answers : null;
   const [filters, setFilters] = useState<FilterState>(NO_FILTERS);
   const [sort, setSort] = useState<SortKey>("cost");
@@ -67,7 +71,8 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
   const [view, setView] = useState<"list" | "map">("list");
 
   // "Best fit" and "Good fit only" need the approval answers.
-  const effectiveSort: SortKey = sort === "fit" && !profile ? "cost" : sort;
+  const effectiveSort: SortKey =
+    (sort === "fit" && !profile) || (sort === "near" && !coords) ? "cost" : sort;
   const effectiveFilters = useMemo(
     () => (profile ? filters : { ...filters, goodFitOnly: false }),
     [profile, filters],
@@ -82,8 +87,9 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
         today,
         profile,
         sort: effectiveSort,
+        origin: coords,
       }),
-    [buildings, effectiveFilters, budget, moveIn, today, profile, effectiveSort],
+    [buildings, effectiveFilters, budget, moveIn, today, profile, effectiveSort, coords],
   );
   const pins = useMemo<MapPin[]>(
     () =>
@@ -239,16 +245,23 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
                   <option
                     key={s.value}
                     value={s.value}
-                    disabled={s.value === "fit" && !profile}
+                    disabled={
+                      (s.value === "fit" && !profile) || (s.value === "near" && !coords)
+                    }
                   >
                     {s.label}
                     {s.value === "fit" && !profile ? " (needs approval answers)" : ""}
+                    {s.value === "near" && !coords ? " (choose a place first)" : ""}
                   </option>
                 ))}
               </select>
               <ChevronDownIcon className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-text-muted" />
             </span>
           </label>
+        </div>
+
+        <div className="mt-4">
+          <LocateButton compact />
         </div>
 
         {items.length > 0 && (
@@ -341,6 +354,7 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
             {pins.length > 0 ? (
               <LazyMap
                 pins={[...mapOnlyPins, ...pins]}
+                you={coords}
                 summary={`${pins.length} apartments with their real monthly cost. Switch to List to read them.`}
                 className="h-[28rem] lg:h-[34rem]"
               />
@@ -368,6 +382,7 @@ export function ResultsExplorer({ buildings, area, budget, moveIn, today }: Prop
                 today={today}
                 people={effectiveFilters.people}
                 detailHref={`/buildings/${item.building.id}?budget=${budget}&moveIn=${moveIn}`}
+                fromLabel={fromLabel}
                 alternative={
                   item.fit?.level === "unlikely" && firstGoodFit
                     ? {

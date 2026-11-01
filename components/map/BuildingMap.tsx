@@ -3,7 +3,7 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import * as maplibregl from "maplibre-gl";
 import { useEffect, useRef, useState } from "react";
-import { CAMPUS, MAP_STYLE_URL, type MapPin } from "@/lib/map";
+import { CAMPUS, MAP_STYLE_URL, type MapPin, type YouAreHere } from "@/lib/map";
 import { PLACE_KINDS, type Place, type PlaceKind } from "@/lib/places";
 
 // Next.js can't bundle MapLibre's background worker, so we serve it from /public/maplibre
@@ -19,6 +19,8 @@ type Props = {
   places?: Place[];
   /** Which kinds of places are switched on. */
   visibleKinds?: PlaceKind[];
+  /** The renter's own position, if they turned location on. */
+  you?: YouAreHere | null;
   /** Text for people who can't see the map. */
   summary: string;
   className?: string;
@@ -78,6 +80,7 @@ export default function BuildingMap({
   showCampus = true,
   places = [],
   visibleKinds = [],
+  you = null,
   summary,
   className,
 }: Props) {
@@ -224,13 +227,23 @@ export default function BuildingMap({
         .addTo(map);
       bounds.extend([CAMPUS.longitude, CAMPUS.latitude]);
     }
+    if (you) {
+      const el = document.createElement("div");
+      el.className = "map-pin map-pin-you";
+      el.setAttribute("aria-label", "You are here");
+      el.title = "You are here";
+      new maplibregl.Marker({ element: el })
+        .setLngLat([you.longitude, you.latitude])
+        .addTo(map);
+      bounds.extend([you.longitude, you.latitude]);
+    }
     map.fitBounds(bounds, { padding: 56, maxZoom: 14, animate: !reduceMotion });
 
     return () => {
       mapRef.current = null;
       map.remove();
     };
-  }, [pins, highlightId, showCampus]);
+  }, [pins, highlightId, showCampus, you]);
 
   // Switching tabs only swaps the dots; the map itself is not rebuilt.
   useEffect(() => {
