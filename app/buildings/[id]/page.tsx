@@ -19,6 +19,7 @@ import { describeCriteria, pickCriteria } from "@/lib/approval";
 import { fetchBuilding } from "@/lib/buildings";
 import { isDealActive, planRows } from "@/lib/cost";
 import { CAMPUS, milesBetween } from "@/lib/map";
+import { moveInCash } from "@/lib/movein";
 import { fetchPlacesNear, nearestByKind, PLACE_KINDS, walkMinutes } from "@/lib/places";
 import { bathroomLabel, bedroomLabel, formatDate, formatUsd } from "@/lib/format";
 import { todayInTexas, validateSearch } from "@/lib/validation";
@@ -80,6 +81,9 @@ export default async function BuildingPage({
   // Imported real community with no prices entered yet: show where it is, nothing else.
   const mapOnly = building.floor_plans.length === 0;
   const cheapest = rows.find((r) => r.availableByMoveIn) ?? rows[0];
+  const cash = cheapest
+    ? moveInCash(building, cheapest.plan.rent_usd, cheapest.cost.monthlyFees, moveIn)
+    : null;
   const deals = building.building_deals.filter((d) => isDealActive(d, today));
   const totalFees = building.building_fees.reduce((sum, f) => sum + f.monthly_usd, 0);
   const hasPin = building.latitude !== null && building.longitude !== null;
@@ -355,6 +359,76 @@ export default async function BuildingPage({
                   </>
                 )}
               </Section>
+
+              {cash && (
+                <Section id="movein" title="Cash to move in">
+                  <p className="text-sm text-text-muted">
+                    What you pay before you get the keys, for {cheapest.plan.name}. Only
+                    amounts the leasing office has confirmed are counted.
+                  </p>
+                  <dl className="mt-4 space-y-2 text-sm tabular-nums">
+                    {cash.lines.map((line) => (
+                      <div key={line.label} className="flex justify-between gap-3">
+                        <dt className="text-text-muted">{line.label}</dt>
+                        <dd className={line.usd === null ? "text-text-muted" : ""}>
+                          {line.usd === null
+                            ? "Ask the leasing office"
+                            : formatUsd(line.usd)}
+                        </dd>
+                      </div>
+                    ))}
+                    <div className="flex justify-between gap-3 border-t border-border pt-2 font-semibold">
+                      <dt>{cash.complete ? "Total to move in" : "Known so far"}</dt>
+                      <dd>{formatUsd(cash.knownTotal)}</dd>
+                    </div>
+                  </dl>
+                  {!cash.complete && (
+                    <p className="mt-3 text-sm text-text-muted">
+                      This is not the full amount. Still to confirm:{" "}
+                      {cash.missing.join(", ")}.
+                    </p>
+                  )}
+                  {cash.noCreditExtra > 0 && (
+                    <p className="mt-3 text-sm text-text-muted">
+                      With no US credit, the deposit can be{" "}
+                      {formatUsd(cash.noCreditExtra)} higher.
+                    </p>
+                  )}
+                  <h3 className="mt-5 text-base font-semibold">Guarantor</h3>
+                  <p className="mt-1 text-sm text-text-muted">
+                    {building.guarantor_companies === null
+                      ? "Which guarantor companies this building accepts is not confirmed yet. Ask before you pay any guarantor fee."
+                      : building.guarantor_companies.length === 0
+                        ? "This building does not accept guarantor companies."
+                        : `Accepted: ${building.guarantor_companies.join(", ")}.`}
+                  </p>
+                  <Tip summary="How much does a guarantor cost?" className="mt-3">
+                    <p>
+                      Fees are one-time and paid before the lease starts. One guarantor
+                      company publishes about 70%–90% of one month&apos;s rent with US
+                      credit and 98%–110% with no US credit, per lease.{" "}
+                      <a
+                        href="https://www.insurent.com/renters/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-medium text-brand-text underline underline-offset-2"
+                      >
+                        Source<span className="sr-only"> (opens in a new tab)</span>
+                      </a>
+                    </p>
+                    <p>
+                      That company does not serve Texas buildings yet, so treat it as an
+                      example, not a quote.
+                    </p>
+                  </Tip>
+                  {building.terms_verified_on && (
+                    <p className="mt-3 text-xs text-text-muted">
+                      Confirmed with the leasing office on{" "}
+                      {formatDate(building.terms_verified_on)}.
+                    </p>
+                  )}
+                </Section>
+              )}
 
               <Section id="approval" title="Approval rules">
                 <dl className="space-y-2 text-sm">

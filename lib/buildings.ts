@@ -4,6 +4,8 @@ import { getSupabase } from "./supabase";
 import type { Building } from "./types";
 
 const BUILDING_COLUMNS = `id, name, address, city, last_verified, latitude, longitude, website, source, approval_known, notes,
+  application_fee_usd, admin_fee_usd, security_deposit_usd, deposit_no_credit_usd,
+  guarantor_companies, terms_verified_on,
   min_income_multiple, min_credit_score, accepts_no_ssn, accepts_guarantor,
   accepts_international_credit,
   floor_plans (id, name, bedrooms, bathrooms, rent_usd, lease_months, available_from),
