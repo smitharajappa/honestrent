@@ -129,9 +129,14 @@ FEATURES
   R3.5 Saved places and buildings synced across devices (accounts).
 
   Round 4 (later):
-  R4.1 Roommate matching (Move Pass): profiles with lifestyle preferences
-       (budget, move-in date, sleep schedule, cleanliness, smoking, pets,
-       guests, study habits). Messaging and safety reporting.
+  R4.1 Roommate matching (Move Pass). FIRST VERSION BUILT (Nov 2026): signed-in renters make a
+       profile (nickname, city, budget, move-in date, languages, interests, sleep, cleaning,
+       guests, smoking, pets, study habits, short note) and see people in the same city ranked by
+       habit fit with plain reasons. They ask for an introduction; chat opens only after both
+       accept, is rental-topics-only with safety checks (no links, contact or payment details),
+       and has report and block. Verified tag: team-set only (sample profiles for the demo); an
+       ID-check vendor is not chosen yet and no ID scan is ever stored. Still to do: ID-check
+       vendor, stronger chat moderation, email alerts for new matches. See docs/roommates.md.
   R4.2 Landlord portal: free listings, with Swelt verifying fees and approval
        rules before they show.
   R4.3 Lease referrals: properties pay when a renter signs, through a partner
@@ -190,7 +195,11 @@ LEGAL AND TRUST GUARDRAILS:
     partner for the Renter Passport instead.
   - Approval predictions use documents, credit and income only, never national
     origin or other protected traits (fair housing).
-  - Roommate matching uses lifestyle preferences only.
+  - Roommate matching uses lifestyle preferences only: no field, filter or ranking for race,
+    ethnicity, religion, nationality, sex, family status or disability. A roommate site that
+    asked such questions and filtered on them was held liable under fair housing law
+    (Roommates.com, 2012), so get legal advice before ever adding one. Free-text notes must not
+    exclude people by who they are.
   - Neighbourhood incident counts are shown the same way for every building and every
     renter. We never use victim, suspect, race, sex or any personal field from police
     data, never publish a safety score or grade, and never filter or rank buildings by

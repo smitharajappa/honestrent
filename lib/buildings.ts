@@ -112,6 +112,11 @@ export async function fetchBuildings(): Promise<BuildingsResult> {
   ]);
   if (error) {
     console.error("Failed to load buildings:", error.message);
+    if (/invalid api key/i.test(error.message)) {
+      console.error(
+        "Hint: the Supabase key in .env.local is wrong or from another project. Run: npm run check:env",
+      );
+    }
     return { ok: false, reason: "query_failed" };
   }
   const rows = (data ?? []) as unknown as Record<string, unknown>[];

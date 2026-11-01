@@ -50,3 +50,17 @@ views is the number to watch.
 Signing in is optional and uses an email address only. Approval answers still stay in the
 browser tab and are never tied to an account. The session lives in the browser; our server
 checks the sign-in token and reads only that person's own passes.
+
+## If the app shows "Invalid API key" on your computer
+
+The key in `.env.local` is wrong, or from a different Supabase project. Run:
+
+```bash
+npm run check:env
+```
+
+It never prints your key. It says what is wrong (quote marks, a space, the secret key by mistake,
+or a key that Supabase rejects). Copy the **Publishable** key again from Supabase, Project
+Settings, API Keys, from the same project as the URL. Then stop the app (Ctrl+C) and start it
+again with `npm run dev`: the file is only read when the app starts. Sign-in uses the same two
+values, so it will not work until this passes.

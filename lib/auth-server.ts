@@ -16,6 +16,17 @@ export type Viewer = {
   hasPlus: boolean;
 };
 
+/** A Supabase client that acts as this signed-in renter: row-level security applies to them. */
+export function userClient(token: string) {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key, {
+    auth: { persistSession: false },
+    global: { headers: { Authorization: `Bearer ${token}` } },
+  });
+}
+
 export async function viewerFromToken(token: unknown): Promise<Viewer | null> {
   if (typeof token !== "string" || token.length < 20 || token.length > 4000) return null;
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

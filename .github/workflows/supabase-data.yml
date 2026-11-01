@@ -48,6 +48,9 @@ jobs:
       - name: Nearby places
         run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/seed-places.sql
 
+      - name: Sample roommate profiles
+        run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/seed-roommates-demo.sql
+
       - name: Reported-incident counts
         run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/seed-safety.sql
 

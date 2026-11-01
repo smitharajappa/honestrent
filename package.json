@@ -13,7 +13,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check": "npm run lint && npm run typecheck && npm run format:check && npm test",
-    "postinstall": "mkdir -p public/maplibre && cp node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs public/maplibre/"
+    "postinstall": "mkdir -p public/maplibre && cp node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs public/maplibre/",
+    "check:env": "node scripts/check-env.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.109.0",

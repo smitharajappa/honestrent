@@ -8,7 +8,7 @@ import { useShortlist } from "./ShortlistContext";
 /** "Saved (2)" and "Compare (1)" links in the header. */
 export function HeaderLinks() {
   const { saved, compare, ready } = useShortlist();
-  const { user, ready: authReady, available, signOut } = useAuth();
+  const { user, ready: authReady, available } = useAuth();
   const link =
     "inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2.5 text-sm font-semibold whitespace-nowrap text-text hover:bg-surface-muted";
   return (
@@ -34,18 +34,16 @@ export function HeaderLinks() {
       </Link>
       {available && authReady && (
         <>
+          <Link href="/roommates" className={`${link} max-md:hidden`}>
+            Roommates
+          </Link>
           <Link href="/plus" className={`${link} max-sm:hidden`}>
             Plus
           </Link>
           {user ? (
-            <button
-              type="button"
-              onClick={signOut}
-              className={link}
-              title={user.email ?? undefined}
-            >
-              Sign out
-            </button>
+            <Link href="/account" className={link} title={user.email ?? undefined}>
+              Account
+            </Link>
           ) : (
             <Link href="/sign-in" className={`${link} text-brand-text`}>
               Sign in
