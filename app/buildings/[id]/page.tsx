@@ -12,6 +12,7 @@ import { VerifiedNote } from "@/components/VerifiedNote";
 import { BuildingCover } from "@/components/BuildingCover";
 import { CostBar } from "@/components/CostBar";
 import { LazyMap } from "@/components/map/LazyMap";
+import { RevealOnScroll } from "@/components/motion/Reveal";
 import { CompareToggle, SaveButton } from "@/components/shortlist/ShortlistButtons";
 import { TrustNotes } from "@/components/TrustNotes";
 import { describeCriteria, pickCriteria } from "@/lib/approval";
@@ -449,16 +450,18 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <Card
-      as="section"
-      aria-labelledby={`${id}-heading`}
-      className="mt-6 scroll-mt-20 p-5 sm:p-6"
-      id={id}
-    >
-      <h2 id={`${id}-heading`} className="mb-3 text-lg font-semibold">
-        {title}
-      </h2>
-      {children}
-    </Card>
+    <RevealOnScroll>
+      <Card
+        as="section"
+        aria-labelledby={`${id}-heading`}
+        className="mt-6 scroll-mt-20 p-5 sm:p-6"
+        id={id}
+      >
+        <h2 id={`${id}-heading`} className="mb-3 text-lg font-semibold">
+          {title}
+        </h2>
+        {children}
+      </Card>
+    </RevealOnScroll>
   );
 }

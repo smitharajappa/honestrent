@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import { useMemo, useState } from "react";
 import { isCompleteProfile } from "@/lib/approval";
 import { suggestAlternatives } from "@/lib/cost";
@@ -255,12 +256,21 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
                 type="button"
                 aria-pressed={view === option.value}
                 onClick={() => setView(option.value)}
-                className={`inline-flex min-h-11 items-center gap-1.5 rounded-lg px-4 text-sm font-semibold ${
-                  view === option.value ? "bg-text text-bg" : "text-text-muted"
+                className={`relative inline-flex min-h-11 items-center gap-1.5 rounded-lg px-4 text-sm font-semibold ${
+                  view === option.value ? "text-bg" : "text-text-muted"
                 }`}
               >
-                <option.icon className="size-4" />
-                {option.label}
+                {view === option.value && (
+                  <motion.span
+                    layoutId="view-pill"
+                    transition={{ type: "spring", stiffness: 500, damping: 40 }}
+                    className="absolute inset-0 rounded-lg bg-text"
+                  />
+                )}
+                <span className="relative inline-flex items-center gap-1.5">
+                  <option.icon className="size-4" />
+                  {option.label}
+                </span>
               </button>
             ))}
           </div>
@@ -297,7 +307,12 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
         )}
 
         {items.length > 0 && view === "map" && (
-          <div className="mt-6">
+          <motion.div
+            className="mt-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.25 }}
+          >
             {pins.length > 0 ? (
               <LazyMap
                 pins={[...mapOnlyPins, ...pins]}
@@ -314,7 +329,7 @@ export function ResultsExplorer({ buildings, budget, moveIn, today }: Props) {
               {mapOnlyPins.length > 0 &&
                 ` Grey dots are ${mapOnlyPins.length} more real communities whose prices we haven't verified yet.`}
             </p>
-          </div>
+          </motion.div>
         )}
 
         {items.length > 0 && view === "list" ? (
