@@ -1,0 +1,54 @@
+name: Load data into Supabase
+
+# Loads the real data files into the hosted database. Press "Run workflow" in the Actions tab.
+# Every file used here is safe to run again, except the demo data (see the checkbox).
+on:
+  workflow_dispatch:
+    inputs:
+      include_demo:
+        description: "ALSO reload the 6 made-up demo buildings. This CLEARS ALL BUILDINGS first, then reloads everything."
+        type: boolean
+        default: false
+
+concurrency:
+  group: supabase-database
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  load:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the database secret exists
+        run: |
+          if [ -z "$SUPABASE_DB_URL" ]; then
+            echo "::error::Add the SUPABASE_DB_URL secret first (see docs/supabase-automation.md)."
+            exit 1
+          fi
+
+      - name: Demo buildings (clears all buildings first)
+        if: ${{ inputs.include_demo }}
+        run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/seed.sql
+
+      # Order matters: later files look buildings up by name.
+      - name: Real map-only complexes
+        run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/seed-osm.sql
+
+      - name: Priced communities
+        run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/seed-live.sql
+
+      - name: Nearby places
+        run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/seed-places.sql
+
+      - name: Reported-incident counts
+        run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/seed-safety.sql
+
+      - name: Show what is in the database
+        run: |
+          psql "$SUPABASE_DB_URL" -c "select (select count(*) from buildings) as buildings, (select count(*) from places) as places, (select count(*) from building_safety) as safety_rows;"
