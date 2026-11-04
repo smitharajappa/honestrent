@@ -17,9 +17,10 @@ Three GitHub Actions do the work. You add **one secret** once.
 2. In GitHub: your repo, **Settings**, **Secrets and variables**, **Actions**,
    **New repository secret**. Name: `SUPABASE_DB_URL`. Value: the string from step 1.
    Never put it in a file or in chat.
-3. Because you already ran the existing migrations by hand, tell the tool once so it does not
+3. Because you already ran the first migrations by hand, tell the tool once so it does not
    run them again: Actions tab, **Supabase migrations**, **Run workflow**, tick
-   **baseline**, run. Check the log says each version is marked as applied.
+   **baseline**, leave the version as it is (`20261107000000`), run. The log marks the older
+   files as applied, then applies the newer ones (Plus, delete account, roommates).
 
 After that, every new file in `supabase/migrations` is applied automatically when it is
 merged to `main`. To load data: Actions tab, **Load data into Supabase**, **Run workflow**.

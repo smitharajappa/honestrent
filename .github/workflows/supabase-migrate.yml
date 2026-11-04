@@ -9,9 +9,13 @@ on:
   workflow_dispatch:
     inputs:
       baseline:
-        description: "ONE TIME ONLY: mark every migration already in the repo as applied (use if you ran them by hand)"
+        description: "ONE TIME ONLY: mark the migrations you ran by hand as applied, then apply the rest"
         type: boolean
         default: false
+      baseline_through:
+        description: "With baseline: mark files up to and including this version as already applied"
+        type: string
+        default: "20261107000000"
 
 # Never run two database updates at once.
 concurrency:
@@ -40,11 +44,21 @@ jobs:
         with:
           version: latest
 
-      - name: Mark existing migrations as already applied (one time)
+      - name: Mark the migrations you ran by hand as already applied (one time)
         if: ${{ inputs.baseline }}
+        env:
+          THROUGH: ${{ inputs.baseline_through }}
         run: |
+          if ! [[ "$THROUGH" =~ ^[0-9]{14}$ ]]; then
+            echo "::error::baseline_through must be a 14-digit version like 20261107000000."
+            exit 1
+          fi
           for f in supabase/migrations/*.sql; do
             version=$(basename "$f" | cut -d_ -f1)
+            if [[ "$version" > "$THROUGH" ]]; then
+              echo "Leaving $version to be applied"
+              continue
+            fi
             echo "Marking $version as applied"
             supabase migration repair --status applied "$version" --db-url "$SUPABASE_DB_URL"
           done
@@ -53,5 +67,4 @@ jobs:
         run: supabase db push --dry-run --db-url "$SUPABASE_DB_URL"
 
       - name: Apply new migrations
-        if: ${{ !inputs.baseline }}
         run: supabase db push --yes --db-url "$SUPABASE_DB_URL"
