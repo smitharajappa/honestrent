@@ -14,7 +14,7 @@ export const EXAMPLE_COMMUNITY_NAMES: CommunityNames = new Map([
 ]);
 
 export const EXAMPLE_ME: Profile = {
-  nickname: "You (example)",
+  nickname: "You",
   city: "Plano",
   budget_usd: 900,
   move_in: "2026-12-01",
@@ -59,7 +59,7 @@ export const EXAMPLE_PEOPLE: DirectoryProfile[] = [
   {
     ...base,
     id: "example-high",
-    nickname: "Example Priya",
+    nickname: "Priya",
     budget_usd: 1050,
     move_in: "2026-12-20",
     languages: ["English", "Hindi", "Telugu"],
@@ -72,7 +72,7 @@ export const EXAMPLE_PEOPLE: DirectoryProfile[] = [
   {
     ...base,
     id: "example-mid",
-    nickname: "Example Luis",
+    nickname: "Luis",
     budget_usd: 1200,
     move_in: "2027-01-10",
     languages: ["English", "Spanish"],
@@ -86,7 +86,7 @@ export const EXAMPLE_PEOPLE: DirectoryProfile[] = [
   {
     ...base,
     id: "example-none",
-    nickname: "Example Chen",
+    nickname: "Chen",
     budget_usd: 1800,
     move_in: "2027-04-15",
     languages: ["Mandarin"],

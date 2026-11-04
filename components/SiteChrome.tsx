@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { Logo } from "./ui/Logo";
 import { HeaderLinks } from "./shortlist/HeaderLinks";
-import { HomeIcon, InfoIcon, ShieldIcon } from "./ui/icons";
+import { InfoIcon, ShieldIcon } from "./ui/icons";
 
 export function SiteHeader() {
   return (
@@ -8,12 +9,10 @@ export function SiteHeader() {
       <div className="page-container flex h-16 items-center justify-between gap-3">
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-2 rounded-lg font-heading text-base font-bold tracking-tight whitespace-nowrap sm:text-lg"
+          aria-label="Honest Rent, home"
+          className="group/logo shrink-0 rounded-lg"
         >
-          <span className="grid size-8 place-items-center rounded-lg bg-text text-bg">
-            <HomeIcon className="size-4.5" />
-          </span>
-          Honest Rent
+          <Logo />
         </Link>
         <HeaderLinks />
       </div>

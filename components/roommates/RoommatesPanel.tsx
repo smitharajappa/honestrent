@@ -60,7 +60,7 @@ function MatchCard({
   busy: boolean;
   message?: string;
   names: ReadonlyMap<string, string>;
-  /** Shown only to explain how a percentage works: no button, labelled "Example". */
+  /** Shown only to explain how a percentage works: no button, labelled "Sample". */
   example?: boolean;
 }) {
   const p = m.profile;
@@ -79,7 +79,7 @@ function MatchCard({
           <h3 className="text-lg font-bold">{p.nickname}</h3>
           <div className="mt-1 flex flex-wrap gap-1.5">
             {p.verified && <VerifiedBadge />}
-            {example ? <Badge>Example</Badge> : p.demo && <Badge>Sample profile</Badge>}
+            {example ? <Badge>Sample</Badge> : p.demo && <Badge>Sample profile</Badge>}
             <Badge>{p.city}</Badge>
           </div>
         </div>
@@ -348,7 +348,7 @@ export function RoommatesPanel() {
           )}
           <details className="mt-8" open={matches.length === 0}>
             <summary className="min-h-11 cursor-pointer text-sm font-semibold text-brand-text">
-              How matching works: three examples
+              How matching works: 90%, 50% and 0%
             </summary>
             <p className="mb-3 mt-1 text-sm text-text-muted">
               Made-up people scored against a made-up renter with the same rules we use

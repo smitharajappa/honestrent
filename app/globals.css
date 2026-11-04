@@ -65,6 +65,12 @@
   --hero-to: #faf6ef;
   --hero-ink: #c9d8d4;
 
+  /* Logo and decoration only (never text or buttons): a teal that deepens toward one corner. */
+  --logo-from: #14b8a6;
+  --logo-to: #0b5f59;
+  --logo-accent: #fbbf4d;
+  --glow: rgb(20 184 166 / 0.18);
+
   --ring: #0f766e;
 }
 
@@ -113,6 +119,10 @@
     --hero-from: #10201d;
     --hero-to: #15140f;
     --hero-ink: #23322f;
+
+    --logo-from: #2dd4bf;
+    --logo-to: #0f766e;
+    --glow: rgb(45 212 191 / 0.16);
 
     --ring: #4fcfc3;
   }
@@ -190,6 +200,22 @@
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
+}
+
+/* Type scale for big moments. Headings above h2 use these; body text stays plain. */
+@utility display {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  font-size: clamp(2.25rem, 1.4rem + 3.6vw, 4rem);
+}
+@utility eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-text);
 }
 
 /* Respect people who turn off motion in their phone settings. */

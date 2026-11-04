@@ -53,10 +53,20 @@ interface.
 - Every text color must pass WCAG AA (4.5:1 body text, 3:1 large text and input
   borders) in light **and** dark mode.
 
+## Brand
+
+- **Logo:** `components/ui/Logo.tsx`: an H under a roof, with an amber bar like a receipt line.
+  Header, tab icon (`app/icon.svg`) and phone icon (`app/apple-icon.png`) all use it. Colors are
+  the `--logo-*` tokens: a teal that deepens toward one corner, plus the warm amber.
+- Gradients and glows are decoration only. Buttons and links stay solid brand teal so text
+  keeps its contrast.
+- Motion: small and quick (150 to 300ms), always off for people who ask for less motion.
+
 ## Type
 
 - **Headings:** Plus Jakarta Sans (`font-heading`): friendly and clear.
 - **Body, numbers and forms:** Inter (`font-sans`). Prices use `tabular-nums`.
+- Big moments: `display` (one per page, fluid size) with an `eyebrow` label above it.
 - Body text is at least 16px in inputs (phones zoom in on smaller text).
 - One `h1` per page. Headings go in order (h1 → h2 → h3).
 

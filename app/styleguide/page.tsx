@@ -14,6 +14,7 @@ import { TrustNotes } from "@/components/TrustNotes";
 import { ProfileMenuPanel } from "@/components/auth/ProfileMenu";
 import { PassStatus } from "@/components/plus/PassStatus";
 import { Avatar } from "@/components/ui/Avatar";
+import { Logo, LogoMark } from "@/components/ui/Logo";
 import { Badge } from "@/components/ui/Badge";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -134,6 +135,31 @@ export default function StyleguidePage() {
         <p className="mt-3 text-xs text-text-muted">
           Shows the Google photo if there is one, otherwise the first letter. Opens from
           the round avatar in the header; closes with Escape or a tap outside.
+        </p>
+      </Section>
+
+      <Section title="Logo">
+        <div className="flex flex-wrap items-center gap-8">
+          <Logo />
+          <div className="flex items-end gap-4">
+            <LogoMark className="size-16" />
+            <LogoMark className="size-10" />
+            <LogoMark className="size-6" />
+          </div>
+        </div>
+        <p className="mt-3 text-xs text-text-muted">
+          An H under a roof, with an amber bar like a receipt line. In the header the roof
+          lifts and the bar widens on hover. Colors come from the <code>--logo-*</code>{" "}
+          tokens, so it follows dark mode.
+        </p>
+      </Section>
+
+      <Section title="Big type">
+        <p className="eyebrow">Real monthly cost</p>
+        <p className="display mt-2">See what it really costs.</p>
+        <p className="mt-3 text-xs text-text-muted">
+          <code>display</code> for the one big line on a page, <code>eyebrow</code> for
+          the small label above it.
         </p>
       </Section>
 
