@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AnswersNote, FitBadge } from "@/components/approval/FitBadge";
 import { Tip } from "@/components/ui/Tip";
@@ -23,6 +24,7 @@ import { CompareToggle, SaveButton } from "@/components/shortlist/ShortlistButto
 import { TrustNotes } from "@/components/TrustNotes";
 import { describeCriteria, pickCriteria } from "@/lib/approval";
 import { fetchBuilding } from "@/lib/buildings";
+import { fetchRoommateInterest } from "@/lib/roommate-interest";
 import { isDealActive, planRows } from "@/lib/cost";
 import { CAMPUS, milesBetween } from "@/lib/map";
 import { utilitiesFor } from "@/lib/utilities";
@@ -106,6 +108,7 @@ export default async function BuildingPage({
   if (!building) notFound();
 
   const rows = planRows(building, today, moveIn);
+  const roommateInterest = await fetchRoommateInterest(building.id);
   // Imported real community with no prices entered yet: show where it is, nothing else.
   const mapOnly = building.floor_plans.length === 0;
   const cheapest = rows.find((r) => r.availableByMoveIn) ?? rows[0];
@@ -629,6 +632,19 @@ export default async function BuildingPage({
                   </p>
                 </Tip>
               </Section>
+
+              {roommateInterest > 0 && (
+                <InfoNote className="mt-6">
+                  {roommateInterest} renters are looking for a roommate at {building.name}
+                  .{" "}
+                  <Link
+                    href="/roommates"
+                    className="font-semibold underline underline-offset-2"
+                  >
+                    Find a roommate
+                  </Link>
+                </InfoNote>
+              )}
 
               <Section id="interest" title="I'm interested">
                 <p className="mb-5 text-sm text-text-muted">

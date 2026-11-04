@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { blockAndReport, type Intro } from "@/app/actions/roommates";
-import { CHAT_STARTERS, checkMessage } from "@/lib/roommates";
+import { CHAT_STARTERS, NEXT_STEPS, checkMessage } from "@/lib/roommates";
 import { getBrowserSupabase } from "@/lib/supabase-browser";
 import { useAuth } from "../auth/AuthContext";
 import { Badge } from "../ui/Badge";
@@ -61,7 +61,9 @@ export function Chat({
     const t = setInterval(load, 6000);
     return () => clearInterval(t);
   }, [load]);
-  useEffect(() => end.current?.scrollIntoView({ block: "nearest" }), [messages.length]);
+  useEffect(() => {
+    end.current?.scrollIntoView({ block: "nearest" });
+  }, [messages.length]);
 
   async function send(body: string) {
     const check = checkMessage(body);
@@ -125,6 +127,13 @@ export function Chat({
         and a written lease.
       </p>
 
+      {intro.demo && (
+        <p className="bg-surface-muted px-4 py-2 text-xs text-text-muted">
+          Sample profile made for the demo: it accepted at once so you can try the chat,
+          but nobody will reply.
+        </p>
+      )}
+
       {reporting && (
         <div className="space-y-3 border-b border-border bg-surface-muted p-4 text-sm">
           <p className="font-semibold">Report and block {intro.nickname}</p>
@@ -182,6 +191,17 @@ export function Chat({
         ))}
         <div ref={end} />
       </div>
+
+      <details className="border-t border-border px-4 py-3 text-sm">
+        <summary className="min-h-6 cursor-pointer font-semibold">
+          Next steps once you&apos;re matched
+        </summary>
+        <ol className="mt-2 list-decimal space-y-1 pl-5 text-text-muted">
+          {NEXT_STEPS.map((step) => (
+            <li key={step}>{step}</li>
+          ))}
+        </ol>
+      </details>
 
       <div className="space-y-2 border-t border-border p-4">
         <div className="flex flex-wrap gap-2">

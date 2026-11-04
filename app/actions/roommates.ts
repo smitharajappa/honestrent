@@ -13,6 +13,8 @@ import { todayInTexas } from "@/lib/validation";
 
 export type MyProfile = Profile & { id: string; verified: boolean };
 
+export type CommunityOption = { id: string; name: string; city: string };
+
 export type Intro = {
   id: string;
   status: "pending" | "accepted" | "declined";
@@ -35,10 +37,19 @@ export type RoommateState =
       /** How many people are in the same city (shown even without a pass). */
       cityCount: number;
       intros: Intro[];
+      /** Apartment communities people can say they are looking at. */
+      communities: CommunityOption[];
     };
 
 const PROFILE_COLUMNS =
-  "id, nickname, city, budget_usd, move_in, languages, interests, sleep, cleanliness, guests, smoking, pets, study, about, visible, verified_at";
+  "id, nickname, city, budget_usd, move_in, languages, interests, sleep, cleanliness, guests, smoking, pets, study, room_types, gender, gender_pref, building_ids, about, visible, verified_at";
+
+async function loadCommunities(
+  sb: NonNullable<ReturnType<typeof userClient>>,
+): Promise<CommunityOption[]> {
+  const { data } = await sb.from("buildings").select("id, name, city").order("name");
+  return (data ?? []) as CommunityOption[];
+}
 
 /** Everything the roommates page needs, for the signed-in renter only. */
 export async function loadRoommates(token: string | null): Promise<RoommateState> {
@@ -61,6 +72,7 @@ export async function loadRoommates(token: string | null): Promise<RoommateState
     .neq("status", "declined")
     .order("created_at", { ascending: false });
   const intros = (introRows ?? []) as Intro[];
+  const communities = await loadCommunities(sb);
 
   if (!row) {
     return {
@@ -70,6 +82,7 @@ export async function loadRoommates(token: string | null): Promise<RoommateState
       matches: [],
       cityCount: 0,
       intros,
+      communities,
     };
   }
   const { verified_at, ...rest } = row as unknown as Profile & {
@@ -88,9 +101,12 @@ export async function loadRoommates(token: string | null): Promise<RoommateState
     status: "ok",
     hasPlus: viewer.hasPlus,
     profile,
-    matches: viewer.hasPlus ? rankMatches(profile, list) : [],
+    matches: viewer.hasPlus
+      ? rankMatches(profile, list, 20, new Map(communities.map((c) => [c.id, c.name])))
+      : [],
     cityCount: list.length,
     intros,
+    communities,
   };
 }
 
@@ -106,6 +122,11 @@ export async function saveRoommateProfile(
 
   const checked = validateProfile(raw, todayInTexas());
   if (!checked.ok) return { ok: false, errors: checked.errors };
+  // Keep only communities that exist.
+  if (checked.value.building_ids.length > 0) {
+    const known = new Set((await loadCommunities(sb)).map((c) => c.id));
+    checked.value.building_ids = checked.value.building_ids.filter((id) => known.has(id));
+  }
 
   const { data: existing } = await sb
     .from("roommate_profiles")
@@ -141,41 +162,31 @@ export type ActionResult = { ok: true } | { ok: false; error: string };
 const TRY_AGAIN = "That didn't work just now. Please try again in a minute.";
 
 /** Ask someone for an introduction. Needs a pass (free during the demo). */
+export type AskResult =
+  { ok: true; status: "pending" | "accepted" } | { ok: false; error: string };
+
 export async function askIntro(
   token: string | null,
   otherId: string,
-): Promise<ActionResult> {
+): Promise<AskResult> {
   const viewer = await viewerFromToken(token);
   const sb = viewer && token ? userClient(token) : null;
   if (!viewer || !sb) return { ok: false, error: "Sign in first." };
   if (!viewer.hasPlus)
     return { ok: false, error: "Introductions are part of a Honest Rent Plus pass." };
 
-  const { data: target } = await sb
-    .from("roommate_directory")
-    .select("id, demo")
-    .eq("id", otherId)
-    .maybeSingle();
-  if (!target) return { ok: false, error: "That person isn't available any more." };
-  if (target.demo) {
-    return {
-      ok: false,
-      error:
-        "This is a sample profile made for the demo, so no one will answer. Introductions to real people work the same way.",
-    };
-  }
-  const { data: me } = await sb.from("roommate_profiles").select("id").maybeSingle();
-  if (!me) return { ok: false, error: "Create your profile first." };
-  const { error } = await sb
-    .from("roommate_intros")
-    .insert({ from_profile: me.id, to_profile: otherId });
+  const { data, error } = await sb.rpc("ask_roommate_intro", { p_other: otherId });
   if (error?.code === "23505")
     return { ok: false, error: "You already have an introduction with this person." };
+  if (error?.message.includes("not available"))
+    return { ok: false, error: "That person isn't available any more." };
+  if (error?.message.includes("Create a roommate profile"))
+    return { ok: false, error: "Create your profile first." };
   if (error) {
     console.error("Failed to ask for an introduction:", error.code, error.message);
     return { ok: false, error: TRY_AGAIN };
   }
-  return { ok: true };
+  return { ok: true, status: data === "accepted" ? "accepted" : "pending" };
 }
 
 export async function answerIntro(

@@ -5,7 +5,7 @@ import { CheckIcon } from "@/components/ui/icons";
 export const metadata: Metadata = {
   title: "Honest Rent Plus",
   description:
-    "Optional passes for drive times to your own places, price alerts and synced saves.",
+    "Optional passes for roommate matches, drive times to your own places, price alerts and synced saves.",
 };
 
 const FREE = [
@@ -16,6 +16,7 @@ const FREE = [
 ];
 const PLUS = [
   "Drive times from every apartment to up to 5 places you add (work, a grocery chain, a place of worship)",
+  "Roommate matches and introductions: see who fits your habits, room type and community, then chat after you both accept (a free profile is always open)",
   "Price-drop alerts (coming)",
   "Saved apartments and places on every device (coming)",
 ];

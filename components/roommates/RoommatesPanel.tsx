@@ -11,7 +11,20 @@ import {
   type RoommateState,
 } from "@/app/actions/roommates";
 import { formatDate, formatUsd } from "@/lib/format";
-import { CLEAN, GUESTS, PETS, SLEEP, SMOKING, STUDY, type Match } from "@/lib/roommates";
+import {
+  EXAMPLE_COMMUNITY_NAMES as EXAMPLE_NAMES,
+  exampleMatches,
+} from "@/lib/roommate-examples";
+import {
+  CLEAN,
+  GUESTS,
+  PETS,
+  ROOM_TYPES,
+  SLEEP,
+  SMOKING,
+  STUDY,
+  type Match,
+} from "@/lib/roommates";
 import { useAuth } from "../auth/AuthContext";
 import { Badge } from "../ui/Badge";
 import { Button, ButtonLink } from "../ui/Button";
@@ -37,6 +50,8 @@ function MatchCard({
   onAsk,
   busy,
   message,
+  names,
+  example,
 }: {
   m: Match;
   intro: Intro | undefined;
@@ -44,6 +59,9 @@ function MatchCard({
   onAsk: () => void;
   busy: boolean;
   message?: string;
+  names: ReadonlyMap<string, string>;
+  /** Shown only to explain how a percentage works: no button, labelled "Example". */
+  example?: boolean;
 }) {
   const p = m.profile;
   const habits = [
@@ -61,7 +79,7 @@ function MatchCard({
           <h3 className="text-lg font-bold">{p.nickname}</h3>
           <div className="mt-1 flex flex-wrap gap-1.5">
             {p.verified && <VerifiedBadge />}
-            {p.demo && <Badge>Sample profile</Badge>}
+            {example ? <Badge>Example</Badge> : p.demo && <Badge>Sample profile</Badge>}
             <Badge>{p.city}</Badge>
           </div>
         </div>
@@ -89,7 +107,19 @@ function MatchCard({
       <p className="mt-3 text-sm tabular-nums text-text-muted">
         {formatUsd(p.budget_usd)}/mo · moving in {formatDate(p.move_in)}
       </p>
+      <p className="mt-1 text-xs text-text-muted">
+        {p.room_types.map((k) => ROOM_TYPES[k]).join(" or ")}
+      </p>
       <p className="mt-1 text-xs text-text-muted">{habits.join(" · ")}</p>
+      {p.building_ids.length > 0 && (
+        <p className="mt-1 text-xs text-text-muted">
+          Looking at:{" "}
+          {p.building_ids
+            .map((id) => names.get(id))
+            .filter(Boolean)
+            .join(", ")}
+        </p>
+      )}
       {(p.languages.length > 0 || p.interests.length > 0) && (
         <p className="mt-1 text-xs text-text-muted">
           {[...p.languages, ...p.interests].join(" · ")}
@@ -97,7 +127,15 @@ function MatchCard({
       )}
       {p.about && <p className="mt-3 text-sm">{p.about}</p>}
       <div className="mt-4">
-        {intro ? (
+        {example ? (
+          <p className="text-sm text-text-muted">
+            {m.score >= 80
+              ? "A strong match: very close habits, and the same community."
+              : m.score >= 40
+                ? "A partial match: some habits fit, others don't."
+                : "No match: almost nothing lines up."}
+          </p>
+        ) : intro ? (
           <Badge tone={intro.status === "accepted" ? "success" : "neutral"}>
             {intro.status === "accepted"
               ? "Matched: open the chat"
@@ -182,6 +220,7 @@ export function RoommatesPanel() {
         <ProfileForm
           existing={state.profile}
           token={accessToken}
+          communities={state.communities}
           onSaved={() => {
             setEditing(false);
             void reload();
@@ -201,7 +240,8 @@ export function RoommatesPanel() {
     );
   }
 
-  const { profile, matches, intros, hasPlus, cityCount } = state;
+  const { profile, matches, intros, hasPlus, cityCount, communities } = state;
+  const names = new Map(communities.map((c) => [c.id, c.name]));
   const introFor = (id: string) => intros.find((i) => i.other_id === id);
   const incoming = intros.filter((i) => i.status === "pending" && !i.i_asked);
   const accepted = intros.filter((i) => i.status === "accepted");
@@ -213,7 +253,11 @@ export function RoommatesPanel() {
     setBusyId(null);
     setNotes((n) => ({
       ...n,
-      [otherId]: r.ok ? "Asked. We'll show it here when they answer." : r.error,
+      [otherId]: r.ok
+        ? r.status === "accepted"
+          ? "Matched! Open the chat in Introductions."
+          : "Asked. We'll show it here when they answer."
+        : r.error,
     }));
     if (r.ok) void reload();
   }
@@ -264,8 +308,8 @@ export function RoommatesPanel() {
                 {cityCount} {cityCount === 1 ? "person" : "people"} in {profile.city}
               </h2>
               <p className="mt-1 text-text-muted">
-                A Honest Rent Plus pass shows who fits your habits, and lets you ask for
-                an introduction.
+                Your profile is free. A Honest Rent Plus pass shows who fits your habits,
+                room type and community, and lets you ask for an introduction.
               </p>
               <ButtonLink href="/plus" className="mt-4">
                 See Honest Rent Plus
@@ -295,11 +339,36 @@ export function RoommatesPanel() {
                     busy={busyId === m.profile.id}
                     onAsk={() => ask(m.profile.id)}
                     message={notes[m.profile.id]}
+                    names={names}
                   />
                 ))}
               </ul>
             </>
           )}
+          <details className="mt-8" open={matches.length === 0}>
+            <summary className="min-h-11 cursor-pointer text-sm font-semibold text-brand-text">
+              How matching works: three examples
+            </summary>
+            <p className="mb-3 mt-1 text-sm text-text-muted">
+              Made-up people scored against a made-up renter with the same rules we use
+              for real matches. A 90% match shares habits and a community, 50% fits some
+              things, 0% shares almost nothing.
+            </p>
+            <ul className="grid gap-4 md:grid-cols-3">
+              {exampleMatches().map((m) => (
+                <MatchCard
+                  key={m.profile.id}
+                  m={m}
+                  intro={undefined}
+                  canAsk={false}
+                  busy={false}
+                  onAsk={() => {}}
+                  names={EXAMPLE_NAMES}
+                  example
+                />
+              ))}
+            </ul>
+          </details>
         </section>
       )}
 
@@ -409,6 +478,14 @@ export function RoommatesPanel() {
             </p>
             <p className="mt-1 text-xs text-text-muted">
               {[...profile.languages, ...profile.interests].join(" · ")}
+            </p>
+            <p className="mt-1 text-xs text-text-muted">
+              {profile.room_types.map((k) => ROOM_TYPES[k]).join(" or ")}
+              {profile.building_ids.length > 0 &&
+                ` · Looking at ${profile.building_ids
+                  .map((id) => names.get(id))
+                  .filter(Boolean)
+                  .join(", ")}`}
             </p>
           </Card>
           <Card className="p-5 text-sm">
