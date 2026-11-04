@@ -22,6 +22,10 @@ const me: Profile = {
   smoking: "no",
   pets: "fine",
   study: "quiet",
+  room_types: ["private", "shared"],
+  gender: "prefer_not",
+  gender_pref: "any",
+  building_ids: [],
   about: "",
   visible: true,
 };
@@ -39,6 +43,8 @@ const other = (o: Partial<DirectoryProfile> = {}): DirectoryProfile => ({
   smoking: "no",
   pets: "fine",
   study: "quiet",
+  room_types: ["private", "shared"],
+  building_ids: [],
   about: "",
   verified: false,
   demo: false,
@@ -85,6 +91,36 @@ describe("rankMatches", () => {
   });
 });
 
+describe("room type and shared communities", () => {
+  const CAMDEN = "11111111-1111-4111-8111-111111111111";
+  const names = new Map([[CAMDEN, "Camden Legacy Park"]]);
+  it("leaves out people who want a different kind of room", () => {
+    const privateOnly = { ...me, room_types: ["private" as const] };
+    const list = rankMatches(privateOnly, [
+      other({ id: "1", nickname: "Shares", room_types: ["shared"] }),
+      other({ id: "2", nickname: "Either", room_types: ["private", "shared"] }),
+    ]);
+    expect(list.map((m) => m.profile.nickname)).toEqual(["Either"]);
+  });
+  it("says which community both are looking at and ranks it higher", () => {
+    const mine = { ...me, building_ids: [CAMDEN], budget_usd: 1000 };
+    const same = scoreMatch(
+      mine,
+      other({ budget_usd: 1300, building_ids: [CAMDEN] }),
+      names,
+    );
+    const diff = scoreMatch(mine, other({ budget_usd: 1300 }), names);
+    expect(same.sharedCommunities).toEqual([CAMDEN]);
+    expect(same.reasons).toContain("Also looking at Camden Legacy Park");
+    expect(same.score).toBeGreaterThan(diff.score);
+    expect(diff.sharedCommunities).toEqual([]);
+  });
+  it("never goes over 100", () => {
+    const mine = { ...me, building_ids: [CAMDEN] };
+    expect(scoreMatch(mine, other({ building_ids: [CAMDEN] }), names).score).toBe(100);
+  });
+});
+
 describe("text rules", () => {
   it("blocks contact details in 'about me'", () => {
     expect(checkAbout("call me 214 555 0199").ok).toBe(false);
@@ -123,6 +159,7 @@ describe("validateProfile", () => {
     pets: "fine",
     study: "quiet",
     about: "Calm home.",
+    room_types: ["private"],
   };
   it("accepts a good profile and keeps only known options", () => {
     const r = validateProfile(
@@ -153,6 +190,44 @@ describe("validateProfile", () => {
         "nickname",
         "sleep",
       ]);
+  });
+  it("needs at least one room type, and only knows the two", () => {
+    const none = validateProfile({ ...good, room_types: [] }, "2026-11-01");
+    expect(none.ok).toBe(false);
+    if (!none.ok) expect(none.errors.room_types).toBeTruthy();
+    const r = validateProfile(
+      { ...good, room_types: ["shared", "castle"] },
+      "2026-11-01",
+    );
+    expect(r.ok).toBe(true);
+    if (r.ok) expect(r.value.room_types).toEqual(["shared"]);
+  });
+  it("only allows 'my own gender' if you say what your gender is", () => {
+    const bad = validateProfile({ ...good, gender_pref: "same" }, "2026-11-01");
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) expect(bad.errors.gender_pref).toContain("choose your gender");
+    const refuse = validateProfile(
+      { ...good, gender: "prefer_not", gender_pref: "same" },
+      "2026-11-01",
+    );
+    expect(refuse.ok).toBe(false);
+    const fine = validateProfile(
+      { ...good, gender: "woman", gender_pref: "same" },
+      "2026-11-01",
+    );
+    expect(fine.ok).toBe(true);
+    const open = validateProfile(good, "2026-11-01");
+    expect(open.ok && open.value.gender).toBe("prefer_not");
+    expect(open.ok && open.value.gender_pref).toBe("any");
+  });
+  it("keeps up to 3 real building ids and drops the rest", () => {
+    const id = (n: number) => `${String(n).repeat(8)}-1111-4111-8111-111111111111`;
+    const r = validateProfile(
+      { ...good, building_ids: [id(1), id(1), id(2), "not-an-id", id(3), id(4)] },
+      "2026-11-01",
+    );
+    expect(r.ok).toBe(true);
+    if (r.ok) expect(r.value.building_ids).toEqual([id(1), id(2), id(3)]);
   });
   it("has no field for race, ethnicity, religion or nationality", () => {
     const r = validateProfile(

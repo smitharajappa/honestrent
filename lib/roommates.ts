@@ -1,8 +1,11 @@
 // Roommate profiles and matching.
-// Lifestyle only: habits, budget, move-in date, languages and interests. There is deliberately
-// no field for race, ethnicity, religion, nationality, sex, family status or disability, and
-// nothing here uses them. Free text ("about me") is checked for contact details and for
-// language that rules people out by who they are.
+// Lifestyle: habits, budget, move-in date, languages and interests, plus the kind of room people
+// want to share, who they would share with (anyone, or their own gender) and which apartment
+// communities they are looking at. The sharing preference only decides who can be matched; a
+// person's own gender is never shown to anyone. There is deliberately no field for race,
+// ethnicity, religion, nationality, family status or disability, and nothing here uses them.
+// Free text ("about me") is checked for contact details and for language that rules people out
+// by who they are.
 
 import { DFW_SUGGESTIONS } from "./areas";
 
@@ -84,6 +87,22 @@ export const STUDY = {
   social: "Social at home",
 } as const;
 
+export const ROOM_TYPES = {
+  private: "Private room in a shared home",
+  shared: "Share a room with one more person",
+} as const;
+export const GENDERS = {
+  woman: "Woman",
+  man: "Man",
+  nonbinary: "Non-binary",
+  prefer_not: "Prefer not to say",
+} as const;
+export const GENDER_PREFS = {
+  any: "Anyone",
+  same: "Only people of my own gender",
+} as const;
+export const MAX_COMMUNITIES = 3;
+
 type Keys<T> = keyof T & string;
 export type Profile = {
   nickname: string;
@@ -98,12 +117,19 @@ export type Profile = {
   smoking: Keys<typeof SMOKING>;
   pets: Keys<typeof PETS>;
   study: Keys<typeof STUDY>;
+  /** The kinds of room this person would take. At least one. */
+  room_types: Keys<typeof ROOM_TYPES>[];
+  /** Only used to apply the sharing preference. Never shown to other renters. */
+  gender: Keys<typeof GENDERS>;
+  gender_pref: Keys<typeof GENDER_PREFS>;
+  /** Apartment communities (building ids) this person is looking at. Up to 3. */
+  building_ids: string[];
   about: string;
   visible: boolean;
 };
 
 /** A profile as other signed-in renters see it (no account id or email). */
-export type DirectoryProfile = Omit<Profile, "visible"> & {
+export type DirectoryProfile = Omit<Profile, "visible" | "gender" | "gender_pref"> & {
   id: string;
   verified: boolean;
   /** A sample profile made by the team for the demo. */
@@ -199,7 +225,18 @@ export const CHAT_STARTERS = [
   "Would you want to tour a place together?",
 ];
 
+/** What to do once you are matched, in order. Shown in the chat. */
+export const NEXT_STEPS = [
+  "Agree your share of rent, utilities and the deposit, and write it down.",
+  "Pick a move-in date that works for both of you.",
+  "Tour the same building together, in daylight and in a public place.",
+  "Ask the leasing office whether you can both go on the lease, and what they accept without an SSN or with a guarantor.",
+  "Never send money before you have seen the place and a written lease.",
+];
+
 // ---- profile form -----------------------------------------------------------------------
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export type ProfileErrors = Partial<Record<keyof Profile | "form", string>>;
 
@@ -263,6 +300,28 @@ export function validateProfile(
   if (!pets) errors.pets = "Choose one.";
   if (!study) errors.study = "Choose one.";
 
+  const room_types = list(
+    "room_types",
+    Object.keys(ROOM_TYPES),
+    2,
+  ) as Profile["room_types"];
+  if (room_types.length === 0)
+    errors.room_types = "Choose at least one kind of room you would take.";
+
+  const gender = pick(GENDERS, raw.gender) ?? "prefer_not";
+  const gender_pref = pick(GENDER_PREFS, raw.gender_pref) ?? "any";
+  if (gender_pref === "same" && gender === "prefer_not")
+    errors.gender_pref =
+      "To share only with your own gender, choose your gender above. Others never see it.";
+
+  const building_ids = [
+    ...new Set(
+      (Array.isArray(raw.building_ids) ? (raw.building_ids as unknown[]) : []).filter(
+        (v): v is string => typeof v === "string" && UUID.test(v),
+      ),
+    ),
+  ].slice(0, MAX_COMMUNITIES);
+
   const about = str("about");
   const aboutCheck = checkAbout(about);
   if (!aboutCheck.ok) errors.about = aboutCheck.reason;
@@ -283,6 +342,10 @@ export function validateProfile(
       smoking: smoking!,
       pets: pets!,
       study: study!,
+      room_types,
+      gender,
+      gender_pref,
+      building_ids,
       about,
       visible: raw.visible !== false && raw.visible !== "off",
     },
@@ -291,7 +354,16 @@ export function validateProfile(
 
 // ---- matching ---------------------------------------------------------------------------
 
-export type Match = { profile: DirectoryProfile; score: number; reasons: string[] };
+export type Match = {
+  profile: DirectoryProfile;
+  score: number;
+  reasons: string[];
+  /** Communities both people are looking at. */
+  sharedCommunities: string[];
+};
+
+/** Building id to name, so reasons can say "Also looking at Camden Legacy Park". */
+export type CommunityNames = ReadonlyMap<string, string>;
 
 const ORDER = {
   sleep: ["early", "flexible", "night"],
@@ -313,7 +385,11 @@ const joinWords = (xs: string[]) =>
  * How well two people's habits fit, 0 to 100, with plain reasons. Uses only the lifestyle
  * facts above. Different smoking habits cap the score, because that rarely works out.
  */
-export function scoreMatch(me: Profile, other: DirectoryProfile): Match {
+export function scoreMatch(
+  me: Profile,
+  other: DirectoryProfile,
+  names: CommunityNames = new Map(),
+): Match {
   let points = 0;
   const reasons: { text: string; weight: number }[] = [];
   const add = (p: number, text?: string) => {
@@ -380,25 +456,48 @@ export function scoreMatch(me: Profile, other: DirectoryProfile): Match {
     add(7, `Both like ${joinWords(sharedInt.map((x) => x.toLowerCase()))}`);
   else if (sharedInt.length === 1) add(4, `Both like ${sharedInt[0].toLowerCase()}`);
 
+  // Looking at the same apartment community is the strongest sign of a shared plan.
+  const sharedCommunities = me.building_ids.filter((b) => other.building_ids.includes(b));
+  if (sharedCommunities.length > 0) {
+    const first = names.get(sharedCommunities[0]);
+    add(
+      15,
+      first
+        ? `Also looking at ${first}${sharedCommunities.length > 1 ? ` and ${sharedCommunities.length - 1} more` : ""}`
+        : "Looking at the same community",
+    );
+  }
+
   const MAX = 20 + 15 + 10 + 10 + 5 + 5 + 5 + 10 + 10 + 10; // 100
-  let score = Math.round((points / MAX) * 100);
+  let score = Math.min(100, Math.round((points / MAX) * 100));
   if (smokingClash) score = Math.min(score, 40);
 
   reasons.sort((a, b) => b.weight - a.weight);
   const top = reasons.slice(0, 3).map((r) => r.text);
+  // Looking at the same community always shows, even if three other reasons score higher.
+  const community = reasons.find(
+    (r) => r.text.startsWith("Also looking") || r.text.startsWith("Looking at"),
+  );
+  if (community && !top.includes(community.text)) top[top.length - 1] = community.text;
   if (smokingClash) top.push("Different smoking habits");
-  return { profile: other, score, reasons: top };
+  return { profile: other, score, reasons: top, sharedCommunities };
 }
 
-/** Same city only, best first. */
+/**
+ * Same city only, best first. People who want a different kind of room are left out here too
+ * (the database already does this; this keeps the rule true wherever the list comes from).
+ */
 export function rankMatches(
   me: Profile,
   others: DirectoryProfile[],
   limit = 20,
+  names: CommunityNames = new Map(),
 ): Match[] {
   return others
-    .filter((o) => o.city === me.city)
-    .map((o) => scoreMatch(me, o))
+    .filter(
+      (o) => o.city === me.city && me.room_types.some((r) => o.room_types.includes(r)),
+    )
+    .map((o) => scoreMatch(me, o, names))
     .sort(
       (a, b) => b.score - a.score || a.profile.nickname.localeCompare(b.profile.nickname),
     )

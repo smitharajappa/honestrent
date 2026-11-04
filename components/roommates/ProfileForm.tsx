@@ -1,14 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { saveRoommateProfile, type MyProfile } from "@/app/actions/roommates";
+import {
+  saveRoommateProfile,
+  type CommunityOption,
+  type MyProfile,
+} from "@/app/actions/roommates";
 import {
   CITIES,
   CLEAN,
+  GENDER_PREFS,
+  GENDERS,
   GUESTS,
   INTERESTS,
+  MAX_COMMUNITIES,
   LANGUAGES,
   PETS,
+  ROOM_TYPES,
   SLEEP,
   SMOKING,
   STUDY,
@@ -30,6 +38,10 @@ type Draft = {
   smoking: string;
   pets: string;
   study: string;
+  room_types: string[];
+  gender: string;
+  gender_pref: string;
+  building_ids: string[];
   about: string;
   visible: boolean;
 };
@@ -47,6 +59,10 @@ const EMPTY: Draft = {
   smoking: "",
   pets: "",
   study: "",
+  room_types: ["private"],
+  gender: "prefer_not",
+  gender_pref: "any",
+  building_ids: [],
   about: "",
   visible: true,
 };
@@ -132,14 +148,100 @@ function Choice({
   );
 }
 
+/** Pick up to 3 apartment communities you are looking at, from the city you chose. */
+function CommunityPicker({
+  options,
+  city,
+  value,
+  onChange,
+}: {
+  options: CommunityOption[];
+  city: string;
+  value: string[];
+  onChange: (v: string[]) => void;
+}) {
+  const [query, setQuery] = useState("");
+  const q = query.trim().toLowerCase();
+  const chosen = value
+    .map((id) => options.find((o) => o.id === id))
+    .filter((o): o is CommunityOption => Boolean(o));
+  const shown = options
+    .filter((o) => !value.includes(o.id))
+    .filter((o) => (city ? o.city === city : true))
+    .filter((o) => (q ? o.name.toLowerCase().includes(q) : true))
+    .slice(0, 8);
+  const full = value.length >= MAX_COMMUNITIES;
+  return (
+    <div>
+      <p className="text-sm font-medium">
+        Apartment communities you&apos;re looking at (up to {MAX_COMMUNITIES}, optional)
+      </p>
+      <p className="mt-1 text-xs text-text-muted">
+        Matches who pick the same community rank higher, so you can tour and apply
+        together. Only shown to people in your city.
+      </p>
+      {chosen.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-2">
+          {chosen.map((o) => (
+            <button
+              key={o.id}
+              type="button"
+              aria-label={`Remove ${o.name}`}
+              onClick={() => onChange(value.filter((x) => x !== o.id))}
+              className="min-h-11 rounded-full border border-brand bg-brand px-3.5 text-sm font-medium text-brand-fg"
+            >
+              {o.name} ×
+            </button>
+          ))}
+        </div>
+      )}
+      {!full && (
+        <>
+          <label className="sr-only" htmlFor="community-search">
+            Search apartment communities
+          </label>
+          <input
+            id="community-search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={city ? `Search in ${city}` : "Search by name"}
+            autoComplete="off"
+            className={inputClass}
+          />
+          <div className="mt-2 flex flex-wrap gap-2">
+            {shown.map((o) => (
+              <button
+                key={o.id}
+                type="button"
+                onClick={() => {
+                  onChange([...value, o.id]);
+                  setQuery("");
+                }}
+                className="min-h-11 rounded-full border border-border-strong bg-surface px-3.5 text-sm font-medium text-text"
+              >
+                {o.name}
+              </button>
+            ))}
+            {shown.length === 0 && (
+              <p className="text-sm text-text-muted">No communities match.</p>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 /** Create or change your roommate profile: habits, languages and interests. Nothing else. */
 export function ProfileForm({
   existing,
   token,
+  communities,
   onSaved,
 }: {
   existing: MyProfile | null;
   token: string | null;
+  communities: CommunityOption[];
   onSaved: () => void;
 }) {
   const [d, setD] = useState<Draft>(toDraft(existing));
@@ -224,6 +326,54 @@ export function ProfileForm({
             )}
           </label>
         </div>
+      </Card>
+
+      <Card className="space-y-4 p-5">
+        <h2 className="text-lg font-bold">What you&apos;re looking for</h2>
+        <div>
+          <p className="text-sm font-medium">
+            Kind of room you&apos;d take (pick one or both)
+          </p>
+          <Chips
+            options={Object.values(ROOM_TYPES)}
+            value={d.room_types.map((k) => ROOM_TYPES[k as keyof typeof ROOM_TYPES])}
+            onChange={(labels) =>
+              set(
+                "room_types",
+                (Object.keys(ROOM_TYPES) as (keyof typeof ROOM_TYPES)[]).filter((k) =>
+                  labels.includes(ROOM_TYPES[k]),
+                ),
+              )
+            }
+            max={2}
+          />
+          {errors.room_types && (
+            <p className="mt-1 text-sm text-danger-text">{errors.room_types}</p>
+          )}
+        </div>
+        <CommunityPicker
+          options={communities}
+          city={d.city}
+          value={d.building_ids}
+          onChange={(v) => set("building_ids", v)}
+        />
+        <Choice
+          legend="I am"
+          options={GENDERS}
+          value={d.gender}
+          onChange={(v) => set("gender", v)}
+        />
+        <Choice
+          legend="I'd share with"
+          options={GENDER_PREFS}
+          value={d.gender_pref}
+          onChange={(v) => set("gender_pref", v)}
+          error={errors.gender_pref}
+        />
+        <p className="text-xs text-text-muted">
+          This only decides who can be matched with you, for sharing a home or a room.
+          Other renters never see your gender.
+        </p>
       </Card>
 
       <Card className="space-y-4 p-5">
@@ -332,9 +482,10 @@ export function ProfileForm({
       </Card>
 
       <p className="text-sm text-text-muted">
-        We match on habits, budget, move-in date, languages and interests only. We
-        don&apos;t ask about, store or filter by race, ethnicity, religion, nationality,
-        sex, family status or disability.
+        We match on room type, habits, budget, move-in date, languages, interests and the
+        communities you pick. The only personal detail we use is the gender preference
+        above, and only to decide who can share with you. We don&apos;t ask about, store
+        or filter by race, ethnicity, religion, nationality, family status or disability.
       </p>
       {errors.form && (
         <p role="alert" className="text-sm text-danger-text">

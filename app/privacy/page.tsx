@@ -64,14 +64,17 @@ export default function PrivacyPage() {
           </li>
           <li>
             <strong className="text-text">A roommate profile (optional):</strong> the
-            nickname, city, budget, move-in date, languages, interests, habits and short
-            note you choose. Other signed-in renters in your city can see those, never
-            your email or account. You can hide or remove it any time. If you ask someone
-            for an introduction and they accept, your chat messages are stored so you both
-            can read them, Our team can technically see stored messages, and only looks at
-            chats that are reported. We never ask about race, ethnicity, religion,
-            nationality, sex, family status or disability, and we never keep a copy of an
-            ID.
+            nickname, city, budget, move-in date, languages, interests, habits, the kind
+            of room you want, up to 3 apartment communities you are looking at, and a
+            short note you choose. Other signed-in renters in your city can see those,
+            never your email or account. You can hide or remove it any time. If you ask
+            someone for an introduction and they accept, your chat messages are stored so
+            you both can read them, Our team can technically see stored messages, and only
+            looks at chats that are reported. You can also say your gender and whether you
+            would share only with people of your own gender. We use that only to decide
+            who can be matched with you, and it is never shown to other renters. We never
+            ask about race, ethnicity, religion, nationality, family status or disability,
+            and we never keep a copy of an ID.
           </li>
           <li>
             <strong className="text-text">Passes:</strong> the type and dates of any pass

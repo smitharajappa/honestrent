@@ -81,7 +81,9 @@ export function ProfileMenu() {
   }, []);
 
   // Close when the page changes.
-  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;

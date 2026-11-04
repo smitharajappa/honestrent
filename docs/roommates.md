@@ -4,10 +4,17 @@
 
 1. Sign in (required, free; no password).
 2. Create a profile: nickname, city, budget, move-in date, languages, interests, sleep,
-   cleaning, guests, smoking, pets, study habits and a short note.
+   cleaning, guests, smoking, pets, study habits, a short note, the kind of room they want
+   (**private room in a shared home**, **share a room with one more person**, or both), up to 3
+   apartment communities they are looking at, and optionally their gender with a sharing
+   preference (**anyone**, or **only people of my own gender**).
 3. See people in the same city, best fit first, with reasons ("Both night owls", "Budgets
    within $10"). Seeing matches and asking for an introduction is a Honest Rent Plus feature (free for
    signed-in renters during demo mode).
+   Matches only include people who want a kind of room in common and whose sharing preference is
+   met in both directions. Picking the same community adds to the score ("Also looking at Camden
+   Legacy Park"). A building page says "N renters are looking for a roommate here" only when at
+   least 3 real people picked it (sample profiles are never counted).
 4. Ask for an introduction. The other person accepts or declines. **Chat opens only after both
    accept.**
 5. Chat about renting a place together. Report or block anyone from inside the chat.
@@ -24,8 +31,12 @@
 
 ## What we deliberately do not have
 
-- No field, filter or ranking for race, ethnicity, religion, nationality, sex, family status or
-  disability. Matching uses habits, budget, move-in date, languages and interests only. Free text
+- No field, filter or ranking for race, ethnicity, religion, nationality, family status or
+  disability. Matching uses habits, budget, move-in date, languages, interests, room type, the
+  communities picked and the gender sharing preference.
+- Gender is used only to apply a sharing preference. It is never shown to other renters: the
+  directory view leaves out people whose preference doesn't fit, in either direction. This is a
+  sensitive area (fair housing). Have a housing lawyer review it before real launch. Free text
   that rules people out by who they are is rejected. If you ever want a "background" field, get
   fair housing advice first.
 - No ID scan is ever stored.
@@ -45,8 +56,9 @@ Later an ID-check vendor (a new service: ask first) would set it and send back o
 ## Sample profiles
 
 `supabase/seed-roommates-demo.sql` adds 8 made-up people in Richardson, Plano and Dallas, labelled
-"Sample profile", some with the verified tag. Introductions to them are refused with a clear
-message. The "Load data into Supabase" workflow loads them.
+"Sample profile", some with the verified tag. A sample profile accepts an introduction at once so
+the chat can be tried; nobody replies. The Matches tab also has three made-up examples (90%, 50%
+and 0%) that explain how a percentage works. The "Load data into Supabase" workflow loads them.
 
 ## Reports
 
