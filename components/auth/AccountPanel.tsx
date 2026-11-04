@@ -7,7 +7,9 @@ import { Button, ButtonLink } from "../ui/Button";
 import { Card } from "../ui/Card";
 import { CheckIcon } from "../ui/icons";
 import { useAuth } from "./AuthContext";
+import { displayName } from "@/lib/profile";
 import { PassStatus } from "../plus/PassStatus";
+import { Avatar } from "../ui/Avatar";
 import { usePlusStatus } from "./usePlusStatus";
 
 // The two things we keep in this browser. Cleared on request when an account is deleted.
@@ -94,31 +96,19 @@ export function AccountPanel() {
   return (
     <div className="space-y-6">
       <Card className="p-5">
-        <h2 className="font-bold">Details</h2>
-        <dl className="mt-3 space-y-2 text-sm">
-          <div className="flex justify-between gap-3">
-            <dt className="text-text-muted">Email</dt>
-            <dd className="font-medium break-all">{user.email}</dd>
+        <div className="flex items-center gap-4">
+          <Avatar user={user} className="size-16 !text-2xl" />
+          <div className="min-w-0">
+            <h2 className="truncate text-lg font-bold">{displayName(user)}</h2>
+            <p className="truncate text-sm text-text-muted">{user.email}</p>
           </div>
-          <div id="pass" className="flex justify-between gap-3 scroll-mt-24">
-            <dt className="text-text-muted">Honest Rent Plus</dt>
-            <dd className="text-right font-medium">
-              {!status || !status.signedIn ? (
-                "Checking…"
-              ) : (
-                <PassStatus pass={status.pass} demoOpen={status.demoOpen} />
-              )}
-            </dd>
-          </div>
-        </dl>
+        </div>
         <div className="mt-4 flex flex-wrap gap-2">
           <Button type="button" variant="secondary" onClick={signOut}>
             Sign out
           </Button>
-          <ButtonLink href="/plus" variant="ghost">
-            {status?.signedIn && status.pass
-              ? "Buy another pass"
-              : "See Honest Rent Plus"}
+          <ButtonLink href="/roommates" variant="ghost">
+            My roommate profile
           </ButtonLink>
         </div>
         <p className="mt-4 text-xs text-text-muted">
@@ -132,6 +122,44 @@ export function AccountPanel() {
           .
         </p>
       </Card>
+
+      <section
+        id="pass"
+        aria-labelledby="pass-heading"
+        className={`scroll-mt-24 overflow-hidden rounded-2xl border shadow-card ${
+          status?.signedIn && status.pass ? "border-brand" : "border-border bg-surface"
+        }`}
+      >
+        <div
+          className={`flex items-center justify-between gap-3 px-5 py-3 ${
+            status?.signedIn && status.pass
+              ? "bg-gradient-to-br from-brand to-brand-hover text-brand-fg"
+              : "bg-surface-muted"
+          }`}
+        >
+          <h2 id="pass-heading" className="font-extrabold tracking-tight">
+            Honest Rent Plus
+          </h2>
+          {status?.signedIn && status.pass && (
+            <span className="text-sm font-semibold tabular-nums">
+              {status.pass.daysLeft} {status.pass.daysLeft === 1 ? "day" : "days"} left
+            </span>
+          )}
+        </div>
+        <div className="space-y-3 border-t border-dashed border-border-strong bg-surface p-5">
+          {!status || !status.signedIn ? (
+            <p className="text-sm text-text-muted">Checking…</p>
+          ) : (
+            <PassStatus pass={status.pass} demoOpen={status.demoOpen} hideLink />
+          )}
+          <ButtonLink
+            href="/plus"
+            variant={status?.signedIn && status.pass ? "secondary" : "primary"}
+          >
+            {status?.signedIn && status.pass ? "Buy another pass" : "See passes"}
+          </ButtonLink>
+        </div>
+      </section>
 
       <Card className="border-danger-text/40 p-5">
         <h2 className="font-bold">Delete my account</h2>

@@ -1,14 +1,9 @@
 "use client";
 
-import {
-  animate,
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useTransform,
-} from "motion/react";
-import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import { useState } from "react";
 import { formatUsd } from "@/lib/format";
+import { CountUp } from "../motion/CountUp";
 import { LogoMark } from "../ui/Logo";
 import { Badge } from "../ui/Badge";
 
@@ -21,23 +16,6 @@ const ROWS = [
 ] as const;
 const REAL = AD + ROWS.reduce((sum, r) => sum + r.amount, 0);
 const GAP = REAL - AD;
-
-/** A number that counts up once it is told to start. Still when motion is reduced. */
-function CountUp({ from, to, go }: { from: number; to: number; go: boolean }) {
-  const reduce = useReducedMotion();
-  const value = useMotionValue(reduce ? to : from);
-  const text = useTransform(value, (v) => formatUsd(Math.round(v)));
-  useEffect(() => {
-    if (reduce) {
-      value.set(to);
-      return;
-    }
-    if (!go) return;
-    const controls = animate(value, to, { duration: 0.9, ease: [0.2, 0.8, 0.2, 1] });
-    return () => controls.stop();
-  }, [go, reduce, to, value]);
-  return <motion.span>{text}</motion.span>;
-}
 
 /**
  * The home page's one big idea in a card: the advertised rent, then each thing the ad leaves

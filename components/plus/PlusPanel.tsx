@@ -58,7 +58,12 @@ export function PlusPanel() {
           <p>
             Signed in as <strong>{status.email}</strong>.
           </p>
-          <PassStatus pass={status.pass} demoOpen={Boolean(demoOpen)} className="mt-2" />
+          <PassStatus
+            pass={status.pass}
+            demoOpen={Boolean(demoOpen)}
+            hideLink
+            className="mt-2"
+          />
         </div>
       )}
 
@@ -77,40 +82,53 @@ export function PlusPanel() {
                 className="peer sr-only"
               />
               <Card
-                className={`h-full p-4 transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[var(--ring)] ${
-                  on ? "border-brand bg-brand-soft" : ""
+                className={`h-full overflow-hidden transition-[border-color,box-shadow,transform] duration-200 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[var(--ring)] motion-safe:hover:-translate-y-0.5 ${
+                  on ? "border-brand shadow-raised" : ""
                 }`}
               >
-                <div className="flex items-center justify-between gap-2">
-                  <p className="text-lg font-bold">{p.name}</p>
+                <div
+                  className={`flex items-center justify-between gap-2 px-4 py-2.5 ${
+                    on
+                      ? "bg-gradient-to-br from-brand to-brand-hover text-brand-fg"
+                      : "bg-surface-muted"
+                  }`}
+                >
+                  <p className="text-lg font-extrabold tracking-tight">{p.name}</p>
+                  <p className="text-sm font-semibold tabular-nums">{p.days} days</p>
+                </div>
+                <div className="p-4">
                   {p.badge && (
-                    <Badge tone={p.badge === "Best value" ? "success" : "accent"}>
+                    <Badge
+                      tone={p.badge === "Best value" ? "success" : "accent"}
+                      className="mb-2"
+                    >
                       {p.badge}
                     </Badge>
                   )}
-                </div>
-                <p className="mt-0.5 text-sm text-text-muted">{p.days} days</p>
-                <p className="mt-3 text-3xl font-extrabold tracking-tight tabular-nums">
-                  {dollars(p.cents)}
-                </p>
-                <p className="text-xs text-text-muted tabular-nums">
-                  {dollars(perDayCents(p))} a day
-                  {savingVsWeekly(p) > 0 && ` · save ${savingVsWeekly(p)}%`}
-                </p>
-                <p className="mt-2 text-sm text-text-muted">{p.blurb}</p>
-                <p
-                  className={`mt-2 flex items-center gap-1.5 text-xs ${includesRoommates(p.id) ? "font-semibold text-text" : "text-text-muted"}`}
-                >
-                  <UsersIcon className="size-3.5" />
-                  {includesRoommates(p.id)
-                    ? "Includes roommate matches"
-                    : "No roommate matches"}
-                </p>
-                {on && (
-                  <p className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-brand-text">
-                    <CheckIcon className="size-4" /> Your pick
+                  <p className="text-4xl font-extrabold tracking-tight tabular-nums">
+                    {dollars(p.cents)}
                   </p>
-                )}
+                  <p className="text-xs text-text-muted tabular-nums">
+                    {dollars(perDayCents(p))} a day
+                    {savingVsWeekly(p) > 0 && ` · save ${savingVsWeekly(p)}%`}
+                  </p>
+                  <p className="mt-3 text-sm text-text-muted">{p.blurb}</p>
+                  <div className="mt-3 border-t border-dashed border-border-strong pt-3">
+                    <p
+                      className={`flex items-center gap-1.5 text-xs ${includesRoommates(p.id) ? "font-semibold text-text" : "text-text-muted"}`}
+                    >
+                      <UsersIcon className="size-3.5" />
+                      {includesRoommates(p.id)
+                        ? "Includes roommate matches"
+                        : "No roommate matches"}
+                    </p>
+                    {on && (
+                      <p className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-brand-text">
+                        <CheckIcon className="size-4" /> Your pick
+                      </p>
+                    )}
+                  </div>
+                </div>
               </Card>
             </label>
           );

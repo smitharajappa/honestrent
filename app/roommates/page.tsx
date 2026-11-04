@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { RoommatesPanel } from "@/components/roommates/RoommatesPanel";
 
 export const metadata: Metadata = {
@@ -9,15 +10,16 @@ export const metadata: Metadata = {
 
 export default function RoommatesPage() {
   return (
-    <main className="page-container py-10">
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Find a roommate</h1>
-      <p className="mt-2 max-w-2xl text-lg text-text-muted">
+    <main>
+      <PageHeader eyebrow="Roommates" title="Find a roommate">
         People in your city whose habits fit yours. You choose who to ask, and chat opens
-        only after you both accept. We match on habits, budget, move-in date, languages
-        and interests.
-      </p>
-      <div className="mt-8 max-w-4xl">
-        <RoommatesPanel />
+        only after you both accept. We match on habits, budget, move-in date, room type,
+        languages and interests.
+      </PageHeader>
+      <div className="page-container py-8">
+        <div className="max-w-4xl">
+          <RoommatesPanel />
+        </div>
       </div>
     </main>
   );
