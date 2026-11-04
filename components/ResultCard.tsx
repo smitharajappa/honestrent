@@ -50,6 +50,35 @@ export function UtilitiesLine({ utilities }: { utilities: UtilityView }) {
   );
 }
 
+/** The biggest required monthly fees as small chips that pop in one after another. */
+function FeeChips({
+  fees,
+}: {
+  fees: { id: string; name: string; monthly_usd: number }[];
+}) {
+  const shown = [...fees]
+    .filter((f) => f.monthly_usd > 0)
+    .sort((a, b) => b.monthly_usd - a.monthly_usd)
+    .slice(0, 3);
+  if (shown.length === 0) return null;
+  return (
+    <ul
+      aria-label="Biggest required monthly fees"
+      className="mt-2 flex flex-wrap gap-1.5"
+    >
+      {shown.map((f, i) => (
+        <li
+          key={f.id}
+          style={{ animationDelay: `${300 + i * 90}ms` }}
+          className="animate-chip-pop rounded-full bg-warning-soft px-2.5 py-0.5 text-xs font-semibold text-warning-text tabular-nums"
+        >
+          {f.name.length > 24 ? "Monthly fees" : f.name} +{formatUsd(f.monthly_usd)}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 /**
  * One building in the results grid. The whole card opens the building page;
  * the save and compare controls sit above that link.
@@ -85,28 +114,41 @@ export function ResultCard({
       index={index}
       className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-card transition-[transform,box-shadow,border-color] duration-200 ease-out-soft hover:-translate-y-0.5 hover:border-border-strong hover:shadow-raised"
     >
-      <div className="relative h-32 overflow-hidden">
+      <div className="relative h-40 overflow-hidden">
         <BuildingCover
           id={building.id}
           name={building.name}
-          className="transition-transform duration-300 group-hover:scale-[1.03]"
+          className="transition-transform duration-500 ease-out-soft group-hover:scale-[1.05]"
+        />
+        {/* A soft fade at the bottom so the labels on the cover always read clearly. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-text/20 to-transparent"
         />
         <div className="absolute top-3 left-3 flex gap-1.5">
-          {rank === 1 && <Badge tone="success">Lowest total</Badge>}
-          <Badge className="bg-surface text-text">{building.city}</Badge>
+          {rank === 1 && (
+            <Badge tone="success" icon={<CheckIcon className="size-3.5" />}>
+              Lowest total
+            </Badge>
+          )}
+          <Badge className="bg-surface text-text shadow-card">{building.city}</Badge>
         </div>
-        {deal && (
-          <Badge
-            tone="accent"
-            icon={<TagIcon className="size-3.5" />}
-            className="absolute bottom-3 left-3 max-w-[70%]"
-          >
-            <span className="truncate">Deal: {deal.description}</span>
-          </Badge>
-        )}
-        <p className="absolute right-3 bottom-2.5 text-[11px] font-medium text-text-muted">
-          Photos coming soon
-        </p>
+        <div className="absolute inset-x-3 bottom-2.5 flex items-end justify-between gap-2">
+          {deal ? (
+            <Badge
+              tone="accent"
+              icon={<TagIcon className="size-3.5" />}
+              className="max-w-[68%] shadow-card"
+            >
+              <span className="truncate">Deal: {deal.description}</span>
+            </Badge>
+          ) : (
+            <span />
+          )}
+          <span className="shrink-0 rounded-full bg-surface/85 px-2 py-0.5 text-[11px] font-medium text-text-muted">
+            Illustrative cover
+          </span>
+        </div>
         <SaveButton
           buildingId={building.id}
           buildingName={building.name}
@@ -134,7 +176,7 @@ export function ResultCard({
             </p>
           </div>
           <div className="shrink-0 text-right">
-            <p className="text-2xl leading-none font-bold tracking-tight tabular-nums sm:text-3xl">
+            <p className="text-3xl leading-none font-extrabold tracking-tight tabular-nums">
               {isEstimate ? "~" : ""}
               {formatUsd(shared ? perPerson : estimatedTotal)}
             </p>
@@ -145,6 +187,11 @@ export function ResultCard({
                   ? "est. total / mo"
                   : "real cost / mo"}
             </p>
+            {!shared && difference !== 0 && (
+              <p className="mt-0.5 text-xs text-text-muted tabular-nums">
+                ad: <span className="line-through">{formatUsd(cost.advertisedRent)}</span>
+              </p>
+            )}
             {shared && (
               <p className="text-xs text-text-muted tabular-nums">
                 {formatUsd(estimatedTotal)} total
@@ -170,6 +217,7 @@ export function ResultCard({
         </div>
 
         <CostBar cost={cost} utilities={utilities} />
+        <FeeChips fees={building.building_fees} />
         <p className="mt-1.5 text-xs text-text-muted">
           <UtilitiesLine utilities={utilities} />
         </p>

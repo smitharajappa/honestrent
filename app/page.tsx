@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { ResultsExplorer } from "@/components/explore/ResultsExplorer";
 import { HeroArt } from "@/components/HeroArt";
+import { CollapsibleSearch } from "@/components/explore/CollapsibleSearch";
 import { CostReveal } from "@/components/home/CostReveal";
 import { HomeSections } from "@/components/home/HowItWorks";
 import { ResultsSkeleton } from "@/components/ResultsSkeleton";
@@ -111,13 +112,29 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
           aria-label="Search apartments"
           className="scroll-mt-24 p-5 shadow-raised sm:p-6 lg:p-8"
         >
-          <SearchForm
-            area={rawArea}
-            budget={rawBudget}
-            moveIn={rawMoveIn}
-            today={today}
-            errors={formErrors}
-          />
+          {showingResults && validation?.ok ? (
+            <CollapsibleSearch
+              area={rawArea?.trim() || null}
+              budget={validation.value.budget}
+              moveIn={validation.value.moveIn}
+            >
+              <SearchForm
+                area={rawArea}
+                budget={rawBudget}
+                moveIn={rawMoveIn}
+                today={today}
+                errors={formErrors}
+              />
+            </CollapsibleSearch>
+          ) : (
+            <SearchForm
+              area={rawArea}
+              budget={rawBudget}
+              moveIn={rawMoveIn}
+              today={today}
+              errors={formErrors}
+            />
+          )}
         </Card>
 
         {showingResults && validation?.ok ? (
