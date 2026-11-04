@@ -44,7 +44,7 @@ CORE USER STORY:
 
 FEATURES
 
-  Built and live (swelt.vercel.app):
+  Built and live (honestrent.vercel.app):
   F1. Search by real monthly cost (rent + required fees - deals spread over the
       lease), with advertised rent beside it and the last-verified date.
   F2. Approval fit: income range, credit band and ID type give Good fit,

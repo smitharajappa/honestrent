@@ -3,7 +3,7 @@
 The code, pages, docs and scripts now say **Honest Rent**. These places also carry the old name
 and only you can change them. Do them in this order, and read the warning on the first one.
 
-1. **Keep the live address for now (`swelt.vercel.app`).** Sign-in links, Supabase's allowed
+1. **Done: the live address is now `honestrent.vercel.app` (`swelt.vercel.app` still works).** Sign-in links, Supabase's allowed
    addresses and the Google sign-in setup all point at that address. Rename the Vercel project
    or add a new domain only when you are ready to repeat `docs/sign-in-setup.md` (Site URL and
    Redirect URLs in Supabase, then `npm run check:auth`). Until then people simply see the new
