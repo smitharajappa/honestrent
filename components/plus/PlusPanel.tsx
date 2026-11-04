@@ -4,14 +4,23 @@ import Link from "next/link";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { joinPlusWaitlist, type WaitlistState } from "@/app/actions/plus";
 import { getBrowserSupabase } from "@/lib/supabase-browser";
-import { dollars, PASSES, perDayCents, savingVsWeekly, type PassId } from "@/lib/plus";
+import {
+  dollars,
+  includesRoommates,
+  PASSES,
+  passById,
+  perDayCents,
+  savingVsWeekly,
+  type PassId,
+} from "@/lib/plus";
 import { useAuth } from "../auth/AuthContext";
 import { usePlusStatus } from "../auth/usePlusStatus";
 import { Badge } from "../ui/Badge";
-import { Button } from "../ui/Button";
+import { Button, ButtonLink } from "../ui/Button";
 import { Card } from "../ui/Card";
 import { Field } from "../ui/Field";
-import { CheckIcon } from "../ui/icons";
+import { CheckIcon, UsersIcon } from "../ui/icons";
+import { PassStatus } from "./PassStatus";
 
 const initial: WaitlistState = { status: "idle" };
 
@@ -45,14 +54,12 @@ export function PlusPanel() {
   return (
     <div>
       {status?.signedIn && (
-        <p role="status" className="mb-6 rounded-xl bg-surface-muted p-4 text-sm">
-          Signed in as <strong>{status.email}</strong>.{" "}
-          {status.plusUntil
-            ? `Your pass runs until ${new Date(status.plusUntil).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}.`
-            : demoOpen
-              ? "Honest Rent Plus features are free for you during the demo."
-              : "You don't have a pass yet."}
-        </p>
+        <div role="status" className="mb-6 rounded-xl bg-surface-muted p-4 text-sm">
+          <p>
+            Signed in as <strong>{status.email}</strong>.
+          </p>
+          <PassStatus pass={status.pass} demoOpen={Boolean(demoOpen)} className="mt-2" />
+        </div>
       )}
 
       <fieldset className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -91,6 +98,14 @@ export function PlusPanel() {
                   {savingVsWeekly(p) > 0 && ` · save ${savingVsWeekly(p)}%`}
                 </p>
                 <p className="mt-2 text-sm text-text-muted">{p.blurb}</p>
+                <p
+                  className={`mt-2 flex items-center gap-1.5 text-xs ${includesRoommates(p.id) ? "font-semibold text-text" : "text-text-muted"}`}
+                >
+                  <UsersIcon className="size-3.5" />
+                  {includesRoommates(p.id)
+                    ? "Includes roommate matches"
+                    : "No roommate matches"}
+                </p>
                 {on && (
                   <p className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-brand-text">
                     <CheckIcon className="size-4" /> Your pick
@@ -101,9 +116,17 @@ export function PlusPanel() {
           );
         })}
       </fieldset>
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <ButtonLink href={`/plus/checkout?pass=${choice}`} size="lg">
+          Try the demo checkout for {passById(choice).name}
+        </ButtonLink>
+        <p className="text-sm text-text-muted">
+          A demo: no card, nothing charged. It adds the pass to your account.
+        </p>
+      </div>
       <p className="mt-3 text-sm text-text-muted">
-        Pay once. No auto-renew. Prices are planned and may change. Nothing is charged
-        yet.
+        Pay once. No auto-renew. Prices are planned and may change. Real payments are not
+        switched on yet.
       </p>
 
       <Card className="mt-6 p-5">

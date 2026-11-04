@@ -181,8 +181,43 @@ export function checkAbout(text: string): TextCheck {
 const OFF_LIMITS =
   /\b(sex|sexy|nude|nudes|dating|hook ?up|girlfriend|boyfriend|date me|go on a date|ask you out|are you single|romantic|romance|flirt|kill|stupid|idiot|fuck|shit|bitch|asshole)\w*\b/i;
 
-/** Checks one chat message. Chats are about renting a place together, nothing else. */
-export function checkMessage(text: string): TextCheck {
+// Chat apps people use to take a conversation away from Honest Rent.
+const OFF_PLATFORM = /\b(whatsapp|telegram|wechat|snapchat|instagram)\b/i;
+
+// Wording that shows up again and again in rental scams.
+const SCAM_PHRASES =
+  /\b(cashier'?s check|money order|advance payment|pay (me )?(first|upfront|in advance)|holding fee|reservation fee|i('| a)?m (currently )?(abroad|overseas|out of the (country|state|us|usa)))\b|\b(send|pay|wire|transfer)\b.{0,30}\b(deposit|rent|money|fee|payment)\b.{0,30}\b(first|before|now|today|upfront|in advance)\b/i;
+
+/**
+ * The text with look-alike digits and symbols turned back into letters and everything else
+ * removed, so "z e l l e", "d0t com" and "w.h.a.t.s.a.p.p" are caught too. Mirrors the
+ * database check. Not used for "we chat": that is checked on the plain words only.
+ */
+export function squash(text: string): string {
+  const map: Record<string, string> = {
+    "0": "o",
+    "1": "l",
+    "3": "e",
+    "4": "a",
+    "5": "s",
+    "7": "t",
+    "8": "b",
+    "@": "a",
+    $: "s",
+  };
+  return text
+    .toLowerCase()
+    .replace(/[0134578@$]/g, (c) => map[c] ?? c)
+    .replace(/[^a-z0-9]/g, "");
+}
+const SQUASHED_BAD =
+  /(zelle|venmo|cashapp|paypal|westernunion|moneygram|wiretransfer|giftcard|bitcoin|whatsapp|telegram|snapchat|instagram|signalapp|dotcom|dotnet|dotorg|atgmail|atyahoo|atoutlook)/;
+
+/**
+ * Checks one chat message. Chats are about renting a place together, nothing else.
+ * `recent` is what this person sent last, so the same message can't be pasted again and again.
+ */
+export function checkMessage(text: string, recent: string[] = []): TextCheck {
   const t = text.trim();
   if (t.length < 1) return { ok: false, reason: "Write a message first." };
   if (t.length > 500)
@@ -192,12 +227,21 @@ export function checkMessage(text: string): TextCheck {
     EMAIL_LIKE.test(t) ||
     PHONE_LIKE.test(t) ||
     HANDLE_LIKE.test(t) ||
-    MONEY_APPS.test(t)
+    MONEY_APPS.test(t) ||
+    OFF_PLATFORM.test(t) ||
+    SQUASHED_BAD.test(squash(t))
   ) {
     return {
       ok: false,
       reason:
         "For your safety, don't share links, contact details or payment details here. Never send money before you have seen the place and a written lease.",
+    };
+  }
+  if (SCAM_PHRASES.test(t)) {
+    return {
+      ok: false,
+      reason:
+        "That wording is common in rental scams, so we can't send it. Never pay anyone before you've seen the place and a written lease.",
     };
   }
   if (EXCLUDES_PEOPLE.test(t) || ASKS_PROTECTED.test(t)) {
@@ -212,6 +256,10 @@ export function checkMessage(text: string): TextCheck {
       reason:
         "This chat is for renting a place together. Please keep it respectful and on topic.",
     };
+  }
+  const same = (a: string) => a.trim().toLowerCase().replace(/\s+/g, " ");
+  if (recent.slice(-3).some((r) => same(r) === same(t))) {
+    return { ok: false, reason: "You already sent that. Add something new." };
   }
   return { ok: true };
 }

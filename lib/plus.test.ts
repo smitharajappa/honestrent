@@ -1,11 +1,14 @@
 import { describe, expect, it } from "vitest";
 import {
   activeUntil,
+  currentPass,
   dollars,
+  includesRoommates,
   isPassId,
   nextPassWindow,
   PASSES,
   perDayCents,
+  roommatesUntil,
   savingVsWeekly,
 } from "./plus";
 
@@ -48,5 +51,55 @@ describe("pass windows", () => {
       "2026-12-04T00:00:00.000Z",
     );
     expect(nextPassWindow(null, 7, now).start).toEqual(now);
+  });
+});
+
+describe("what a pass includes", () => {
+  const now = new Date("2026-11-10T12:00:00Z");
+  const row = (pass: string, start: string, end: string) => ({
+    pass,
+    starts_at: start,
+    ends_at: end,
+  });
+  it("includes roommates from Tour up, not Browse", () => {
+    expect(includesRoommates("browse")).toBe(false);
+    expect(includesRoommates("tour")).toBe(true);
+    expect(includesRoommates("apply")).toBe(true);
+    expect(includesRoommates("move_in")).toBe(true);
+  });
+  it("finds the running pass and the days left", () => {
+    const c = currentPass(
+      [row("tour", "2026-11-05T00:00:00Z", "2026-11-19T00:00:00Z")],
+      now,
+    );
+    expect(c).toMatchObject({ id: "tour", name: "Tour", daysLeft: 9 });
+  });
+  it("ignores passes that ended or have not started, and unknown names", () => {
+    expect(
+      currentPass(
+        [
+          row("tour", "2026-10-01T00:00:00Z", "2026-10-15T00:00:00Z"),
+          row("apply", "2026-12-01T00:00:00Z", "2026-12-22T00:00:00Z"),
+          row("gold", "2026-11-01T00:00:00Z", "2026-12-01T00:00:00Z"),
+        ],
+        now,
+      ),
+    ).toBeNull();
+  });
+  it("picks the pass that ends last when two overlap", () => {
+    const c = currentPass(
+      [
+        row("browse", "2026-11-08T00:00:00Z", "2026-11-15T00:00:00Z"),
+        row("move_in", "2026-11-09T00:00:00Z", "2026-12-07T00:00:00Z"),
+      ],
+      now,
+    );
+    expect(c?.id).toBe("move_in");
+  });
+  it("gives roommate access only while a Tour or higher pass runs", () => {
+    const browse = [row("browse", "2026-11-08T00:00:00Z", "2026-11-15T00:00:00Z")];
+    expect(roommatesUntil(browse, now)).toBeNull();
+    const both = [...browse, row("tour", "2026-11-09T00:00:00Z", "2026-11-23T00:00:00Z")];
+    expect(roommatesUntil(both, now)?.toISOString()).toBe("2026-11-23T00:00:00.000Z");
   });
 });

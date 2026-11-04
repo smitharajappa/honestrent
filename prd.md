@@ -129,7 +129,7 @@ FEATURES
   R3.5 Saved places and buildings synced across devices (accounts).
 
   Round 4 (later):
-  R4.1 Roommate matching (part of a pass; creating a profile stays free). FIRST VERSION BUILT
+  R4.1 Roommate matching (Tour, Apply and Move-in passes; a profile, answering and chat stay free). FIRST VERSION BUILT
        (Nov 2026): signed-in renters make a
        profile (nickname, city, budget, move-in date, languages, interests, sleep, cleaning,
        guests, smoking, pets, study habits, room type, up to 3 apartment communities, optional

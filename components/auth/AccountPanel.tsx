@@ -7,6 +7,7 @@ import { Button, ButtonLink } from "../ui/Button";
 import { Card } from "../ui/Card";
 import { CheckIcon } from "../ui/icons";
 import { useAuth } from "./AuthContext";
+import { PassStatus } from "../plus/PassStatus";
 import { usePlusStatus } from "./usePlusStatus";
 
 // The two things we keep in this browser. Cleared on request when an account is deleted.
@@ -99,16 +100,14 @@ export function AccountPanel() {
             <dt className="text-text-muted">Email</dt>
             <dd className="font-medium break-all">{user.email}</dd>
           </div>
-          <div className="flex justify-between gap-3">
+          <div id="pass" className="flex justify-between gap-3 scroll-mt-24">
             <dt className="text-text-muted">Honest Rent Plus</dt>
             <dd className="text-right font-medium">
-              {!status || !status.signedIn
-                ? "Checking…"
-                : status.plusUntil
-                  ? `Pass until ${new Date(status.plusUntil).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`
-                  : status.demoOpen
-                    ? "Free during the demo"
-                    : "No pass"}
+              {!status || !status.signedIn ? (
+                "Checking…"
+              ) : (
+                <PassStatus pass={status.pass} demoOpen={status.demoOpen} />
+              )}
             </dd>
           </div>
         </dl>
@@ -117,7 +116,9 @@ export function AccountPanel() {
             Sign out
           </Button>
           <ButtonLink href="/plus" variant="ghost">
-            See Honest Rent Plus
+            {status?.signedIn && status.pass
+              ? "Buy another pass"
+              : "See Honest Rent Plus"}
           </ButtonLink>
         </div>
         <p className="mt-4 text-xs text-text-muted">

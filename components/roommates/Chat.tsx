@@ -66,7 +66,10 @@ export function Chat({
   }, [messages.length]);
 
   async function send(body: string) {
-    const check = checkMessage(body);
+    const check = checkMessage(
+      body,
+      messages.filter((m) => m.sender === myId).map((m) => m.body),
+    );
     if (!check.ok) return setProblem(check.reason);
     const sb = getBrowserSupabase();
     if (!sb) return;
