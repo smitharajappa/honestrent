@@ -5,7 +5,7 @@ import { Card } from "../ui/Card";
 import { PlusCircleIcon, TagIcon } from "../ui/icons";
 
 /**
- * The reason Swelt exists, at the top of every building page: the ad price, what gets
+ * The reason Honest Rent exists, at the top of every building page: the ad price, what gets
  * added, and the total. Every part has words and an icon, never color alone.
  */
 export function HiddenCostBanner({

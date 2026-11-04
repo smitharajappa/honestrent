@@ -1,6 +1,6 @@
 # Design review: October 2026
 
-Swelt's screens were reviewed against two guides:
+Honest Rent's screens were reviewed against two guides:
 
 - **Nielsen's 10 Usability Heuristics** (NN/g)
 - **Design Foundations for AI Builders** (Jenny Le, Oct 2026)

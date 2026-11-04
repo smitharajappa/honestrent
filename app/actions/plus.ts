@@ -45,7 +45,7 @@ export async function joinPlusWaitlist(
 ): Promise<WaitlistState> {
   const raw = Object.fromEntries(formData);
   // Hidden field that only bots fill in: pretend it worked.
-  if (typeof raw.swelt_trap === "string" && raw.swelt_trap.trim() !== "") {
+  if (typeof raw.hr_trap === "string" && raw.hr_trap.trim() !== "") {
     return { status: "success" };
   }
   const email = typeof raw.email === "string" ? raw.email.trim().toLowerCase() : "";

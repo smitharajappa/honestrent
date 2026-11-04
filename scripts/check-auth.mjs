@@ -9,7 +9,7 @@ const SITE = (process.argv[2] ?? "https://swelt.vercel.app").replace(/\/$/, "");
 
 if (!existsSync(".env.local")) {
   console.log(
-    "✗ No .env.local here. Run this from the Swelt folder, after npm run check:env passes.",
+    "✗ No .env.local here. Run this from the Honest Rent folder, after npm run check:env passes.",
   );
   process.exit(1);
 }

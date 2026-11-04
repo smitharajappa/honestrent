@@ -15,7 +15,7 @@ export default async function SignInPage({
   const target = Array.isArray(next) ? next[0] : next;
   return (
     <main className="mx-auto w-full max-w-md px-4 py-12">
-      <h1 className="text-3xl font-bold tracking-tight">Sign in to Swelt</h1>
+      <h1 className="text-3xl font-bold tracking-tight">Sign in to Honest Rent</h1>
       <p className="mt-2 text-text-muted">
         Optional. Search, real cost and approval fit work without an account.
       </p>
@@ -24,7 +24,7 @@ export default async function SignInPage({
       </Card>
       <ul className="mt-6 space-y-2 text-sm text-text-muted">
         <li>
-          An account lets you use a Swelt Plus pass and, later, keep saves on every
+          An account lets you use a Honest Rent Plus pass and, later, keep saves on every
           device.
         </li>
         <li>

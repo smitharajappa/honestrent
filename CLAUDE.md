@@ -1,7 +1,7 @@
-# Project: Swelt
+# Project: Honest Rent
 
 ## What this is
-Swelt helps newcomers renting in Richardson-Plano, Texas find apartments ranked by real monthly cost (rent + fees - deals) and by how likely they are to be approved, even without US credit. Renters use it free; building data is entered by hand for the MVP.
+Honest Rent helps newcomers renting in Richardson-Plano, Texas find apartments ranked by real monthly cost (rent + fees - deals) and by how likely they are to be approved, even without US credit. Renters use it free; building data is entered by hand for the MVP.
 
 ## Team hats
 - Product owner (owns prd.md): [name]

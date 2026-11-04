@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Privacy",
-  description: "What Swelt keeps, what stays on your device, and how to delete it.",
+  description: "What Honest Rent keeps, what stays on your device, and how to delete it.",
 };
 
 const CONTACT = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
@@ -22,10 +22,11 @@ export default function PrivacyPage() {
     <main className="mx-auto w-full max-w-2xl px-4 py-12">
       <h1 className="text-3xl font-bold tracking-tight">Privacy</h1>
       <p className="mt-2 text-lg text-text-muted">
-        Short version: you can use Swelt without an account, and we keep very little.
+        Short version: you can use Honest Rent without an account, and we keep very
+        little.
       </p>
       <p className="mt-3 rounded-xl bg-warning-soft p-3 text-sm text-warning-text">
-        Draft written by the Swelt team. It has not been reviewed by a lawyer yet.
+        Draft written by the Honest Rent team. It has not been reviewed by a lawyer yet.
       </p>
 
       <Section title="Never collected">
@@ -85,8 +86,8 @@ export default function PrivacyPage() {
           </li>
           <li>
             <strong className="text-text">Anonymous counts:</strong> how many people saw
-            the Swelt Plus page and how many joined the waitlist, by day. No names or
-            emails.
+            the Honest Rent Plus page and how many joined the waitlist, by day. No names
+            or emails.
           </li>
           <li>
             <strong className="text-text">Bills you share (if you share one):</strong>{" "}
@@ -114,8 +115,8 @@ export default function PrivacyPage() {
           <li>
             <strong className="text-text">When you add a place for drive times:</strong>{" "}
             the address you type goes once to OpenStreetMap&apos;s address search, and the
-            place goes to our traffic provider (TomTom) to get drive times. Swelt does not
-            keep either.
+            place goes to our traffic provider (TomTom) to get drive times. Honest Rent
+            does not keep either.
           </li>
           <li>
             <strong className="text-text">Google,</strong> if you choose &quot;Continue

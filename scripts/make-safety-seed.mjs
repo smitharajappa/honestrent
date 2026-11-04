@@ -45,7 +45,7 @@ if (buildings.length === 0)
 async function query(params) {
   const url = new URL(DATASET);
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
-  const res = await fetch(url, { headers: { "User-Agent": "SweltDataCheck/0.1" } });
+  const res = await fetch(url, { headers: { "User-Agent": "HonestRentDataCheck/0.1" } });
   if (!res.ok) throw new Error(`Dallas open data answered ${res.status}`);
   return res.json();
 }

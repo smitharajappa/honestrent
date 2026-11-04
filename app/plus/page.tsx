@@ -3,7 +3,7 @@ import { PlusPanel } from "@/components/plus/PlusPanel";
 import { CheckIcon } from "@/components/ui/icons";
 
 export const metadata: Metadata = {
-  title: "Swelt Plus",
+  title: "Honest Rent Plus",
   description:
     "Optional passes for drive times to your own places, price alerts and synced saves.",
 };
@@ -23,7 +23,7 @@ const PLUS = [
 export default function PlusPage() {
   return (
     <main className="page-container py-10">
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Swelt Plus</h1>
+      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Honest Rent Plus</h1>
       <p className="mt-2 max-w-2xl text-lg text-text-muted">
         Search and real cost stay free, always. A pass adds extras for renters who are
         about to sign. One payment, no auto-renew.

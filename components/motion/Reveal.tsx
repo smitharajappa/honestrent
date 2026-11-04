@@ -3,7 +3,7 @@
 import { motion, MotionConfig } from "motion/react";
 
 /**
- * Motion presets for Swelt. Short and gentle (see DESIGN.md).
+ * Motion presets for Honest Rent. Short and gentle (see DESIGN.md).
  * People who turn on "reduce motion" in their device settings get no movement.
  */
 export const MOTION = {

@@ -14,7 +14,7 @@ const good = {
   admin: "11.43",
   other: "",
   consent: "on",
-  swelt_trap: "",
+  hr_trap: "",
 };
 
 describe("parseAmount", () => {
@@ -54,7 +54,7 @@ describe("validateBillReport", () => {
   });
 
   it("silently drops spam bots", () => {
-    expect(validateBillReport({ ...good, swelt_trap: "x" }, TODAY)).toEqual({
+    expect(validateBillReport({ ...good, hr_trap: "x" }, TODAY)).toEqual({
       ok: false,
       spam: true,
     });

@@ -8,12 +8,12 @@ export function SiteHeader() {
       <div className="page-container flex h-16 items-center justify-between gap-3">
         <Link
           href="/"
-          className="flex items-center gap-2 rounded-lg font-heading text-lg font-bold tracking-tight"
+          className="flex shrink-0 items-center gap-2 rounded-lg font-heading text-base font-bold tracking-tight whitespace-nowrap sm:text-lg"
         >
           <span className="grid size-8 place-items-center rounded-lg bg-text text-bg">
             <HomeIcon className="size-4.5" />
           </span>
-          Swelt
+          Honest Rent
         </Link>
         <HeaderLinks />
       </div>
@@ -43,7 +43,7 @@ export function SiteFooter() {
             href="/plus"
             className="font-semibold text-brand-text underline underline-offset-2"
           >
-            Swelt Plus
+            Honest Rent Plus
           </Link>{" "}
           adds optional extras. Search and real cost are always free.{" "}
           <Link

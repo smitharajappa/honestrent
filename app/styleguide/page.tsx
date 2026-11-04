@@ -65,8 +65,8 @@ export default function StyleguidePage() {
       <header>
         <h1 className="text-3xl font-bold">Styleguide</h1>
         <p className="mt-2 text-text-muted">
-          Every color, font and component Swelt uses. Rules live in DESIGN.md; tokens live
-          in app/globals.css.
+          Every color, font and component Honest Rent uses. Rules live in DESIGN.md;
+          tokens live in app/globals.css.
         </p>
       </header>
 

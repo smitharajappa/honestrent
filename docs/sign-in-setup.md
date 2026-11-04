@@ -1,4 +1,4 @@
-# Sign-in and Swelt Plus: setup
+# Sign-in and Honest Rent Plus: setup
 
 Sign-in uses Supabase Auth (the same Supabase project). It is optional for renters.
 

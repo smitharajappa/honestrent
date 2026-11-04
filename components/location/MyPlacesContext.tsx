@@ -18,7 +18,9 @@ export type MyPlace = {
 };
 
 export const MAX_PLACES = 5;
-const KEY = "swelt.places.v1";
+const KEY = "honestrent.places.v1";
+// The app used to be called Swelt. Read places testers saved under the old name once.
+const OLD_KEY = "swelt.places.v1";
 
 type Value = {
   places: MyPlace[];
@@ -31,7 +33,9 @@ const Ctx = createContext<Value | null>(null);
 
 function load(): MyPlace[] {
   try {
-    const raw = JSON.parse(localStorage.getItem(KEY) ?? "[]");
+    const raw = JSON.parse(
+      localStorage.getItem(KEY) ?? localStorage.getItem(OLD_KEY) ?? "[]",
+    );
     if (!Array.isArray(raw)) return [];
     return raw
       .filter(

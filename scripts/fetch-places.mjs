@@ -73,7 +73,7 @@ async function fetchTile(bbox) {
         const res = await fetch(url, {
           method: "POST",
           headers: {
-            "User-Agent": "SweltDataCheck/0.1 (contact: team@swelt.example)",
+            "User-Agent": "HonestRentDataCheck/0.1 (contact: team@honestrent.example)",
             "Content-Type": "application/x-www-form-urlencoded",
           },
           body: new URLSearchParams({ data: query(bbox) }),

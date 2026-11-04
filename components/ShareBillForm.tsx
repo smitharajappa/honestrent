@@ -40,7 +40,7 @@ export function ShareBillForm({ buildings, months, defaultBuildingId }: Props) {
         </h2>
         <p className="mx-auto mt-1 max-w-sm text-sm text-text-muted">
           Once we&apos;ve checked it and at least 3 renters have shared for the same
-          building and size, the range shows on Swelt.
+          building and size, the range shows on Honest Rent.
         </p>
         <ButtonLink href="/" className="mt-5">
           Back to search
@@ -55,14 +55,8 @@ export function ShareBillForm({ buildings, months, defaultBuildingId }: Props) {
     <form action={action} noValidate className="space-y-6">
       {/* Spam trap: hidden from people and screen readers, bots fill it in. */}
       <div aria-hidden="true" className="sr-only">
-        <label htmlFor="swelt_trap">Leave this empty</label>
-        <input
-          id="swelt_trap"
-          name="swelt_trap"
-          type="text"
-          tabIndex={-1}
-          autoComplete="off"
-        />
+        <label htmlFor="hr_trap">Leave this empty</label>
+        <input id="hr_trap" name="hr_trap" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
       <div className="grid gap-5 sm:grid-cols-3">

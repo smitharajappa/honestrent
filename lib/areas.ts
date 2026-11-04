@@ -1,4 +1,4 @@
-// Places renters can search. Swelt has building data in COVERED_CITIES first;
+// Places renters can search. Honest Rent has building data in COVERED_CITIES first;
 // other DFW areas show "Request my area" so we can see where demand is.
 
 export const COVERED_CITIES = ["Richardson", "Plano"];

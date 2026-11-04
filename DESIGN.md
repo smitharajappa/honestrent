@@ -1,4 +1,4 @@
-# Swelt design guide
+# Honest Rent design guide
 
 Read this before changing anything people see. It keeps every screen feeling like the
 same calm, trustworthy app. The tokens live in `app/globals.css`, and the live examples
@@ -81,7 +81,7 @@ interface.
 `components/ui/`: `Button` / `ButtonLink` (primary, secondary, ghost), `Field`, `Select`,
 `Card`, `Badge`, `Tip`, `InfoNote`, `icons`.
 
-Swelt-specific: `BuildingCover` (drawn cover; shows a real photo once a building supplies
+Honest Rent-specific: `BuildingCover` (drawn cover; shows a real photo once a building supplies
 one), `CostBar` (rent, + fees, − deals), `ResultCard`, `explore/FiltersPanel` (toggle
 chips), `explore/InsightBanner`, `shortlist/SaveButton` and `CompareToggle`, `CompareTray`,
 `TrustNotes`, `location/LocateButton` (device location or a ZIP code to measure from; kept in the tab, never sent or saved), `map/LazyMap` (maps, MapLibre + OpenFreeMap tiles) and `motion/Reveal` (fade-up animation presets; respects "reduce motion").
@@ -96,7 +96,7 @@ If a new pattern is needed, add it there and to `/styleguide`.
   from other websites or Google Maps.
 - Saved and compared buildings stay on the device. Approval answers stay in the tab.
 
-## Usability rules (Nielsen's 10 heuristics, applied to Swelt)
+## Usability rules (Nielsen's 10 heuristics, applied to Honest Rent)
 
 1. **Show status:** every action gives feedback (loading text or placeholder cards, success
    messages).

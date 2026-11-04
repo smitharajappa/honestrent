@@ -1,5 +1,5 @@
 // Utilities billed by the building (water, sewer, trash, drainage, admin fees).
-// They change month to month, so Swelt shows an average with a range and says
+// They change month to month, so Honest Rent shows an average with a range and says
 // where the number came from.
 
 import type { Building } from "./types";
@@ -24,7 +24,7 @@ export type UtilityView = {
 export const SOURCE_LABELS: Record<UtilitySource, string> = {
   building: "Building's figures",
   renters: "Renters reported",
-  estimate: "Swelt estimate",
+  estimate: "Honest Rent estimate",
   included: "Included in rent",
   direct: "You pay providers directly",
   unknown: "Not known yet",
@@ -46,7 +46,7 @@ function closest<T extends { bedrooms: number }>(
 
 /**
  * Best available figure, in this order: the building's own numbers (Texas PUC
- * rules let renters ask for them), then at least 3 renter reports, then Swelt's
+ * rules let renters ask for them), then at least 3 renter reports, then Honest Rent's
  * estimate. "Included" counts as $0.
  */
 export function utilitiesFor(building: Building, bedrooms: number): UtilityView {

@@ -39,7 +39,7 @@ export type ExploreItem = {
   cost: CostBreakdown;
   /** Utilities billed by the building (an average that varies month to month). */
   utilities: UtilityView;
-  /** Real cost + average utilities: what Swelt ranks by. */
+  /** Real cost + average utilities: what Honest Rent ranks by. */
   estimatedTotal: number;
   /** Estimated total divided between the people sharing. */
   perPerson: number;

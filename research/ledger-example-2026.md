@@ -38,7 +38,7 @@ Blur names before sharing screenshots anywhere else.
 
 1. Charges above rent here are about 10x the $25 threshold in PRD kill criterion 1.
 2. Trash appears twice: a fixed valet trash fee **and** a variable monthly trash charge.
-3. Utilities billed by the building change month to month, so Swelt should show a range
+3. Utilities billed by the building change month to month, so Honest Rent should show a range
    with its source, not one exact number.
 4. Texas PUC rules let renters ask for the average, highest and lowest monthly
    water/wastewater bill for all units in the previous calendar year. That gives a

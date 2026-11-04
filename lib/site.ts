@@ -7,7 +7,7 @@
  */
 export const IS_DEMO = process.env.NEXT_PUBLIC_DEMO_MODE !== "off";
 
-export const SITE_NAME = "Swelt";
+export const SITE_NAME = "Honest Rent";
 export const SITE_DESCRIPTION =
   "Dallas-area apartments ranked by what you will really pay each month: rent plus fees, minus deals.";
 

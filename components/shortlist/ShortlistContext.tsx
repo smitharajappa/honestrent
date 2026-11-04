@@ -11,11 +11,13 @@ import {
 
 /**
  * Saved buildings and the compare list. Kept on this device only (browser
- * storage), never sent to Swelt. Building ids are not personal data.
+ * storage), never sent to Honest Rent. Building ids are not personal data.
  */
 
 export const MAX_COMPARE = 3;
-const STORAGE_KEY = "swelt.shortlist.v1";
+const STORAGE_KEY = "honestrent.shortlist.v1";
+// The app used to be called Swelt. Read what testers saved under the old name once.
+const OLD_STORAGE_KEY = "swelt.shortlist.v1";
 
 type Stored = { saved: string[]; compare: string[] };
 
@@ -35,7 +37,9 @@ const ShortlistContext = createContext<ContextValue | null>(null);
 
 function load(): Stored {
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw =
+      window.localStorage.getItem(STORAGE_KEY) ??
+      window.localStorage.getItem(OLD_STORAGE_KEY);
     if (!raw) return { saved: [], compare: [] };
     const parsed = JSON.parse(raw) as Partial<Stored>;
     const ids = (v: unknown) =>

@@ -28,7 +28,7 @@ async function refusal(
   if (!viewer.hasPlus) {
     return {
       needs: "plus",
-      error: "Adding your own places is part of a Swelt Plus pass.",
+      error: "Adding your own places is part of a Honest Rent Plus pass.",
     };
   }
   return null;

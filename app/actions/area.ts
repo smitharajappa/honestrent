@@ -5,7 +5,7 @@ import { validateArea } from "@/lib/validation";
 
 export type AreaRequestState = { status: "idle" | "done" | "error"; message?: string };
 
-/** Records that someone wants Swelt in an area. Area name and date only. */
+/** Records that someone wants Honest Rent in an area. Area name and date only. */
 export async function requestArea(
   _prev: AreaRequestState,
   formData: FormData,
