@@ -60,7 +60,7 @@ jobs:
               continue
             fi
             echo "Marking $version as applied"
-            supabase migration repair --status applied "$version" --db-url "$SUPABASE_DB_URL"
+            supabase migration repair --status applied --yes "$version" --db-url "$SUPABASE_DB_URL"
           done
 
       - name: Show what is pending
