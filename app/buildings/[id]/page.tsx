@@ -11,9 +11,17 @@ import { InfoNote } from "@/components/ui/InfoNote";
 import {
   AlertIcon,
   ArrowLeftIcon,
+  BusIcon,
   CheckIcon,
+  ClockIcon,
+  HomeIcon,
+  InfoIcon,
   MapPinIcon,
+  PlusCircleIcon,
+  SearchIcon,
+  ShieldIcon,
   TagIcon,
+  UsersIcon,
 } from "@/components/ui/icons";
 import { VerifiedNote } from "@/components/VerifiedNote";
 import { BuildingCover } from "@/components/BuildingCover";
@@ -170,8 +178,12 @@ export default async function BuildingPage({
         {search.ok ? "Back to results" : "Search apartments"}
       </ButtonLink>
 
-      <div className="relative mt-3 h-40 overflow-hidden rounded-2xl border border-border sm:h-56">
+      <div className="relative mt-3 h-48 overflow-hidden rounded-3xl border border-border sm:h-72">
         <BuildingCover id={building.id} name={building.name} />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-text/20 to-transparent"
+        />
         {!mapOnly && (
           <SaveButton
             buildingId={building.id}
@@ -179,47 +191,53 @@ export default async function BuildingPage({
             className="absolute top-3 right-3"
           />
         )}
+        <span className="absolute top-3 left-3 rounded-full bg-surface/85 px-2.5 py-0.5 text-[11px] font-medium text-text-muted">
+          Illustrative cover
+        </span>
       </div>
+
+      <section
+        aria-labelledby="building-name"
+        className="relative -mt-12 rounded-2xl border border-border bg-surface p-5 shadow-raised sm:mx-6 sm:p-6"
+      >
+        <Badge>{building.city}</Badge>
+        <h1
+          id="building-name"
+          className="mt-2 text-3xl leading-tight font-extrabold tracking-tight sm:text-4xl"
+        >
+          {building.name}
+        </h1>
+        <p className="mt-2 flex items-start gap-1.5 text-text-muted">
+          <MapPinIcon className="mt-1 size-4 shrink-0" />
+          <span>
+            {building.address}
+            {hasPin && (
+              <>
+                {" "}
+                ·{" "}
+                <a
+                  href="#location"
+                  className="font-medium text-brand-text underline underline-offset-2"
+                >
+                  Map
+                </a>
+              </>
+            )}
+          </span>
+        </p>
+        <div className="mt-3">
+          {mapOnly ? (
+            <Badge tone="warning">Prices not verified yet</Badge>
+          ) : (
+            <VerifiedNote lastVerified={building.last_verified} today={today} />
+          )}
+        </div>
+      </section>
 
       <SectionNav items={navItems} />
 
       <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_22rem]">
         <div className="min-w-0">
-          <section aria-labelledby="building-name">
-            <Badge>{building.city}</Badge>
-            <h1
-              id="building-name"
-              className="mt-2 text-3xl leading-tight font-extrabold tracking-tight sm:text-4xl"
-            >
-              {building.name}
-            </h1>
-            <p className="mt-2 flex items-start gap-1.5 text-text-muted">
-              <MapPinIcon className="mt-1 size-4 shrink-0" />
-              <span>
-                {building.address}
-                {hasPin && (
-                  <>
-                    {" "}
-                    ·{" "}
-                    <a
-                      href="#location"
-                      className="font-medium text-brand-text underline underline-offset-2"
-                    >
-                      Map
-                    </a>
-                  </>
-                )}
-              </span>
-            </p>
-            <div className="mt-3">
-              {mapOnly ? (
-                <Badge tone="warning">Prices not verified yet</Badge>
-              ) : (
-                <VerifiedNote lastVerified={building.last_verified} today={today} />
-              )}
-            </div>
-          </section>
-
           {building.notes && !mapOnly && (
             <InfoNote className="mt-6">{building.notes}</InfoNote>
           )}
@@ -345,7 +363,7 @@ export default async function BuildingPage({
                   </p>
                   <dl className="mt-3 grid gap-4 sm:grid-cols-2">
                     {PLACE_KINDS.map(({ kind, label }) => (
-                      <div key={kind}>
+                      <div key={kind} className="min-w-0">
                         <dt className="text-sm font-semibold">{label}</dt>
                         <dd className="mt-1">
                           {nearby[kind].length === 0 ? (
@@ -707,6 +725,21 @@ export default async function BuildingPage({
   );
 }
 
+const SECTION_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  plans: HomeIcon,
+  location: MapPinIcon,
+  safety: ShieldIcon,
+  drive: BusIcon,
+  fees: PlusCircleIcon,
+  deals: TagIcon,
+  utilities: InfoIcon,
+  "move-in": ClockIcon,
+  documents: CheckIcon,
+  approval: UsersIcon,
+  interest: SearchIcon,
+  unverified: InfoIcon,
+};
+
 function Section({
   id,
   title,
@@ -716,6 +749,7 @@ function Section({
   title: string;
   children: React.ReactNode;
 }) {
+  const Icon = SECTION_ICONS[id];
   return (
     <RevealOnScroll>
       <Card
@@ -724,7 +758,15 @@ function Section({
         className="mt-6 scroll-mt-32 p-5 sm:p-6"
         id={id}
       >
-        <h2 id={`${id}-heading`} className="mb-3 text-lg font-semibold">
+        <h2
+          id={`${id}-heading`}
+          className="mb-4 flex items-center gap-3 text-lg font-bold tracking-tight"
+        >
+          {Icon && (
+            <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-brand-soft text-brand-text">
+              <Icon className="size-[18px]" />
+            </span>
+          )}
           {title}
         </h2>
         {children}

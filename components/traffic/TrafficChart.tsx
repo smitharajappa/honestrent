@@ -87,23 +87,26 @@ export function TrafficChart({
         <span>Minutes above each bar. a = AM, p = PM</span>
       </div>
 
-      <table className="sr-only">
-        <caption>Typical weekday drive time to {destination} by departure hour</caption>
-        <thead>
-          <tr>
-            <th scope="col">Leave at</th>
-            <th scope="col">Minutes</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sorted.map((p) => (
-            <tr key={p.hour}>
-              <th scope="row">{hourLabel(p.hour)}</th>
-              <td>{p.minutes}</td>
+      {/* The wrapper does the hiding: a table ignores sr-only itself and widened the page on phones. */}
+      <div className="sr-only">
+        <table>
+          <caption>Typical weekday drive time to {destination} by departure hour</caption>
+          <thead>
+            <tr>
+              <th scope="col">Leave at</th>
+              <th scope="col">Minutes</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {sorted.map((p) => (
+              <tr key={p.hour}>
+                <th scope="row">{hourLabel(p.hour)}</th>
+                <td>{p.minutes}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
