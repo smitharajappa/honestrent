@@ -11,6 +11,8 @@ import { RevealBlock } from "@/components/motion/Reveal";
 import { DriveToPlaces } from "@/components/traffic/DriveToPlaces";
 import { TrafficChart } from "@/components/traffic/TrafficChart";
 import { TrustNotes } from "@/components/TrustNotes";
+import { ProfileMenuPanel } from "@/components/auth/ProfileMenu";
+import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -114,6 +116,24 @@ export default function StyleguidePage() {
             Large link
           </ButtonLink>
         </div>
+      </Section>
+
+      <Section title="Profile avatar and menu">
+        <div className="flex flex-wrap items-start gap-6">
+          <div className="flex items-center gap-3">
+            <Avatar user={{ email: "sample.renter@example.com" }} />
+            <Avatar
+              user={{ email: "x@example.com", user_metadata: { full_name: "Priya Rao" } }}
+            />
+          </div>
+          <div className="w-72 rounded-2xl border border-border bg-surface shadow-raised">
+            <ProfileMenuPanel user={{ email: "sample.renter@example.com" }} />
+          </div>
+        </div>
+        <p className="mt-3 text-xs text-text-muted">
+          Shows the Google photo if there is one, otherwise the first letter. Opens from
+          the round avatar in the header; closes with Escape or a tap outside.
+        </p>
       </Section>
 
       <Section title="Badges">

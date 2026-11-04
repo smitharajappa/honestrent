@@ -5,7 +5,7 @@
 
 import { existsSync, readFileSync } from "node:fs";
 
-const SITE = (process.argv[2] ?? "https://swelt.vercel.app").replace(/\/$/, "");
+const SITE = (process.argv[2] ?? "https://honestrent.vercel.app").replace(/\/$/, "");
 
 if (!existsSync(".env.local")) {
   console.log(

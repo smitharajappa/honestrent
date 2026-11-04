@@ -14,9 +14,9 @@ or prints your key). Add a site address to check another one: `npm run check:aut
 ## One-time setup in Supabase (about 10 minutes)
 
 1. **Authentication, URL Configuration**
-   - Site URL: your live address (for example `https://swelt.vercel.app`).
+   - Site URL: your live address (for example `https://honestrent.vercel.app`).
    - Redirect URLs (add each): `http://localhost:3000/auth/callback`,
-     `https://swelt.vercel.app/auth/callback`, and your Vercel preview address ending in
+     `https://honestrent.vercel.app/auth/callback`, and your Vercel preview address ending in
      `/auth/callback`.
 2. **Authentication, Providers, Email**: leave on. This is the "email me a sign-in link" button.
    No password is stored. Supabase's built-in email sender is limited to a few emails an hour,

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useAuth } from "../auth/AuthContext";
+import { ProfileMenu } from "../auth/ProfileMenu";
 import { CompareIcon, HeartIcon } from "../ui/icons";
 import { useShortlist } from "./ShortlistContext";
 
@@ -41,9 +42,7 @@ export function HeaderLinks() {
             Plus
           </Link>
           {user ? (
-            <Link href="/account" className={link} title={user.email ?? undefined}>
-              Account
-            </Link>
+            <ProfileMenu />
           ) : (
             <Link href="/sign-in" className={`${link} text-brand-text`}>
               Sign in
