@@ -2,7 +2,9 @@ import Form from "next/form";
 import { ApprovalFooter, ApprovalSelects } from "./approval/ApprovalFields";
 import { AreaChips, BudgetChips, SearchButton } from "./SearchFormControls";
 import { LocateButton } from "./location/LocateButton";
+import { Badge } from "./ui/Badge";
 import { Field } from "./ui/Field";
+import { CheckIcon, UsersIcon, XCircleIcon } from "./ui/icons";
 import { DFW_SUGGESTIONS } from "@/lib/areas";
 
 type Props = {
@@ -93,6 +95,38 @@ export function SearchForm({ area, budget, moveIn, today, errors = {} }: Props) 
           </p>
           <div className="grid gap-5 sm:grid-cols-3">
             <ApprovalSelects />
+          </div>
+          <div className="mt-6 rounded-2xl bg-surface-muted p-4">
+            <p className="text-sm font-semibold">
+              What you&apos;ll see on every building
+            </p>
+            <ul className="mt-3 space-y-3 text-sm">
+              <li className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <Badge tone="success" icon={<CheckIcon className="size-3.5" />}>
+                  Good fit
+                </Badge>
+                <span className="text-text-muted">Your answers match what they ask.</span>
+              </li>
+              <li className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <Badge tone="warning" icon={<UsersIcon className="size-3.5" />}>
+                  Possible with guarantor
+                </Badge>
+                <span className="text-text-muted">
+                  A guarantor would help. We say who takes one.
+                </span>
+              </li>
+              <li className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <Badge tone="unlikely" icon={<XCircleIcon className="size-3.5" />}>
+                  Unlikely
+                </Badge>
+                <span className="text-text-muted">
+                  With the reason, and a nearby building that fits.
+                </span>
+              </li>
+            </ul>
+            <p className="mt-3 text-xs text-text-muted">
+              Estimates only. Skip the questions to see every building.
+            </p>
           </div>
         </div>
       </div>

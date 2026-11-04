@@ -54,3 +54,20 @@ export function RevealOnScroll({
     />
   );
 }
+
+/** A list item that fades up the first time it scrolls into view. */
+export function RevealItemOnScroll({
+  index = 0,
+  ...rest
+}: React.ComponentProps<typeof motion.li> & { index?: number }) {
+  const { initial, transition } = MOTION.reveal(index);
+  return (
+    <motion.li
+      initial={initial}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "0px 0px -60px 0px" }}
+      transition={transition}
+      {...rest}
+    />
+  );
+}

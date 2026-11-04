@@ -12,6 +12,7 @@ import { DriveToPlaces } from "@/components/traffic/DriveToPlaces";
 import { TrafficChart } from "@/components/traffic/TrafficChart";
 import { TrustNotes } from "@/components/TrustNotes";
 import { ProfileMenuPanel } from "@/components/auth/ProfileMenu";
+import { CostReveal } from "@/components/home/CostReveal";
 import { PassStatus } from "@/components/plus/PassStatus";
 import { Avatar } from "@/components/ui/Avatar";
 import { Logo, LogoMark } from "@/components/ui/Logo";
@@ -151,6 +152,14 @@ export default function StyleguidePage() {
           An H under a roof, with an amber bar like a receipt line. In the header the roof
           lifts and the bar widens on hover. Colors come from the <code>--logo-*</code>{" "}
           tokens, so it follows dark mode.
+        </p>
+      </Section>
+
+      <Section title="Cost reveal (home page)">
+        <CostReveal className="max-w-md" />
+        <p className="mt-3 text-xs text-text-muted">
+          The ad price, what it leaves out, and the real total. Counts up when it appears,
+          and stays still for people who ask for less motion.
         </p>
       </Section>
 

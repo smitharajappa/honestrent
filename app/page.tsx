@@ -1,18 +1,13 @@
 import { Suspense } from "react";
 import { ResultsExplorer } from "@/components/explore/ResultsExplorer";
 import { HeroArt } from "@/components/HeroArt";
+import { CostReveal } from "@/components/home/CostReveal";
+import { HomeSections } from "@/components/home/HowItWorks";
 import { ResultsSkeleton } from "@/components/ResultsSkeleton";
 import { SearchForm } from "@/components/SearchForm";
-import { TrustNotes } from "@/components/TrustNotes";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import {
-  AlertIcon,
-  CheckIcon,
-  LockIcon,
-  SearchIcon,
-  TagIcon,
-} from "@/components/ui/icons";
+import { AlertIcon, LockIcon } from "@/components/ui/icons";
 import { fetchBuildings } from "@/lib/buildings";
 import { searchHref } from "@/lib/links";
 import { inArea } from "@/lib/explore";
@@ -49,12 +44,9 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
   return (
     <main>
       {/* Hero: full width, compact once results are showing. */}
-      <section
-        aria-labelledby="page-title"
-        className="bg-gradient-to-br from-[var(--hero-from)] to-[var(--hero-to)]"
-      >
+      <section aria-labelledby="page-title" className="hero-bg">
         <div
-          className={`page-container grid items-end gap-6 lg:grid-cols-[1fr_26rem] ${
+          className={`page-container grid items-center gap-8 lg:grid-cols-[1fr_27rem] ${
             showingResults ? "pt-8 pb-24 sm:pt-10" : "pt-10 pb-28 sm:pt-14 lg:pt-16"
           }`}
         >
@@ -63,32 +55,56 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
               <LockIcon className="size-3.5" />
               No SSN or US credit? Start here.
             </p>
-            <h1
-              id="page-title"
-              className={`mt-4 leading-[1.05] font-extrabold tracking-tight text-balance ${
-                showingResults
-                  ? "text-3xl sm:text-4xl"
-                  : "text-4xl sm:text-5xl lg:text-6xl"
-              }`}
-            >
-              Find a place that will say yes.{" "}
-              <span className="text-text-muted">See what it really costs.</span>
-            </h1>
+            {showingResults ? (
+              <h1
+                id="page-title"
+                className="mt-4 text-3xl leading-[1.05] font-extrabold tracking-tight text-balance sm:text-4xl"
+              >
+                Find a place that will say yes.{" "}
+                <span className="text-text-muted">See what it really costs.</span>
+              </h1>
+            ) : (
+              <h1 id="page-title" className="display mt-4 text-balance">
+                Find a place that will say yes.{" "}
+                <span className="marker">See what it really costs.</span>
+              </h1>
+            )}
             {!showingResults && (
-              <p className="mt-4 max-w-xl text-lg text-pretty text-text-muted">
-                Apartments ranked by what you&apos;ll really pay each month (rent,
-                required fees and utilities, minus deals) and by how likely they are to
-                approve newcomers. Starting in the Dallas area: Richardson, Plano and
-                Dallas.
-              </p>
+              <>
+                <p className="mt-5 max-w-xl text-lg text-pretty text-text-muted">
+                  Apartments ranked by what you&apos;ll really pay each month (rent,
+                  required fees and utilities, minus deals) and by how likely they are to
+                  approve newcomers. Starting in the Dallas area: Richardson, Plano and
+                  Dallas.
+                </p>
+                <div className="mt-6 flex flex-wrap items-center gap-3">
+                  <ButtonLink href="#search" size="lg">
+                    Search apartments
+                  </ButtonLink>
+                  <ButtonLink href="#how-heading" size="lg" variant="secondary">
+                    How it works
+                  </ButtonLink>
+                </div>
+                <p className="mt-5 inline-flex flex-wrap items-center gap-x-2 gap-y-1 rounded-xl bg-surface/80 px-3.5 py-2 text-sm shadow-card lg:hidden">
+                  <span className="text-text-muted">The ad says</span>
+                  <strong className="tabular-nums">$1,450</strong>
+                  <span aria-hidden="true">→</span>
+                  <span className="text-text-muted">you really pay</span>
+                  <strong className="tabular-nums text-warning-text">$1,620</strong>
+                </p>
+              </>
             )}
           </div>
-          <HeroArt compact={showingResults} />
+          {showingResults ? (
+            <HeroArt compact />
+          ) : (
+            <CostReveal className="hidden lg:block" />
+          )}
         </div>
       </section>
 
       {/* The search card overlaps the hero. */}
-      <div className="page-container -mt-20">
+      <div className="page-container relative z-10 -mt-20">
         <Card
           as="section"
           id="search"
@@ -118,7 +134,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
             />
           </Suspense>
         ) : (
-          <HowItWorks />
+          <HomeSections />
         )}
       </div>
     </main>
@@ -176,60 +192,5 @@ async function Results({
       moveIn={moveIn}
       today={today}
     />
-  );
-}
-
-const STEPS = [
-  {
-    icon: SearchIcon,
-    title: "Tell us your budget and move-in date",
-    body: "Your share if you're living with roommates.",
-  },
-  {
-    icon: LockIcon,
-    title: "Answer 3 private questions",
-    body: "Income range, credit, and the ID you have. Never your SSN or exact score.",
-  },
-  {
-    icon: CheckIcon,
-    title: "See who's likely to say yes",
-    body: "Each building shows Good fit, Possible with guarantor, or Unlikely, with the reason.",
-  },
-  {
-    icon: TagIcon,
-    title: "Compare the real cost",
-    body: "Required fees added, move-in deals spread over the lease. No surprises.",
-  },
-];
-
-function HowItWorks() {
-  return (
-    <section aria-labelledby="how-heading" className="mt-14">
-      <h2 id="how-heading" className="text-2xl font-bold tracking-tight">
-        How Honest Rent works
-      </h2>
-      <ol className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {STEPS.map((step, i) => (
-          <li
-            key={step.title}
-            className="rounded-2xl border border-border bg-surface p-5 shadow-card"
-          >
-            <span className="flex items-center gap-3">
-              <span className="grid size-10 place-items-center rounded-xl bg-surface-muted text-text">
-                <step.icon className="size-5" />
-              </span>
-              <span className="text-xs font-bold tracking-wider text-text-muted uppercase">
-                Step {i + 1}
-              </span>
-            </span>
-            <h3 className="mt-4 font-bold">{step.title}</h3>
-            <p className="mt-1 text-sm text-text-muted">{step.body}</p>
-          </li>
-        ))}
-      </ol>
-      <div className="mt-6 max-w-xl">
-        <TrustNotes />
-      </div>
-    </section>
   );
 }
