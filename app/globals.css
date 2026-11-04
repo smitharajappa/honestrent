@@ -70,6 +70,7 @@
   --logo-to: #0b5f59;
   --logo-accent: #fbbf4d;
   --glow: rgb(20 184 166 / 0.18);
+  --glow-warm: rgb(251 191 77 / 0.16);
 
   --ring: #0f766e;
 }
@@ -123,6 +124,7 @@
     --logo-from: #2dd4bf;
     --logo-to: #0f766e;
     --glow: rgb(45 212 191 / 0.16);
+    --glow-warm: rgb(251 191 77 / 0.1);
 
     --ring: #4fcfc3;
   }
@@ -216,6 +218,37 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--brand-text);
+}
+
+/* Home hero: a soft teal and amber glow over the hero tokens, with a faint dot grid. */
+@utility hero-bg {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(56rem 28rem at 88% -12%, var(--glow), transparent 62%),
+    radial-gradient(38rem 22rem at -8% 112%, var(--glow-warm), transparent 62%),
+    linear-gradient(135deg, var(--hero-from), var(--hero-to));
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(var(--hero-ink) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mask-image: linear-gradient(to bottom, black 0%, transparent 85%);
+    opacity: 0.55;
+  }
+}
+/* A highlighter stroke under a few words. Decoration only. */
+@utility marker {
+  background-image: linear-gradient(
+    transparent 64%,
+    color-mix(in srgb, var(--accent) 42%, transparent) 64%
+  );
+  padding-inline: 0.1em;
+  margin-inline: -0.1em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 /* Respect people who turn off motion in their phone settings. */

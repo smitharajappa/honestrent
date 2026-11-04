@@ -6,7 +6,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { ApprovalProvider } from "@/components/approval/ApprovalContext";
 import { ShortlistProvider } from "@/components/shortlist/ShortlistContext";
-import { DemoBanner, SiteFooter, SiteHeader } from "@/components/SiteChrome";
+import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
 import { IS_DEMO, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -54,7 +54,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jakarta.variable}`}>
       <body className="flex min-h-screen flex-col font-sans antialiased">
-        {IS_DEMO && <DemoBanner />}
         {/* Approval answers live in memory only; the shortlist is saved on this device. */}
         <MotionProvider>
           <AuthProvider>

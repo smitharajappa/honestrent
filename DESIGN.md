@@ -92,7 +92,7 @@ interface.
 `Card`, `Badge`, `Tip`, `InfoNote`, `icons`.
 
 Honest Rent-specific: `BuildingCover` (drawn cover; shows a real photo once a building supplies
-one), `CostBar` (rent, + fees, − deals), `ResultCard`, `explore/FiltersPanel` (toggle
+one), `CostBar` (rent, + fees, − deals), `home/CostReveal` (the home page's animated ad-vs-real price card), `home/HowItWorks` (steps, why, closing call to action), `ui/Logo`, `ResultCard`, `explore/FiltersPanel` (toggle
 chips), `explore/InsightBanner`, `shortlist/SaveButton` and `CompareToggle`, `CompareTray`,
 `TrustNotes`, `location/LocateButton` (device location or a ZIP code to measure from; kept in the tab, never sent or saved), `map/LazyMap` (maps, MapLibre + OpenFreeMap tiles) and `motion/Reveal` (fade-up animation presets; respects "reduce motion").
 
