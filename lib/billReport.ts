@@ -56,7 +56,7 @@ export function validateBillReport(
   raw: Record<string, unknown>,
   today: string,
 ): BillValidation {
-  if (text(raw, "swelt_trap") !== "") return { ok: false, spam: true };
+  if (text(raw, "hr_trap") !== "") return { ok: false, spam: true };
   const errors: BillErrors = {};
 
   const buildingId = text(raw, "buildingId");

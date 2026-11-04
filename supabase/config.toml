@@ -1,6 +1,6 @@
 # Minimal Supabase project settings. Lets the Supabase tool read supabase/migrations.
 # The real database is the hosted one; these values only matter for local testing.
-project_id = "swelt"
+project_id = "honest-rent"
 
 [db]
 major_version = 17

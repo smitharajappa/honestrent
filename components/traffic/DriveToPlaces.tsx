@@ -199,7 +199,8 @@ export function DriveToPlaces({
       <p className="mt-3 text-xs text-text-muted">
         Places you add are saved on this device only, not in your account or our database.
         We send an address once to OpenStreetMap&apos;s address search to find it, and the
-        place once to our traffic provider to get drive times. Swelt does not keep either.
+        place once to our traffic provider to get drive times. Honest Rent does not keep
+        either.
       </p>
     </div>
   );
@@ -237,7 +238,7 @@ function AddPlace({
         <p className="font-semibold">
           {gate === "sign-in"
             ? "Sign in to add your own places"
-            : "Adding your own places is part of Swelt Plus"}
+            : "Adding your own places is part of Honest Rent Plus"}
         </p>
         <p className="mt-1 text-text-muted">
           {gate === "sign-in"
@@ -250,7 +251,7 @@ function AddPlace({
               gate === "sign-in" ? `/sign-in?next=${encodeURIComponent(back)}` : "/plus"
             }
           >
-            {gate === "sign-in" ? "Sign in" : "See Swelt Plus"}
+            {gate === "sign-in" ? "Sign in" : "See Honest Rent Plus"}
           </ButtonLink>
           <Button type="button" variant="ghost" onClick={onClose}>
             Not now

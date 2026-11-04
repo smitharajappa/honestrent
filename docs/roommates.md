@@ -6,7 +6,7 @@
 2. Create a profile: nickname, city, budget, move-in date, languages, interests, sleep,
    cleaning, guests, smoking, pets, study habits and a short note.
 3. See people in the same city, best fit first, with reasons ("Both night owls", "Budgets
-   within $10"). Seeing matches and asking for an introduction is a Swelt Plus feature (free for
+   within $10"). Seeing matches and asking for an introduction is a Honest Rent Plus feature (free for
    signed-in renters during demo mode).
 4. Ask for an introduction. The other person accepts or declines. **Chat opens only after both
    accept.**

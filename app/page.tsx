@@ -206,7 +206,7 @@ function HowItWorks() {
   return (
     <section aria-labelledby="how-heading" className="mt-14">
       <h2 id="how-heading" className="text-2xl font-bold tracking-tight">
-        How Swelt works
+        How Honest Rent works
       </h2>
       <ol className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {STEPS.map((step, i) => (

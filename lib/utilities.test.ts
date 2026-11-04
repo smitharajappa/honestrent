@@ -85,7 +85,7 @@ describe("utilitiesFor", () => {
     expect(utilitiesFor(b, 2)).toMatchObject({ avg: 140, source: "building" });
   });
 
-  it("uses Swelt's estimate last", () => {
+  it("uses Honest Rent's estimate last", () => {
     const b = building({
       utility_billing: "direct",
       building_utility_estimates: [

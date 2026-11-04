@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
- * Swelt design tokens.
+ * Honest Rent design tokens.
  * Every color, shadow and timing used in the app comes from here, so the look
  * stays consistent and dark mode only needs the values below swapped.
  * Text colors are chosen to meet WCAG 2.2 AA contrast (4.5:1) on their backgrounds.

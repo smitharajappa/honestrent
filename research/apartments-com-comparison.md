@@ -1,9 +1,9 @@
-# Swelt compared with Apartments.com (building page)
+# Honest Rent compared with Apartments.com (building page)
 
 Based on the Apartments.com screenshots the team shared (1 Nov 2026). Not a feature audit
 of their whole product.
 
-| What a renter wants     | Apartments.com                                                           | Swelt                                                                                    |
+| What a renter wants     | Apartments.com                                                           | Honest Rent                                                                              |
 | ----------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
 | Jump around a long page | Sticky tab bar (Pricing, Fees and Policies, Location, Transportation...) | Sticky "jump to" bar that highlights the section you are reading                         |
 | Price                   | "From" price, fees in a separate "Fees and Policies" tab                 | One top banner: ad price, then required fees, utilities and deals, then the total        |

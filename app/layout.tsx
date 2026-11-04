@@ -22,16 +22,16 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Swelt: find apartments by real monthly cost",
-    template: "%s · Swelt",
+    default: "Honest Rent: find apartments by real monthly cost",
+    template: "%s · Honest Rent",
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
-  // Link previews when someone shares Swelt in a chat or post.
+  // Link previews when someone shares Honest Rent in a chat or post.
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
-    title: "Swelt: find apartments by real monthly cost",
+    title: "Honest Rent: find apartments by real monthly cost",
     description: SITE_DESCRIPTION,
     locale: "en_US",
   },

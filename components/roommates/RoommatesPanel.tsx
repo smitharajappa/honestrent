@@ -111,7 +111,7 @@ function MatchCard({
           </Button>
         ) : (
           <ButtonLink href="/plus" variant="secondary">
-            Introductions need a Swelt Plus pass
+            Introductions need a Honest Rent Plus pass
           </ButtonLink>
         )}
         {message && (
@@ -264,11 +264,11 @@ export function RoommatesPanel() {
                 {cityCount} {cityCount === 1 ? "person" : "people"} in {profile.city}
               </h2>
               <p className="mt-1 text-text-muted">
-                A Swelt Plus pass shows who fits your habits, and lets you ask for an
-                introduction.
+                A Honest Rent Plus pass shows who fits your habits, and lets you ask for
+                an introduction.
               </p>
               <ButtonLink href="/plus" className="mt-4">
-                See Swelt Plus
+                See Honest Rent Plus
               </ButtonLink>
             </Card>
           ) : matches.length === 0 ? (

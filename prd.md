@@ -1,4 +1,4 @@
-PRODUCT: Swelt
+PRODUCT: Honest Rent
 STATUS: v2 DRAFT (10/29/2026). Updated after the Discovery Report (Smitha Rajappa,
 Oct 2026). The synthetic interviews in that report are hypotheses until the six
 real interviews are done. Every line below is a hypothesis until research/ and
@@ -13,7 +13,7 @@ PIVOT NOTES:
 
 POSITIONING: Approval-first renting for newcomers without US credit.
   Promise to renters: "Find a place that will say yes, and see what it really
-  costs." Swelt ranks only by real cost and approval fit, never by who pays us.
+  costs." Honest Rent ranks only by real cost and approval fit, never by who pays us.
 
 USER:
   Beachhead: UT Dallas international graduate students (F-1, no SSN or US credit),
@@ -116,7 +116,7 @@ FEATURES
        show a link until a bulk source exists). See research/safety-data.md.
 
   Round 3 (then; needs accounts, payments and email services):
-  R3.1 "Swelt Plus" waitlist test before building payments. BUILT (Nov 2026): four passes
+  R3.1 "Honest Rent Plus" waitlist test before building payments. BUILT (Nov 2026): four passes
        (Browse 7 days $5.99, Tour 14 days $8.99, Apply 21 days $11.99, Move-in 28 days
        $14.99; one-time, no auto-renew) shown at /plus with a join button, plus anonymous
        daily view and join counts. Optional sign-in (Google or email link) exists. Passes
@@ -137,7 +137,7 @@ FEATURES
        and has report and block. Verified tag: team-set only (sample profiles for the demo); an
        ID-check vendor is not chosen yet and no ID scan is ever stored. Still to do: ID-check
        vendor, stronger chat moderation, email alerts for new matches. See docs/roommates.md.
-  R4.2 Landlord portal: free listings, with Swelt verifying fees and approval
+  R4.2 Landlord portal: free listings, with Honest Rent verifying fees and approval
        rules before they show.
   R4.3 Lease referrals: properties pay when a renter signs, through a partner
        broker.
@@ -163,14 +163,14 @@ HOW WE MAKE MONEY (to test):
   Movers program:
     - A building may offer "we cover 50% of your move" as a move-in perk,
       shown like any other deal.
-    - Swelt arranges the move with vetted partner movers and earns a disclosed
+    - Honest Rent arranges the move with vetted partner movers and earns a disclosed
       referral fee from the mover.
     - Any discount negotiated with movers goes to the renter.
   Partners:
     - Referral fees from guarantor companies, Nova Credit and student lenders,
       disclosed to renters. MPOWER (no-cosigner loans that can cover housing at
       US schools) paused new loans for 2026, so this waits.
-  Unit economics (report base case): about $563 Swelt share per lease, target
+  Unit economics (report base case): about $563 Honest Rent share per lease, target
   acquisition cost about $83, break-even about 4 leases a month.
 
 DATA WE STORE:
@@ -204,7 +204,7 @@ LEGAL AND TRUST GUARDRAILS:
     renter. We never use victim, suspect, race, sex or any personal field from police
     data, never publish a safety score or grade, and never filter or rank buildings by
     who lives nearby. Get fair housing advice before adding a "safest first" sort.
-  - Swelt does not lend money or act as a guarantor.
+  - Honest Rent does not lend money or act as a guarantor.
   - No copying photos or data from other websites or Google Maps.
   - Demo mode stays on until building data is real.
 
@@ -216,7 +216,7 @@ OUT OF SCOPE (for now):
     buildings (the report's atomic network) or landlords self-list (R4.2).
     "Request my area" measures demand in Dallas and Fort Worth first.
   - Software for landlords (vertical SaaS)
-  - Swelt as a lender or guarantor
+  - Honest Rent as a lender or guarantor
 
 KILL CRITERIA:
   1. Across 10 Richardson-Plano buildings, real monthly cost differs from
@@ -225,7 +225,7 @@ KILL CRITERIA:
      turned down / asked for extra deposit.
   3. A competitor (Sunny, Apartment List, Apartments.com AI) already shows
      both real monthly cost and approval fit for Dallas.
-  4. Fewer than 5% of renters who see the Swelt Plus waitlist join it in the
+  4. Fewer than 5% of renters who see the Honest Rent Plus waitlist join it in the
      first season (then drop the Move Pass and stay commission-only).
 
 NEXT EVIDENCE (from the discovery report):

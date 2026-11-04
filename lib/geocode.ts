@@ -46,7 +46,8 @@ export async function searchAddress(query: string): Promise<Candidate[]> {
   url.searchParams.set("viewbox", "-97.9,33.6,-96.2,32.2");
   const res = await fetch(url, {
     headers: {
-      "User-Agent": "Swelt/0.1 (apartment search; contact via the Swelt website)",
+      "User-Agent":
+        "HonestRent/0.1 (apartment search; contact via the Honest Rent website)",
     },
     cache: "no-store",
   });

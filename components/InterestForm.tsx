@@ -60,14 +60,8 @@ export function InterestForm({ buildingId, buildingName, plans, moveIn, budget }
 
       {/* Spam trap: hidden from people and screen readers, bots fill it in. */}
       <div aria-hidden="true" className="sr-only">
-        <label htmlFor="swelt_trap">Leave this empty</label>
-        <input
-          id="swelt_trap"
-          name="swelt_trap"
-          type="text"
-          tabIndex={-1}
-          autoComplete="off"
-        />
+        <label htmlFor="hr_trap">Leave this empty</label>
+        <input id="hr_trap" name="hr_trap" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
       {errors.form && (
@@ -114,7 +108,7 @@ export function InterestForm({ buildingId, buildingName, plans, moveIn, budget }
             aria-describedby={errors.consent ? "consent-error" : undefined}
             className="mt-0.5 size-5 shrink-0 cursor-pointer accent-brand"
           />
-          <span>Swelt may email me about this apartment.</span>
+          <span>Honest Rent may email me about this apartment.</span>
         </label>
         {errors.consent && (
           <p

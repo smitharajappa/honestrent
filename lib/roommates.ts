@@ -146,7 +146,7 @@ export function checkAbout(text: string): TextCheck {
     return {
       ok: false,
       reason:
-        "Describe your own habits instead of who you do or don't want to live with. Swelt matches on lifestyle, languages and interests only.",
+        "Describe your own habits instead of who you do or don't want to live with. Honest Rent matches on lifestyle, languages and interests only.",
     };
   }
   return { ok: true };

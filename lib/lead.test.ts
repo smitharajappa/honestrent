@@ -11,7 +11,7 @@ const good = {
   moveIn: "2026-12-01",
   budget: "1500",
   consent: "on",
-  swelt_trap: "",
+  hr_trap: "",
 };
 
 describe("validateLead", () => {
@@ -29,7 +29,7 @@ describe("validateLead", () => {
   });
 
   it("flags bots that fill the hidden trap field", () => {
-    expect(validateLead({ ...good, swelt_trap: "spam" })).toEqual({
+    expect(validateLead({ ...good, hr_trap: "spam" })).toEqual({
       ok: false,
       spam: true,
     });

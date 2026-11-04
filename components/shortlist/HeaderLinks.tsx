@@ -10,9 +10,9 @@ export function HeaderLinks() {
   const { saved, compare, ready } = useShortlist();
   const { user, ready: authReady, available } = useAuth();
   const link =
-    "inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2.5 text-sm font-semibold whitespace-nowrap text-text hover:bg-surface-muted";
+    "inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 text-sm font-semibold whitespace-nowrap text-text hover:bg-surface-muted sm:px-2.5";
   return (
-    <nav aria-label="Your shortlist" className="flex items-center gap-1">
+    <nav aria-label="Your shortlist" className="flex items-center gap-0 sm:gap-1">
       <Link href="/saved" className={link}>
         <HeartIcon className="size-4" filled={ready && saved.length > 0} />
         <span>

@@ -1,4 +1,4 @@
-// Swelt Plus passes: fixed length, paid once, no auto-renew.
+// Honest Rent Plus passes: fixed length, paid once, no auto-renew.
 // Prices are planned. Nothing is charged until payments are switched on.
 
 export type PassId = "browse" | "tour" | "apply" | "move_in";

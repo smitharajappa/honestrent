@@ -149,7 +149,7 @@ export async function askIntro(
   const sb = viewer && token ? userClient(token) : null;
   if (!viewer || !sb) return { ok: false, error: "Sign in first." };
   if (!viewer.hasPlus)
-    return { ok: false, error: "Introductions are part of a Swelt Plus pass." };
+    return { ok: false, error: "Introductions are part of a Honest Rent Plus pass." };
 
   const { data: target } = await sb
     .from("roommate_directory")

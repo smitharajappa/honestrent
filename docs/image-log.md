@@ -9,7 +9,7 @@ and react if a license changes. Add a row when you add a file. Remove the row wh
   what scammers do, and our scam tips tell renters to watch for it. Building photos must be of
   that property, dated, and come from the leasing office, our own shoot, or a moderated
   resident. Until then the card shows a drawn cover and "Photos coming soon".
-- Stock photos are for mood only: the home hero, "How Swelt works", the scam-safety page,
+- Stock photos are for mood only: the home hero, "How Honest Rent works", the scam-safety page,
   empty and error states. Label them "Illustrative photo".
 - Free sources and their rules (check the license page on the day you download):
   Unsplash, Pexels and Pixabay allow commercial use without credit. Do not use pictures that

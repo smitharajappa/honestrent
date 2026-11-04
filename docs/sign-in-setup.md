@@ -1,6 +1,15 @@
-# Sign-in and Swelt Plus: setup
+# Sign-in and Honest Rent Plus: setup
 
 Sign-in uses Supabase Auth (the same Supabase project). It is optional for renters.
+
+## Check your settings any time
+
+```bash
+npm run check:auth
+```
+
+It reads your project's public sign-in settings and tells you what to fix (it never sends an email
+or prints your key). Add a site address to check another one: `npm run check:auth -- https://my-site.vercel.app`.
 
 ## One-time setup in Supabase (about 10 minutes)
 

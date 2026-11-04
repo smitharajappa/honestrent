@@ -1,4 +1,4 @@
-# Swelt
+# Honest Rent
 
 Dallas-area (Richardson, Plano, Dallas) apartments ranked by **real monthly cost** (rent + mandatory fees − deals
 spread over the lease) and, later, by how likely a newcomer is to be approved.
@@ -33,7 +33,7 @@ Reviewing renter bills: in **Table Editor → renter_bill_reports**, set `status
 `accepted` or `rejected`. A building's range appears once 3 reports for the same size
 are accepted. See demand by area in **Table Editor → area_requests**.
 
-Real building data is collected with the "Swelt building check (10 buildings)" Google
+Real building data is collected with the "Honest Rent building check (10 buildings)" Google
 Sheet (questions, call script and floor plans tabs).
 
 Any later change to the tables goes in a new, dated file in `supabase/migrations/`.

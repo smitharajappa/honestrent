@@ -10,7 +10,12 @@ import { useAuth } from "./AuthContext";
 import { usePlusStatus } from "./usePlusStatus";
 
 // The two things we keep in this browser. Cleared on request when an account is deleted.
-const DEVICE_KEYS = ["swelt.shortlist.v1", "swelt.places.v1"];
+const DEVICE_KEYS = [
+  "honestrent.shortlist.v1",
+  "honestrent.places.v1",
+  "swelt.shortlist.v1", // the old name
+  "swelt.places.v1",
+];
 
 /** Who is signed in, what they have, sign out, and delete the account. */
 export function AccountPanel() {
@@ -95,7 +100,7 @@ export function AccountPanel() {
             <dd className="font-medium break-all">{user.email}</dd>
           </div>
           <div className="flex justify-between gap-3">
-            <dt className="text-text-muted">Swelt Plus</dt>
+            <dt className="text-text-muted">Honest Rent Plus</dt>
             <dd className="text-right font-medium">
               {!status || !status.signedIn
                 ? "Checking…"
@@ -112,7 +117,7 @@ export function AccountPanel() {
             Sign out
           </Button>
           <ButtonLink href="/plus" variant="ghost">
-            See Swelt Plus
+            See Honest Rent Plus
           </ButtonLink>
         </div>
         <p className="mt-4 text-xs text-text-muted">

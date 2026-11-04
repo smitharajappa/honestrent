@@ -233,10 +233,11 @@ export default async function BuildingPage({
           {mapOnly && (
             <Section id="unverified" title="We haven't verified this community yet">
               <p className="text-sm text-text-muted">
-                This is a real apartment community. Swelt has its location, but not its
-                current rent, fees, deals or approval rules, so it isn&apos;t ranked by
-                real cost yet. Check the community&apos;s own website for current prices,
-                and never pay a fee before seeing the apartment and a written lease.
+                This is a real apartment community. Honest Rent has its location, but not
+                its current rent, fees, deals or approval rules, so it isn&apos;t ranked
+                by real cost yet. Check the community&apos;s own website for current
+                prices, and never pay a fee before seeing the apartment and a written
+                lease.
               </p>
               {building.website && (
                 <p className="mt-3 text-sm">
@@ -631,8 +632,8 @@ export default async function BuildingPage({
 
               <Section id="interest" title="I'm interested">
                 <p className="mb-5 text-sm text-text-muted">
-                  Leave your email and the Swelt team will help you with next steps for{" "}
-                  {building.name}.
+                  Leave your email and the Honest Rent team will help you with next steps
+                  for {building.name}.
                 </p>
                 <InterestForm
                   buildingId={building.id}

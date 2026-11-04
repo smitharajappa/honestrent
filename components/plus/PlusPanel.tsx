@@ -27,8 +27,8 @@ export function PlusPanel() {
   // Counts that someone saw the offer (no name or email, only a daily number), once a tab.
   useEffect(() => {
     try {
-      if (sessionStorage.getItem("swelt.plus.seen")) return;
-      sessionStorage.setItem("swelt.plus.seen", "1");
+      if (sessionStorage.getItem("honestrent.plus.seen")) return;
+      sessionStorage.setItem("honestrent.plus.seen", "1");
     } catch {
       /* private window: count it anyway */
     }
@@ -50,7 +50,7 @@ export function PlusPanel() {
           {status.plusUntil
             ? `Your pass runs until ${new Date(status.plusUntil).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}.`
             : demoOpen
-              ? "Swelt Plus features are free for you during the demo."
+              ? "Honest Rent Plus features are free for you during the demo."
               : "You don't have a pass yet."}
         </p>
       )}
@@ -128,7 +128,7 @@ export function PlusPanel() {
             <div aria-hidden="true" className="hidden">
               <label>
                 Leave this empty
-                <input name="swelt_trap" tabIndex={-1} autoComplete="off" />
+                <input name="hr_trap" tabIndex={-1} autoComplete="off" />
               </label>
             </div>
             <Field
@@ -143,7 +143,7 @@ export function PlusPanel() {
             <label className="flex min-h-11 items-start gap-2 text-sm">
               <input type="checkbox" name="consent" className="mt-1 size-4" />
               <span>
-                Email me once when Swelt Plus opens. I can ignore it.
+                Email me once when Honest Rent Plus opens. I can ignore it.
                 {errors.consent && (
                   <span className="block text-danger-text">{errors.consent}</span>
                 )}
