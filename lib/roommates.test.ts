@@ -144,6 +144,46 @@ describe("text rules", () => {
   });
 });
 
+describe("stronger chat checks", () => {
+  it("catches look-alike tricks for payment apps and links", () => {
+    for (const t of [
+      "send it by z e l l e please",
+      "use v3nmo",
+      "pay with Z.E.L.L.E",
+      "my site is example dot com",
+      "email me at name at gmail",
+      "text me on w h a t s a p p",
+      "add me on Telegram",
+      "find me on Instagram",
+    ])
+      expect(checkMessage(t).ok, t).toBe(false);
+  });
+  it("does not block ordinary talk about chatting or apps", () => {
+    for (const t of [
+      "Can we chat about the rent split?",
+      "I use an app to track bills",
+      "Does the building take cash for the deposit at the office?",
+      "I'm free after 6 to tour",
+    ])
+      expect(checkMessage(t).ok, t).toBe(true);
+  });
+  it("blocks common rental scam wording", () => {
+    for (const t of [
+      "I'm currently abroad so send the deposit first",
+      "You must pay first to hold it",
+      "I can only take a cashier's check",
+      "Please wire the deposit now",
+    ])
+      expect(checkMessage(t).ok, t).toBe(false);
+  });
+  it("stops the same message being sent again and again", () => {
+    expect(
+      checkMessage("What are your quiet hours?", ["what are  your quiet hours?"]).ok,
+    ).toBe(false);
+    expect(checkMessage("What are your quiet hours?", ["Hi!"]).ok).toBe(true);
+  });
+});
+
 describe("validateProfile", () => {
   const good = {
     nickname: "Asha",

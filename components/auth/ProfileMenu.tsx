@@ -9,6 +9,7 @@ import { Avatar } from "../ui/Avatar";
 import { cn } from "../ui/cn";
 import { LockIcon, LogOutIcon, PlusCircleIcon, UserIcon, UsersIcon } from "../ui/icons";
 import { useAuth } from "./AuthContext";
+import { usePlusStatus } from "./usePlusStatus";
 
 const itemClass =
   "flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-semibold text-text hover:bg-surface-muted focus-visible:bg-surface-muted";
@@ -16,11 +17,16 @@ const itemClass =
 /** The list inside the menu. Shown by ProfileMenu, and as a fixed example in /styleguide. */
 export function ProfileMenuPanel({
   user,
+  planLabel,
+  hasPass = false,
   onNavigate,
   onSignOut,
   className,
 }: {
   user: ProfileSource;
+  /** What to say about the pass, for example "Tour pass · 11 days left". */
+  planLabel?: string;
+  hasPass?: boolean;
   onNavigate?: () => void;
   onSignOut?: () => void;
   className?: string;
@@ -39,12 +45,17 @@ export function ProfileMenuPanel({
         <UsersIcon className="size-4 text-text-muted" />
         My roommate profile
       </Link>
-      <Link href="/plus" role="menuitem" className={itemClass} onClick={onNavigate}>
+      <Link
+        href={hasPass ? "/account#pass" : "/plus"}
+        role="menuitem"
+        className={itemClass}
+        onClick={onNavigate}
+      >
         <PlusCircleIcon className="size-4 text-text-muted" />
         <span>
-          Honest Rent Plus
+          {hasPass ? "My pass" : "Honest Rent Plus"}
           <span className="block text-xs font-normal text-text-muted">
-            {IS_DEMO ? "Free during the demo" : "Passes and waitlist"}
+            {planLabel ?? (IS_DEMO ? "Free during the demo" : "See passes")}
           </span>
         </span>
       </Link>
@@ -68,6 +79,16 @@ export function ProfileMenuPanel({
 /** Round avatar in the header that opens the profile menu. */
 export function ProfileMenu() {
   const { user, signOut } = useAuth();
+  const { status } = usePlusStatus();
+  const pass = status?.signedIn ? status.pass : null;
+  const planLabel =
+    status === null
+      ? undefined
+      : pass
+        ? `${pass.name} pass · ${pass.daysLeft} ${pass.daysLeft === 1 ? "day" : "days"} left`
+        : status.signedIn && status.demoOpen
+          ? "Free during the demo"
+          : "No pass · see passes";
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -149,6 +170,8 @@ export function ProfileMenu() {
         >
           <ProfileMenuPanel
             user={user}
+            planLabel={planLabel}
+            hasPass={pass !== null}
             onNavigate={() => setOpen(false)}
             onSignOut={() => {
               setOpen(false);

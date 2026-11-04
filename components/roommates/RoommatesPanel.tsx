@@ -149,7 +149,7 @@ function MatchCard({
           </Button>
         ) : (
           <ButtonLink href="/plus" variant="secondary">
-            Introductions need a Honest Rent Plus pass
+            Introductions come with a Tour, Apply or Move-in pass
           </ButtonLink>
         )}
         {message && (
@@ -240,7 +240,7 @@ export function RoommatesPanel() {
     );
   }
 
-  const { profile, matches, intros, hasPlus, cityCount, communities } = state;
+  const { profile, matches, intros, hasAccess, cityCount, communities } = state;
   const names = new Map(communities.map((c) => [c.id, c.name]));
   const introFor = (id: string) => intros.find((i) => i.other_id === id);
   const incoming = intros.filter((i) => i.status === "pending" && !i.i_asked);
@@ -302,17 +302,18 @@ export function RoommatesPanel() {
               profile.
             </p>
           )}
-          {!hasPlus ? (
+          {!hasAccess ? (
             <Card className="p-6">
               <h2 className="text-lg font-bold">
                 {cityCount} {cityCount === 1 ? "person" : "people"} in {profile.city}
               </h2>
               <p className="mt-1 text-text-muted">
-                Your profile is free. A Honest Rent Plus pass shows who fits your habits,
-                room type and community, and lets you ask for an introduction.
+                Your profile is free. A Tour, Apply or Move-in pass shows who fits your
+                habits, room type and community, and lets you ask for an introduction.
+                Answering an introduction someone sent you, and chatting, are always free.
               </p>
               <ButtonLink href="/plus" className="mt-4">
-                See Honest Rent Plus
+                See passes
               </ButtonLink>
             </Card>
           ) : matches.length === 0 ? (
@@ -335,7 +336,7 @@ export function RoommatesPanel() {
                     key={m.profile.id}
                     m={m}
                     intro={introFor(m.profile.id)}
-                    canAsk={hasPlus}
+                    canAsk={hasAccess}
                     busy={busyId === m.profile.id}
                     onAsk={() => ask(m.profile.id)}
                     message={notes[m.profile.id]}

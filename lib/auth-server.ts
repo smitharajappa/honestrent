@@ -2,7 +2,7 @@
 // with Supabase and read only that person's own passes (row-level security).
 
 import { createClient } from "@supabase/supabase-js";
-import { activeUntil } from "./plus";
+import { activeUntil, currentPass, roommatesUntil, type CurrentPass } from "./plus";
 import { IS_DEMO } from "./site";
 
 export type Viewer = {
@@ -14,6 +14,10 @@ export type Viewer = {
   demoOpen: boolean;
   /** Can use Plus features right now. */
   hasPlus: boolean;
+  /** Can see roommate matches and ask for introductions (a Tour, Apply or Move-in pass). */
+  hasRoommates: boolean;
+  /** The pass running now, for showing in the profile. */
+  pass: CurrentPass | null;
 };
 
 /** A Supabase client that acts as this signed-in renter: row-level security applies to them. */
@@ -37,16 +41,19 @@ export async function viewerFromToken(token: unknown): Promise<Viewer | null> {
     auth: { persistSession: false },
     global: { headers: { Authorization: `Bearer ${token}` } },
   });
-  const { data, error } = await supabase.auth.getUser(token);
-  if (error || !data.user) return null;
+  const { data: auth, error } = await supabase.auth.getUser(token);
+  if (error || !auth.user) return null;
 
-  const { data: passes } = await supabase.from("plus_passes").select("ends_at");
-  const until = activeUntil(passes ?? []);
+  const { data } = await supabase.from("plus_passes").select("pass, starts_at, ends_at");
+  const passes = (data ?? []) as { pass: string; starts_at: string; ends_at: string }[];
+  const until = activeUntil(passes);
   return {
-    id: data.user.id,
-    email: data.user.email ?? null,
+    id: auth.user.id,
+    email: auth.user.email ?? null,
     plusUntil: until ? until.toISOString() : null,
     demoOpen: IS_DEMO,
     hasPlus: IS_DEMO || until !== null,
+    hasRoommates: IS_DEMO || roommatesUntil(passes) !== null,
+    pass: currentPass(passes),
   };
 }

@@ -31,7 +31,8 @@ export type RoommateState =
   | { status: "unavailable" }
   | {
       status: "ok";
-      hasPlus: boolean;
+      /** Has a pass that includes roommate matches (or the site is in demo mode). */
+      hasAccess: boolean;
       profile: MyProfile | null;
       matches: Match[];
       /** How many people are in the same city (shown even without a pass). */
@@ -77,7 +78,7 @@ export async function loadRoommates(token: string | null): Promise<RoommateState
   if (!row) {
     return {
       status: "ok",
-      hasPlus: viewer.hasPlus,
+      hasAccess: viewer.hasRoommates,
       profile: null,
       matches: [],
       cityCount: 0,
@@ -99,9 +100,9 @@ export async function loadRoommates(token: string | null): Promise<RoommateState
   const list = (others ?? []) as DirectoryProfile[];
   return {
     status: "ok",
-    hasPlus: viewer.hasPlus,
+    hasAccess: viewer.hasRoommates,
     profile,
-    matches: viewer.hasPlus
+    matches: viewer.hasRoommates
       ? rankMatches(profile, list, 20, new Map(communities.map((c) => [c.id, c.name])))
       : [],
     cityCount: list.length,
@@ -172,12 +173,20 @@ export async function askIntro(
   const viewer = await viewerFromToken(token);
   const sb = viewer && token ? userClient(token) : null;
   if (!viewer || !sb) return { ok: false, error: "Sign in first." };
-  if (!viewer.hasPlus)
-    return { ok: false, error: "Introductions are part of a Honest Rent Plus pass." };
+  if (!viewer.hasRoommates)
+    return {
+      ok: false,
+      error: "Introductions come with a Tour, Apply or Move-in pass.",
+    };
 
   const { data, error } = await sb.rpc("ask_roommate_intro", { p_other: otherId });
   if (error?.code === "23505")
     return { ok: false, error: "You already have an introduction with this person." };
+  if (error?.message.includes("Too many"))
+    return {
+      ok: false,
+      error: "That's a lot of requests. Please wait a little and try again.",
+    };
   if (error?.message.includes("not available"))
     return { ok: false, error: "That person isn't available any more." };
   if (error?.message.includes("Create a roommate profile"))

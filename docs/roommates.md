@@ -9,8 +9,9 @@
    apartment communities they are looking at, and optionally their gender with a sharing
    preference (**anyone**, or **only people of my own gender**).
 3. See people in the same city, best fit first, with reasons ("Both night owls", "Budgets
-   within $10"). Seeing matches and asking for an introduction is a Honest Rent Plus feature (free for
-   signed-in renters during demo mode).
+   within $10"). Seeing matches and asking for an introduction come with a Tour, Apply or Move-in pass (free
+   for signed-in renters during demo mode). Creating a profile, answering an introduction and
+   chatting are always free. See `docs/payments-demo.md`.
    Matches only include people who want a kind of room in common and whose sharing preference is
    met in both directions. Picking the same community adds to the score ("Also looking at Camden
    Legacy Park"). A building page says "N renters are looking for a roommate here" only when at

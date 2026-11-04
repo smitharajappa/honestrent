@@ -12,6 +12,7 @@ import { DriveToPlaces } from "@/components/traffic/DriveToPlaces";
 import { TrafficChart } from "@/components/traffic/TrafficChart";
 import { TrustNotes } from "@/components/TrustNotes";
 import { ProfileMenuPanel } from "@/components/auth/ProfileMenu";
+import { PassStatus } from "@/components/plus/PassStatus";
 import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
 import { Button, ButtonLink } from "@/components/ui/Button";
@@ -133,6 +134,26 @@ export default function StyleguidePage() {
         <p className="mt-3 text-xs text-text-muted">
           Shows the Google photo if there is one, otherwise the first letter. Opens from
           the round avatar in the header; closes with Escape or a tap outside.
+        </p>
+      </Section>
+
+      <Section title="Pass status">
+        <div className="grid gap-6 sm:grid-cols-3">
+          <PassStatus
+            pass={{
+              id: "tour",
+              name: "Tour",
+              endsAt: "2026-11-18T00:00:00Z",
+              daysLeft: 11,
+            }}
+            demoOpen={false}
+          />
+          <PassStatus pass={null} demoOpen />
+          <PassStatus pass={null} demoOpen={false} />
+        </div>
+        <p className="mt-3 text-xs text-text-muted">
+          One way to say what pass someone has: on the Plus page, the Account page and in
+          the profile menu.
         </p>
       </Section>
 

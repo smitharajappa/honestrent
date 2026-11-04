@@ -84,3 +84,50 @@ export function nextPassWindow(
   const start = current && current > now ? current : now;
   return { start, end: new Date(start.getTime() + days * 86_400_000) };
 }
+
+// ---- what a pass includes ---------------------------------------------------------------
+
+/** Roommate matches and introductions come with Tour, Apply and Move-in (not Browse). */
+export const ROOMMATE_PASS_IDS: PassId[] = ["tour", "apply", "move_in"];
+
+export function includesRoommates(id: PassId): boolean {
+  return ROOMMATE_PASS_IDS.includes(id);
+}
+
+export function passById(id: PassId): Pass {
+  return PASSES.find((p) => p.id === id)!;
+}
+
+export type PassRow = { pass: string; starts_at: string; ends_at: string };
+
+export type CurrentPass = { id: PassId; name: string; endsAt: string; daysLeft: number };
+
+export function daysLeft(end: Date, now = new Date()): number {
+  return Math.max(0, Math.ceil((end.getTime() - now.getTime()) / 86_400_000));
+}
+
+/** The pass running right now (if two overlap, the one that ends last). Null if none. */
+export function currentPass(rows: PassRow[], now = new Date()): CurrentPass | null {
+  let best: { id: PassId; end: Date } | null = null;
+  for (const r of rows) {
+    const start = new Date(r.starts_at);
+    const end = new Date(r.ends_at);
+    if (!isPassId(r.pass) || start > now || end <= now) continue;
+    if (!best || end > best.end) best = { id: r.pass, end };
+  }
+  if (!best) return null;
+  return {
+    id: best.id,
+    name: passById(best.id).name,
+    endsAt: best.end.toISOString(),
+    daysLeft: daysLeft(best.end, now),
+  };
+}
+
+/** When roommate access ends: the latest end of a running pass that includes roommates. */
+export function roommatesUntil(rows: PassRow[], now = new Date()): Date | null {
+  return activeUntil(
+    rows.filter((r) => isPassId(r.pass) && includesRoommates(r.pass)),
+    now,
+  );
+}
