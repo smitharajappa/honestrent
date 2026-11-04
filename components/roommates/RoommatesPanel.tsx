@@ -43,6 +43,30 @@ function VerifiedBadge() {
   );
 }
 
+/** The match percentage as a ring that fills to the score. Words carry the number too. */
+function ScoreRing({ score }: { score: number }) {
+  return (
+    <div
+      role="img"
+      aria-label={`${score}% match`}
+      className="grid size-16 shrink-0 place-items-center rounded-full"
+      style={{
+        background: `conic-gradient(var(--brand) ${score * 3.6}deg, var(--surface-muted) 0)`,
+      }}
+    >
+      <div className="grid size-[3.4rem] place-items-center rounded-full bg-surface text-center">
+        <span className="text-lg leading-none font-extrabold tabular-nums">
+          {score}
+          <span className="text-[10px] font-bold">%</span>
+        </span>
+        <span className="-mt-3 text-[9px] font-semibold tracking-wide text-text-muted uppercase">
+          match
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function MatchCard({
   m,
   intro,
@@ -75,24 +99,26 @@ function MatchCard({
   return (
     <Card as="li" className="p-5">
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <h3 className="text-lg font-bold">{p.nickname}</h3>
-          <div className="mt-1 flex flex-wrap gap-1.5">
-            {p.verified && <VerifiedBadge />}
-            {example ? <Badge>Sample</Badge> : p.demo && <Badge>Sample profile</Badge>}
-            <Badge>{p.city}</Badge>
+        <div className="flex min-w-0 items-start gap-3">
+          <span
+            aria-hidden="true"
+            className="grid size-12 shrink-0 place-items-center rounded-2xl bg-brand-soft text-lg font-extrabold text-brand-text"
+          >
+            {p.nickname
+              .replace(/^Sample\s+/, "")
+              .charAt(0)
+              .toUpperCase()}
+          </span>
+          <div className="min-w-0">
+            <h3 className="text-lg leading-tight font-bold">{p.nickname}</h3>
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
+              {p.verified && <VerifiedBadge />}
+              {example ? <Badge>Sample</Badge> : p.demo && <Badge>Sample profile</Badge>}
+              <Badge>{p.city}</Badge>
+            </div>
           </div>
         </div>
-        <div className="shrink-0 text-right">
-          <p className="text-2xl font-extrabold tabular-nums">{m.score}%</p>
-          <p className="text-xs text-text-muted">match</p>
-        </div>
-      </div>
-      <div
-        className="mt-3 h-2 overflow-hidden rounded-full bg-surface-muted"
-        aria-hidden="true"
-      >
-        <div className="h-full rounded-full bg-brand" style={{ width: `${m.score}%` }} />
+        <ScoreRing score={m.score} />
       </div>
       {m.reasons.length > 0 && (
         <ul className="mt-3 space-y-1 text-sm">

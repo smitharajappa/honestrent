@@ -11,11 +11,14 @@ import { CheckIcon } from "../ui/icons";
 export function PassStatus({
   pass,
   demoOpen,
+  hideLink = false,
   className,
 }: {
   pass: CurrentPass | null;
   /** The site is in demo mode, so Plus features are open to signed-in renters. */
   demoOpen: boolean;
+  /** Leave out the "See passes" link when the page already has a button for it. */
+  hideLink?: boolean;
   className?: string;
 }) {
   if (pass) {
@@ -34,15 +37,19 @@ export function PassStatus({
   return (
     <div className={className}>
       <Badge>{demoOpen ? "Free during the demo" : "No pass"}</Badge>
-      <p className="mt-1 text-sm text-text-muted">
-        {demoOpen ? "Everything in Plus is open while we test. " : ""}
-        <Link
-          href="/plus"
-          className="font-semibold text-brand-text underline underline-offset-2"
-        >
-          See passes
-        </Link>
-      </p>
+      {(demoOpen || !hideLink) && (
+        <p className="mt-1 text-sm text-text-muted">
+          {demoOpen ? "Everything in Plus is open while we test. " : ""}
+          {!hideLink && (
+            <Link
+              href="/plus"
+              className="font-semibold text-brand-text underline underline-offset-2"
+            >
+              See passes
+            </Link>
+          )}
+        </p>
+      )}
     </div>
   );
 }
