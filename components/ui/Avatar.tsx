@@ -5,7 +5,16 @@ import { initialOf, photoUrl, type ProfileSource } from "@/lib/profile";
 import { cn } from "./cn";
 
 /** Round picture for a signed-in person: their Google photo, or the first letter of their name. */
-export function Avatar({ user, className }: { user: ProfileSource; className?: string }) {
+export function Avatar({
+  user,
+  className,
+  tone = "solid",
+}: {
+  user: ProfileSource;
+  className?: string;
+  /** "solid" is white on brand green; "inverse" is for sitting on a green background. */
+  tone?: "solid" | "inverse";
+}) {
   const url = photoUrl(user);
   const [failedUrl, setFailedUrl] = useState<string | null>(null);
   const showPhoto = url !== null && failedUrl !== url;
@@ -13,7 +22,8 @@ export function Avatar({ user, className }: { user: ProfileSource; className?: s
     <span
       aria-hidden="true"
       className={cn(
-        "grid size-9 shrink-0 place-items-center overflow-hidden rounded-full bg-brand-soft text-sm font-bold text-brand-text",
+        "grid size-9 shrink-0 place-items-center overflow-hidden rounded-full text-sm font-extrabold",
+        tone === "solid" ? "bg-brand text-brand-fg" : "bg-brand-fg text-brand",
         className,
       )}
     >

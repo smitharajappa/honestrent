@@ -62,7 +62,8 @@ export default function PrivacyPage() {
               <strong className="text-text">An account (optional):</strong> your email,
               when you signed up and last signed in, and how you signed in. If you use
               Google, Google shares your name and picture link with our sign-in service,
-              which stores them. We do not ask for or show a name. We store no password.
+              which stores them. You can add a name of your own on the account page; only
+              you see it. We store no password.
             </li>
             <li>
               <strong className="text-text">A roommate profile (optional):</strong> the

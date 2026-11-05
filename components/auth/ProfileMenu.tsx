@@ -36,7 +36,7 @@ export function ProfileMenuPanel({
   return (
     <div className={cn("p-2", className)}>
       <div className="flex items-center gap-3 px-3 py-2">
-        <Avatar user={user} className="size-10" />
+        <Avatar user={user} tone="inverse" className="size-10" />
         <div className="min-w-0">
           <p className="truncate text-sm font-bold">{displayName(user)}</p>
           {user.email && <p className="truncate text-xs opacity-90">{user.email}</p>}

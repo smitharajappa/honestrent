@@ -7,7 +7,7 @@ import { Button, ButtonLink } from "../ui/Button";
 import { Card } from "../ui/Card";
 import { CheckIcon } from "../ui/icons";
 import { useAuth } from "./AuthContext";
-import { displayName } from "@/lib/profile";
+import { displayName, validateDisplayName } from "@/lib/profile";
 import { PassStatus } from "../plus/PassStatus";
 import { Avatar } from "../ui/Avatar";
 import { usePlusStatus } from "./usePlusStatus";
@@ -29,6 +29,8 @@ export function AccountPanel() {
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [deleted, setDeleted] = useState(false);
+  const [nameDraft, setNameDraft] = useState<string | null>(null);
+  const [nameNote, setNameNote] = useState<{ ok: boolean; text: string } | null>(null);
 
   if (!ready) return <p className="text-text-muted">One moment…</p>;
 
@@ -69,6 +71,26 @@ export function AccountPanel() {
     );
   }
 
+  async function saveName(e: React.FormEvent) {
+    e.preventDefault();
+    const checked = validateDisplayName(nameDraft ?? displayName(user!));
+    if (!checked.ok) {
+      setNameNote({ ok: false, text: checked.error });
+      return;
+    }
+    const supabase = getBrowserSupabase();
+    if (!supabase) return;
+    const { error: failed } = await supabase.auth.updateUser({
+      data: { full_name: checked.value },
+    });
+    setNameNote(
+      failed
+        ? { ok: false, text: "We couldn't save that just now. Please try again." }
+        : { ok: true, text: "Saved. This is the name you see in the menu." },
+    );
+    if (!failed) setNameDraft(null);
+  }
+
   async function deleteAccount() {
     const supabase = getBrowserSupabase();
     if (!supabase) return;
@@ -103,6 +125,39 @@ export function AccountPanel() {
             <p className="truncate text-sm text-text-muted">{user.email}</p>
           </div>
         </div>
+        <form onSubmit={saveName} className="mt-4" noValidate>
+          <label htmlFor="display-name" className="text-sm font-semibold">
+            Your name
+          </label>
+          <div className="mt-1 flex gap-2">
+            <input
+              id="display-name"
+              value={nameDraft ?? displayName(user)}
+              onChange={(e) => {
+                setNameDraft(e.target.value);
+                setNameNote(null);
+              }}
+              maxLength={40}
+              autoComplete="name"
+              className="min-h-11 min-w-0 flex-1 rounded-xl border border-border-strong bg-surface px-3 text-base"
+            />
+            <Button type="submit" variant="secondary">
+              Save name
+            </Button>
+          </div>
+          <p className="mt-1 text-xs text-text-muted">
+            Only you see it, in the menu. It is not shown to other renters (roommate
+            profiles use a separate nickname).
+          </p>
+          {nameNote && (
+            <p
+              role={nameNote.ok ? "status" : "alert"}
+              className={`mt-1 text-sm ${nameNote.ok ? "text-success-text" : "text-danger-text"}`}
+            >
+              {nameNote.text}
+            </p>
+          )}
+        </form>
         <div className="mt-4 flex flex-wrap gap-2">
           <Button type="button" variant="secondary" onClick={signOut}>
             Sign out
