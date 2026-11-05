@@ -11,8 +11,10 @@ import { LockIcon, LogOutIcon, PlusCircleIcon, UserIcon, UsersIcon } from "../ui
 import { useAuth } from "./AuthContext";
 import { usePlusStatus } from "./usePlusStatus";
 
+// The menu is solid brand green, so its text uses the brand "on color" token (white in light
+// mode, dark in dark mode) and its focus ring flips to the same token.
 const itemClass =
-  "flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-semibold text-text hover:bg-surface-muted focus-visible:bg-surface-muted";
+  "flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-semibold text-brand-fg hover:bg-brand-fg/15 focus-visible:bg-brand-fg/15 focus-visible:outline-brand-fg";
 
 /** The list inside the menu. Shown by ProfileMenu, and as a fixed example in /styleguide. */
 export function ProfileMenuPanel({
@@ -37,12 +39,12 @@ export function ProfileMenuPanel({
         <Avatar user={user} className="size-10" />
         <div className="min-w-0">
           <p className="truncate text-sm font-bold">{displayName(user)}</p>
-          {user.email && <p className="truncate text-xs text-text-muted">{user.email}</p>}
+          {user.email && <p className="truncate text-xs opacity-90">{user.email}</p>}
         </div>
       </div>
-      <div role="separator" className="my-1 border-t border-border" />
+      <div role="separator" className="my-1 border-t border-brand-fg/25" />
       <Link href="/roommates" role="menuitem" className={itemClass} onClick={onNavigate}>
-        <UsersIcon className="size-4 text-text-muted" />
+        <UsersIcon className="size-4 opacity-90" />
         My roommate profile
       </Link>
       <Link
@@ -51,25 +53,25 @@ export function ProfileMenuPanel({
         className={itemClass}
         onClick={onNavigate}
       >
-        <PlusCircleIcon className="size-4 text-text-muted" />
+        <PlusCircleIcon className="size-4 opacity-90" />
         <span>
           {hasPass ? "My pass" : "Honest Rent Plus"}
-          <span className="block text-xs font-normal text-text-muted">
+          <span className="block text-xs font-normal opacity-90">
             {planLabel ?? (IS_DEMO ? "Free during the demo" : "See passes")}
           </span>
         </span>
       </Link>
       <Link href="/account" role="menuitem" className={itemClass} onClick={onNavigate}>
-        <UserIcon className="size-4 text-text-muted" />
+        <UserIcon className="size-4 opacity-90" />
         Account
       </Link>
       <Link href="/privacy" role="menuitem" className={itemClass} onClick={onNavigate}>
-        <LockIcon className="size-4 text-text-muted" />
+        <LockIcon className="size-4 opacity-90" />
         Privacy
       </Link>
-      <div role="separator" className="my-1 border-t border-border" />
+      <div role="separator" className="my-1 border-t border-brand-fg/25" />
       <button type="button" role="menuitem" className={itemClass} onClick={onSignOut}>
-        <LogOutIcon className="size-4 text-text-muted" />
+        <LogOutIcon className="size-4 opacity-90" />
         Sign out
       </button>
     </div>
@@ -166,7 +168,7 @@ export function ProfileMenu() {
           id={menuId}
           role="menu"
           aria-label="Profile"
-          className="absolute right-0 top-full z-50 mt-1 w-[min(18rem,calc(100vw-2rem))] rounded-2xl border border-border bg-surface shadow-raised"
+          className="absolute top-full right-0 z-50 mt-1 w-[min(18rem,calc(100vw-2rem))] rounded-2xl border border-brand-hover bg-brand text-brand-fg shadow-raised"
         >
           <ProfileMenuPanel
             user={user}

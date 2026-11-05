@@ -30,6 +30,7 @@ function pinElement(pin: MapPin, highlighted: boolean): HTMLElement {
   const el = document.createElement(pin.href ? "a" : "div");
   el.className = `map-pin${highlighted ? " map-pin-main" : ""}`;
   if (pin.href) (el as HTMLAnchorElement).href = pin.href;
+  else el.setAttribute("role", "img"); // a label needs a role to be valid on a plain div
   const FIT_WORDS = {
     good: "good fit",
     guarantor: "possible with guarantor",
@@ -85,6 +86,8 @@ export default function BuildingMap({
   className,
 }: Props) {
   const container = useRef<HTMLDivElement>(null);
+  const summaryRef = useRef(summary);
+  summaryRef.current = summary;
   const mapRef = useRef<maplibregl.Map | null>(null);
   const [failed, setFailed] = useState(false);
   // Latest values for the map's own event handlers.
@@ -107,6 +110,10 @@ export default function BuildingMap({
         cooperativeGestures: true,
         attributionControl: { compact: true },
       });
+      // MapLibre labels its canvas just "Map"; give each map its own name.
+      map
+        .getCanvas()
+        .setAttribute("aria-label", `Map. ${summaryRef.current.slice(0, 80)}`);
     } catch {
       // Usually a browser without WebGL.
       setFailed(true);
@@ -230,6 +237,7 @@ export default function BuildingMap({
     if (you) {
       const el = document.createElement("div");
       el.className = "map-pin map-pin-you";
+      el.setAttribute("role", "img");
       el.setAttribute("aria-label", "You are here");
       el.title = "You are here";
       new maplibregl.Marker({ element: el })
@@ -265,7 +273,7 @@ export default function BuildingMap({
       ) : (
         <div
           ref={container}
-          role="img"
+          role="group"
           aria-label={`Map. ${summary}`}
           className="h-full w-full"
         />

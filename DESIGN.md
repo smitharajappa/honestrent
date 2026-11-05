@@ -126,6 +126,15 @@ If a new pattern is needed, add it there and to `/styleguide`.
    setup messages to renters.
 10. **Help in context:** short tips next to the thing they explain. No separate manual.
 
+## Accessibility checks
+
+- A "Skip to content" link is the first Tab stop on every page.
+- Run before a release: axe-core (WCAG 2.1 AA plus best practices) over every page in light and
+  dark, laptop and phone. The last run found nothing left to fix.
+- Labels need a role to be valid (a plain div with `aria-label` needs `role="img"`); a table is
+  hidden by wrapping it in `sr-only`, not by putting `sr-only` on the table; a widget with
+  clickable parts inside (a map) is a `group`, not an `img`.
+
 ## Do / Don't
 
 | Do                                                   | Don't                                          |
