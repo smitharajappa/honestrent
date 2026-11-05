@@ -107,7 +107,7 @@ export function DriveToPlaces({
           >
             {c.label}
             <span
-              className={`ml-2 text-xs tabular-nums ${c.id === current.id ? "text-brand-fg/80" : "text-text-muted"}`}
+              className={`ml-2 text-xs tabular-nums ${c.id === current.id ? "text-brand-fg/90" : "text-text-muted"}`}
             >
               {milesBetween(from, c).toFixed(1)} mi
             </span>

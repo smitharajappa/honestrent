@@ -61,8 +61,16 @@ export default function RootLayout({
               <ApprovalProvider>
                 <ShortlistProvider>
                   <MyPlacesProvider>
+                    <a
+                      href="#content"
+                      className="sr-only rounded-xl bg-surface px-4 py-2 font-semibold text-text shadow-raised focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
+                    >
+                      Skip to content
+                    </a>
                     <SiteHeader />
-                    <div className="flex-1">{children}</div>
+                    <div id="content" tabIndex={-1} className="flex-1 outline-none">
+                      {children}
+                    </div>
                     <SiteFooter />
                   </MyPlacesProvider>
                 </ShortlistProvider>

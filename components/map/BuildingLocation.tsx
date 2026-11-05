@@ -85,7 +85,7 @@ export function BuildingLocation({
               {tab}
               <span
                 className={
-                  on ? "text-brand-fg/80 tabular-nums" : "text-text-muted tabular-nums"
+                  on ? "text-brand-fg/90 tabular-nums" : "text-text-muted tabular-nums"
                 }
               >
                 {counts[kind]}

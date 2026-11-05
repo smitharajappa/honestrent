@@ -129,7 +129,11 @@ export default function StyleguidePage() {
               user={{ email: "x@example.com", user_metadata: { full_name: "Priya Rao" } }}
             />
           </div>
-          <div className="w-72 rounded-2xl border border-brand-hover bg-brand text-brand-fg shadow-raised">
+          <div
+            role="menu"
+            aria-label="Profile menu (static copy)"
+            className="w-72 rounded-2xl border border-brand-hover bg-brand text-brand-fg shadow-raised"
+          >
             <ProfileMenuPanel user={{ email: "sample.renter@example.com" }} />
           </div>
         </div>
