@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { displayName, initialOf, photoUrl } from "./profile";
+import {
+  displayName,
+  initialOf,
+  photoUrl,
+  prettyFromEmail,
+  validateDisplayName,
+} from "./profile";
 
 describe("displayName", () => {
   it("prefers the Google name", () => {
@@ -8,8 +14,10 @@ describe("displayName", () => {
     ).toBe("Priya Rao");
     expect(displayName({ email: "a@b.com", user_metadata: { name: "Li" } })).toBe("Li");
   });
-  it("falls back to the email before the @", () => {
-    expect(displayName({ email: "smitha179@gmail.com" })).toBe("smitha179");
+  it("falls back to a tidied-up version of the email before the @", () => {
+    expect(displayName({ email: "rajappa.smitha@gmail.com" })).toBe("Rajappa Smitha");
+    expect(displayName({ email: "smitha179@gmail.com" })).toBe("Smitha");
+    expect(displayName({ email: "ana_maria-lopez92@x.com" })).toBe("Ana Maria Lopez");
   });
   it("never returns an empty name", () => {
     expect(displayName({})).toBe("Your profile");
@@ -48,5 +56,24 @@ describe("photoUrl", () => {
     ).toBeNull();
     expect(photoUrl({ user_metadata: { avatar_url: "javascript:alert(1)" } })).toBeNull();
     expect(photoUrl({ user_metadata: { avatar_url: "not a url" } })).toBeNull();
+  });
+});
+
+describe("prettyFromEmail and validateDisplayName", () => {
+  it("never returns digits or the @ part", () => {
+    expect(prettyFromEmail("12345@x.com")).toBe("");
+    expect(prettyFromEmail("a.b.c.d.e@x.com")).toBe("A B C");
+  });
+  it("accepts ordinary names and rejects contact details", () => {
+    expect(validateDisplayName("  Smitha   Rajappa ")).toEqual({
+      ok: true,
+      value: "Smitha Rajappa",
+    });
+    expect(validateDisplayName("José O'Neil-Ng").ok).toBe(true);
+    expect(validateDisplayName("x").ok).toBe(false);
+    expect(validateDisplayName("a@b.com").ok).toBe(false);
+    expect(validateDisplayName("call 214 555 0199").ok).toBe(false);
+    expect(validateDisplayName("www.site.com").ok).toBe(false);
+    expect(validateDisplayName("x".repeat(41)).ok).toBe(false);
   });
 });
