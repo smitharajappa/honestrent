@@ -2,20 +2,24 @@
 
 ## Strategy (roommates and passes)
 
-|                                                      | Free              | With a Tour, Apply or Move-in pass |
-| ---------------------------------------------------- | ----------------- | ---------------------------------- |
-| Make a roommate profile                              | yes               |                                    |
-| See how many people are in your city                 | yes               |                                    |
-| See matches and percentages, ask for an introduction |                   | yes                                |
-| Answer an introduction someone sent you              | yes               |                                    |
-| Chat after you both accept                           | yes (both people) |                                    |
+|                                                      | Free              | With a 2-, 3- or 4-week pass |
+| ---------------------------------------------------- | ----------------- | ---------------------------- |
+| Make a roommate profile                              | yes               |                              |
+| See how many people are in your city                 | yes               |                              |
+| See matches and percentages, ask for an introduction |                   | yes                          |
+| Answer an introduction someone sent you              | yes               |                              |
+| Chat after you both accept                           | yes (both people) |                              |
 
-- Browse (7 days) does not include roommates. Finding someone to sign with takes about two
-  weeks, so Tour (14 days, "Most popular") is the entry pass for it. No new pass was added.
+- The 1-week pass (7 days, "Browse" in the database) does not include roommates. Finding someone to sign with takes about two
+  weeks, so the 2-week pass (14 days, "Most popular") is the entry pass for it. No new pass was added.
 - Free profiles keep supply growing. Free answering and chatting means a paying person never
   hits a wall on the other side.
 - Test it before building more: the waitlist stays on the Plus page. PRD kill rule: if under 5%
   of renters who see the offer join the waitlist, drop the pass.
+
+Pass names are the length, so they explain themselves: 1-Week (look around), 2-Week (visit and
+compare), 3-Week (choose and apply), 4-Week (search to keys). The stored ids (`browse`, `tour`,
+`apply`, `move_in`) never change, so renaming needs no database update.
 
 ## The demo checkout (no real payment)
 

@@ -176,7 +176,7 @@ export async function askIntro(
   if (!viewer.hasRoommates)
     return {
       ok: false,
-      error: "Introductions come with a Tour, Apply or Move-in pass.",
+      error: "Introductions come with a 2-week or longer pass.",
     };
 
   const { data, error } = await sb.rpc("ask_roommate_intro", { p_other: otherId });

@@ -1,147 +1,178 @@
-# Honest Rent: demo notes (7 to 8 minutes)
+# Honest Rent: speaker notes (about 8 minutes)
 
-Say the words in quotes. The lines starting with "Do" are what to click. Times are a guide.
+Say the words in quotes. Lines starting with "Do:" are what to click. Times are a guide.
+About 900 spoken words (about 7 minutes at a calm pace) plus the clicks lands near 8 minutes.
 
 ## Before you start (5 minutes, once)
 
-1. Merge the open pull request, then in GitHub: Actions, **Supabase migrations**, Run workflow
-   (leave "baseline" off). Then **Load data into Supabase** (this adds the sample roommates).
-2. Open https://honestrent.vercel.app in a fresh browser window. Sign in with your email link
-   **before** the demo so you are not waiting for email on stage.
-3. Open the site once on the roommate page and the Plus page so the first load is warm.
-4. Keep the phone on the table in case someone wants to see it on a phone.
-5. Know the honest limits (below). Saying them first makes you look careful, not weak.
+1. Merge the open pull request. In GitHub: Actions, **Supabase migrations**, Run workflow (leave
+   "baseline" off). Then **Load data into Supabase** (adds the sample roommates).
+2. Open https://honestrent.vercel.app in a fresh window and **sign in before the talk** so you
+   are not waiting for an email on stage.
+3. Open the Roommates and Plus pages once so the first load is warm.
+4. Have the phone ready in case someone asks to see it on a phone.
 
-## The words
+---
 
-### 0:00 The problem (45 seconds)
+## 0:00 Why I built this (50 seconds)
 
-"Meet Ana. She is an international student arriving at UT Dallas in six weeks. She has no US
-credit history and no Social Security number. She searches Apartments.com and sees a nice
-apartment for $1,450. But the ad does not show the trash fee, the pest fee, the parking, or the
-utilities. And it does not tell her if the building will even approve her, so she pays a $75
-application fee to be told no. Honest Rent fixes both: **the real monthly cost, and the
-chance of being approved**, before she pays anything."
+"Meet Ana. She is an international graduate student arriving at UT Dallas in six weeks. She has no
+Social Security number and no US credit history. She is searching from abroad, asking in cohort
+WhatsApp groups. Three things go wrong. First, she can't tell which buildings will approve her
+until she pays an application fee, about fifty dollars, and loses weeks. Second, the cash to move
+in is a surprise: a guarantor can cost about a month's rent, plus double deposits. Third, the
+price in the ad is not the price: trash, pest, parking and utilities never show up. I built Honest
+Rent so she can see **the real monthly cost and her chance of being approved before she pays
+anything**."
 
-### 0:45 Home page (60 seconds)
+## 0:50 Why now (45 seconds)
 
-Do: stay on the home page. Click **Play again** on the card.
+"Why now? In June 2026, nearly two in three Dallas listings, 64.6 percent, offered a concession, so
+the ad price is rarely what you pay. One real resident's bills ran twelve to sixteen percent above
+rent, $274 in one month, mostly utilities. That is one renter, not a sample, and I say so. And with no
+US credit, a guarantor can cost seventy to a hundred and ten percent of a month's rent. Apartments.com
+does not show approval fit at all. That gap is what I am building into."
 
-"This card is the whole idea. The ad says $1,450. Watch: required fees, utilities the building
-bills, and a move-in deal. The real price is $1,620, a hundred and seventy dollars a month the ad
-never showed. These numbers are made up for this card; the real buildings show their own."
+## 1:35 Customer discovery (45 seconds)
 
-### 1:45 Search (60 seconds)
+Say this version if you have **not** done real interviews yet (it is the honest one):
 
-Do: click **Anywhere in DFW**. Budget $2,200. Pick a move-in date. In "Will they approve you?"
-choose income, **no US credit**, and a passport or ITIN. Click **Show apartments**.
+"Here is what I know and what I don't. My October discovery report used six synthetic interviews:
+simulated renters to form hypotheses, not real customers. In four of six, approval uncertainty was
+the biggest pain, so the product became approval-first. The real evidence so far is that one
+resident's bills. Next, I run six real interviews with UT Dallas international students: would you
+trust an approval prediction, and what would make you apply through a new site? If fewer than two of
+five recent movers were surprised by fees or turned down, I change course."
 
-"Renters choose a place first: a city, a ZIP, near me, or anywhere in Dallas–Fort Worth. We ask
-three private questions about income, credit and ID. We never ask for a Social Security number or
-an exact score, and the answers stay in this browser tab."
+If you **have** done real interviews, replace the middle with: "I interviewed [N] students. [Name or
+'a first-year student'] told me: '[real quote]'. [N] of [N] said approval was the hardest part." Only
+use real quotes. Never present the synthetic ones as real customers.
 
-### 2:45 Results (60 seconds)
+## 2:20 Core features, live (about 3 minutes 40 seconds)
 
-Do: scroll the cards. Point at the big price, the struck-through ad price, the fee chips, the
-colored fit badge. Click **Map**, then back to **List**.
+### Home (25 seconds)
 
-"Each building shows the real monthly cost, the ad price crossed out, and the biggest fees as
-chips. The badge says Good fit, Possible with a guarantor, or Unlikely, and the reason. Where we
-do not know a building's rules, we say **Rules not confirmed** instead of guessing. We never rank
-by who pays us, only by real cost and approval fit."
+Do: stay on the home page, click **Play again** on the card.
 
-### 3:45 One building (75 seconds)
+"This card is the whole idea. The ad says $1,450. Fees, utilities and a deal come in one by one, and
+the real price is $1,620, a hundred and seventy dollars a month the ad never showed. These numbers are
+made up for the card; real buildings show their own."
 
-Do: open a building (for example Cutters Point or a Camden community). Scroll slowly.
+### Search and approval (45 seconds)
 
-"The top box counts up from the ad price to the real price. Below: required fees, move-in
-deals spread over the lease, utilities, cash needed to move in, documents to bring, and the
-approval rules. Every price shows when it was last verified. The map shows nearby groceries,
-bus stops and restaurants from OpenStreetMap. The safety section shows **counts only** from the
-City of Dallas open data, with no scores or grades, to avoid unfair labeling. Drive times go to
-UT Dallas, and signed-in renters can add other places."
+Do: **Anywhere in DFW**, budget $2,200, a move-in date. Choose income, **no US credit**, passport or
+ITIN. Click **Show apartments**.
 
-### 5:00 Roommates (75 seconds)
+"Renters pick a place, then answer three private questions about income, credit and ID. We never ask
+for a Social Security number or an exact score, and the answers stay in this browser tab."
 
-Do: click **Roommates**. Show the form fields, then **Matches**. Open "How matching works".
-Click **Request an introduction** on a sample match. Open the chat and the **Next steps** list.
+### Results (40 seconds)
 
-"Sign-in is required. You choose the kind of room: a private room in a shared home, or sharing a
-room with one more person. You can pick up to three apartment communities you are looking at.
-Matches are people in your city, ranked on habits, budget, move-in date, languages, interests
-and the same community. The ring is the match percent: here are 90, 50 and zero, scored with the
-same rules. Chat opens only after both people accept, and it blocks links, phone numbers and
-payment talk to protect against scams. We use no race, religion or nationality fields; the only
-personal detail is an optional gender sharing preference, and other renters never see it."
+Do: scroll the cards, point at the big price, the struck-through ad price, the fee chips and the
+fit badge. Click **Map**, then back to **List**.
 
-### 6:15 Pass and checkout (40 seconds)
+"Each building shows the real monthly cost with the ad price crossed out, and its biggest fees.
+The badge says Good fit, Possible with a guarantor, or Unlikely, with the reason. When we don't know
+a building's rules we say **Rules not confirmed**, never a guess. We never rank by who pays us."
 
-Do: **Plus**. Pick **Tour**. Click the demo checkout, then **Pay (demo)**. Open the profile menu.
+### One building (55 seconds)
 
-"Search is free forever. A pass, 7 to 28 days, one payment, no auto-renew, adds roommate matches
-and extra drive times. This checkout is a demo: no card is read and no money moves. When we turn
-on real payments, the same flow goes to Stripe. The profile menu now shows my pass and the days
-left."
+Do: open Cutters Point or a Camden community. Scroll.
 
-### 6:55 How it is built (45 seconds)
+"The top box counts up from the ad price to the real price. Below it: required fees, deals, utilities,
+cash to move in, documents to bring and approval rules, each with a last-verified date. The map shows
+nearby groceries and bus stops, and the safety section shows counts only, from City of Dallas open
+data, with no scores or grades."
 
-"It is a mobile-first web app. Next.js and React with TypeScript, Tailwind for design,
-Supabase for the Postgres database, sign-in and row-level security, and Vercel for hosting. Maps
-are MapLibre with free OpenStreetMap data. GitHub Actions updates the database automatically.
-There are 176 automated tests, and the pages pass an accessibility audit in light and dark mode.
-I built it with an AI coding assistant, Claude Code, under my direction."
+### Roommates (50 seconds)
 
-### 7:40 What is next and how AI helps (40 seconds)
+Do: **Roommates**. Show the form, then **Matches**, then open "How matching works". Click **Request an
+introduction** on a sample match, open the chat and the **Next steps** list.
 
-"Next: real payments, ID checks for roommate verification, email alerts, and more buildings with
-verified fees and approval rules. AI will help in three places, always with a human check:
-reading leasing documents to draft fees and rules for us to verify; a second layer of chat
-moderation behind our rules; and plain-language help in a renter's own language. AI will never
-decide who is approved, and never see a Social Security number."
+"Roommates need sign-in. You choose a private room or a shared room, and up to three communities you
+are looking at. Matches are people in your city, ranked on habits, budget, move-in date, languages and
+the same community. The ring is the match percent: 90, 50 and zero show how it works. Chat opens only
+after both accept and blocks links, phone numbers and payment talk. There is no race, religion or
+nationality anywhere; the only personal detail is an optional gender sharing preference that others
+never see."
 
-### 8:00 Close (15 seconds)
+### Pass (25 seconds)
+
+Do: **Plus**, pick the **2-Week Pass**, demo checkout, **Pay (demo)**, open the profile menu.
+
+"Search is free forever. A pass, seven to twenty-eight days, one payment, no auto-renew, adds roommate
+matches and extra drive times. This checkout is a demo: no card, no money. The profile menu now shows
+my pass and the days left."
+
+## 6:00 The databases (45 seconds)
+
+"Everything lives in one Supabase Postgres database: buildings, floor plans, fees, deals, utilities,
+nearby places, safety counts, passes, and roommate profiles, introductions and messages. Seventy-seven
+communities and about 3,950 nearby places come from OpenStreetMap. Eleven communities have prices I
+entered by hand: five real, from the community's own page, and six made up for testing, each with a
+last-verified date. Safety counts come from City of Dallas open data. Row-level security means you see
+only your own account, and we never store a Social Security number, ID scan, exact credit score or
+immigration status."
+
+## 6:45 Tech stack (30 seconds)
+
+"A mobile-first web app: Next.js and React with TypeScript, Tailwind, Supabase for the database and
+sign-in, MapLibre with OpenStreetMap, and Vercel hosting. GitHub Actions updates the database, with 178
+automated tests and an accessibility audit. I built it with an AI coding assistant, Claude Code, under
+my direction."
+
+## 7:15 What is planned and how AI helps next (40 seconds)
+
+"Next: real payments with Stripe, ID checks for the verified roommate tag, email alerts, and more
+verified buildings by phoning leasing offices. There is no AI inside the product today, on purpose:
+matching is plain rules, for fairness. Next, AI will draft fees from leasing documents, add a second
+layer of chat moderation, and explain terms in the renter's language, always with a person checking.
+AI will never decide who is approved or see a Social Security number."
+
+## 7:55 Close (15 seconds)
 
 "Honest Rent: know the real price, and your chances, before you pay a cent. Thank you. Questions?"
 
+---
+
 ## What is real and what is sample (say this if asked)
 
-- 77 apartment communities are on the map (39 Plano, 37 Richardson, 1 Dallas), from OpenStreetMap.
-- 11 have prices. **5 are real**, entered by hand from the communities' own pages (Cutters Point,
-  Maya at White Rock, Camden Buckingham, Camden Legacy Park, Camden Legacy Creek). **6 are made up**
-  for testing (Bluebonnet Lofts, Cottonwood Commons, Legacy Row Residences, Maple Creek Flats,
-  Prairie Oak Apartments, Willow Park Place). Every price shows a "last verified" date.
-- Approval rules are known for only some buildings. The rest say "Rules not confirmed".
+- 77 communities are on the map (39 Plano, 37 Richardson, 1 Dallas), from OpenStreetMap.
+- 11 have prices. **5 are real**, entered from the communities' own pages: Cutters Point, Maya at
+  White Rock, Camden Buckingham, Camden Legacy Park, Camden Legacy Creek. **6 are made up**: Bluebonnet
+  Lofts, Cottonwood Commons, Legacy Row Residences, Maple Creek Flats, Prairie Oak Apartments, Willow Park
+  Place. Every price shows a "last verified" date.
+- Approval rules are known for only some buildings; the rest say "Rules not confirmed".
 - Safety counts exist for Dallas only. Richardson and Plano need public-records requests.
-- Drive times use typical-hour estimates; live traffic switches on with a TomTom key.
+- Drive times are typical-hour estimates; live traffic needs a TomTom key.
 - Roommate matches in the demo are made-up sample people, labeled "Sample profile".
 - Payments are a demo. Nothing is charged.
 
 ## Tech stack
 
-| Layer                | What we use                                                                                                                           |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| App                  | Next.js 15 (App Router), React 19, TypeScript                                                                                         |
-| Design               | Tailwind CSS v4 with design tokens, Plus Jakarta Sans and Inter, `motion` for animation                                               |
-| Maps                 | MapLibre GL JS with OpenFreeMap tiles, OpenStreetMap data                                                                             |
-| Database and sign-in | Supabase: Postgres, row-level security, email-link sign-in                                                                            |
-| Hosting              | Vercel                                                                                                                                |
-| Automation           | GitHub Actions: database migrations, data loads, tests on every change                                                                |
-| Quality              | Vitest (176 tests), ESLint, Prettier, axe-core accessibility audit                                                                    |
-| Data sources         | OpenStreetMap, City of Dallas open data (incident counts), US Census ZIP centers, Nominatim (addresses), TomTom routing (planned key) |
-| Built with           | Claude Code, an AI coding assistant                                                                                                   |
+| Layer                | What we use                                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------- |
+| App                  | Next.js 15 (App Router), React 19, TypeScript                                                           |
+| Design               | Tailwind CSS v4 design tokens, Plus Jakarta Sans and Inter, `motion` for animation                      |
+| Maps                 | MapLibre GL JS, OpenFreeMap tiles, OpenStreetMap data                                                   |
+| Database and sign-in | Supabase: Postgres, row-level security, email-link sign-in                                              |
+| Hosting              | Vercel                                                                                                  |
+| Automation           | GitHub Actions: database migrations, data loads, tests on every change                                  |
+| Quality              | Vitest (178 tests), ESLint, Prettier, axe-core accessibility audit                                      |
+| Data sources         | OpenStreetMap, City of Dallas open data, US Census ZIP centers, Nominatim, TomTom routing (planned key) |
+| Built with           | Claude Code, an AI coding assistant                                                                     |
 
 ## Built, and still planned
 
 Built: search by real monthly cost; approval fit with the reason; building pages with fees, deals,
-utilities, move-in cash and documents; map with nearby places; neighborhood safety counts
-(Dallas); drive times; saved and compare; optional sign-in, account and delete; roommate profiles,
-matching, introductions and chat with safety rules; passes with a demo checkout; accessible,
-dark-mode-ready design.
+utilities, move-in cash and documents; map with nearby places; Dallas safety counts; drive times; saved
+and compare; optional sign-in, account and delete; roommate profiles, matching, introductions and chat
+with safety rules; passes with a demo checkout; accessible, dark-mode-ready design.
 
 Planned (each new service needs approval first):
 
 1. Real payments (Stripe), receipts, refunds, and a tax and legal check.
-2. ID verification for the "verified" roommate tag (a third-party vendor; we never store ID scans).
+2. ID verification for the "verified" roommate tag (a vendor; we never store ID scans).
 3. Email alerts for new roommate matches and price drops (an email service).
 4. More verified buildings: calls to leasing offices for fees, approval rules and guarantor terms.
 5. Safety counts for Richardson and Plano; Google sign-in; real building photos from leasing offices.
@@ -149,36 +180,33 @@ Planned (each new service needs approval first):
 
 ## How we use AI, now and next
 
-**Now:** AI helped build the app (Claude Code wrote code, tests and docs under direction, with
-a human approving every plan). **Inside the product today: none.** Matching and chat checks are
-plain, explainable rules, which is deliberate for fairness and trust.
+**Now:** AI helped build the app (Claude Code wrote code, tests and docs under direction, with a person
+approving every plan). **Inside the product today: none**, on purpose.
 
-**Next, with guardrails:**
+| Idea                    | What AI does                                                                         | Guardrail                                                                      |
+| ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| Fee and rule extraction | Reads a leasing PDF or page and drafts fees, deposits and approval rules             | A person verifies every figure before it shows; the last-verified date stays   |
+| Chat moderation         | A second layer behind the current rules to catch scams and harassment                | Rules stay first; reports go to a person; no ID or contact data sent           |
+| Help in your language   | Explains fees, approval terms and leases in plain language, in the renter's language | Never legal advice; links to the source                                        |
+| Bill reading            | Reads an uploaded utility bill to add real utility costs                             | Strip names and addresses first; ask consent; delete after reading             |
+| Match explanations      | Writes the "why you match" sentence                                                  | Only lifestyle fields; never race, religion, nationality or anything protected |
 
-| Idea                    | What AI does                                                                         | Guardrail                                                                           |
-| ----------------------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
-| Fee and rule extraction | Reads a leasing PDF or web page and drafts fees, deposits and approval rules         | A person verifies every figure before it shows; the "last verified" date stays      |
-| Chat moderation         | A second layer behind the current rules to catch scams and harassment                | Rules stay first; reports go to a person; no ID or contact data sent                |
-| Help in your language   | Explains fees, approval terms and leases in plain language, in the renter's language | Never gives legal advice; links to the source                                       |
-| Bill reading            | Reads an uploaded utility bill to add real utility costs                             | Strip names and addresses first; ask for consent; delete after reading              |
-| Match explanations      | Writes the "why you match" sentence                                                  | Only from lifestyle fields; never race, religion, nationality or anything protected |
-
-**Never:** AI deciding who is approved, scoring people, using protected traits, or seeing SSNs,
-ID scans, exact credit scores or immigration status.
+**Never:** AI deciding who is approved, scoring people, using protected traits, or seeing SSNs, ID
+scans, exact credit scores or immigration status.
 
 ## Likely questions
 
-- **"Isn't the data just sample?"** Five communities have real prices from their own pages, each
-  with a date. The point of the demo is the method: the ad price, the real price, and the chance
-  of approval. Next we verify more buildings by phone.
-- **"How do you make money?"** Search is free. Renters can buy a short pass (7 to 28 days) with
-  roommate matches and extras. Landlords may later pay for verified listings, but we never rank
-  by who pays.
-- **"Fair housing?"** No race, religion, nationality, family status or disability fields or
-  filters. Safety is counts only, with no grades. The roommate gender sharing preference is
-  optional, applied inside shared homes, and never shown to others. We will still get a housing
-  lawyer's review before a real launch.
-- **"What about privacy?"** No SSN, ID scan, exact score or immigration status is ever stored.
-  Approval answers stay in the browser tab. Accounts can be deleted from the Account page.
-- **"What if the number is wrong?"** Every price shows its "last verified" date, and we say "confirm
-  with the building." Renters can also share last month's charges anonymously to improve utilities.
+- **"Isn't the data just sample?"** Five communities have real prices from their own pages, each with a
+  date. The point is the method: ad price, real price, chance of approval. Next I verify more
+  buildings by phone.
+- **"Were the interviews real?"** Be direct: the six in the October report were synthetic hypotheses;
+  the real evidence is one resident's ledger; six real interviews are next.
+- **"How do you make money?"** Search is free. Renters can buy a short pass (7 to 28 days) with roommate
+  matches and extras. Landlords may later pay for verified listings, but we never rank by who pays.
+- **"Fair housing?"** No race, religion, nationality, family status or disability fields or filters.
+  Safety is counts only, no grades. The roommate gender sharing preference is optional, only about
+  sharing a home, and never shown to others. A housing lawyer's review comes before a real launch.
+- **"Privacy?"** No SSN, ID scan, exact score or immigration status is ever stored. Approval answers stay
+  in the browser tab. Accounts can be deleted from the Account page.
+- **"What if a number is wrong?"** Every price shows its last-verified date and says "confirm with the
+  building". Renters can also share last month's charges anonymously.

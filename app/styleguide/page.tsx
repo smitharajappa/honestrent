@@ -181,7 +181,7 @@ export default function StyleguidePage() {
           <PassStatus
             pass={{
               id: "tour",
-              name: "Tour",
+              name: "2-Week",
               endsAt: "2026-11-18T00:00:00Z",
               daysLeft: 11,
             }}
