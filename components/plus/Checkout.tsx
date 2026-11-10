@@ -54,7 +54,7 @@ const INCLUDED = (id: PassId) => [
   "Drive times from every apartment to up to 5 places you add",
   includesRoommates(id)
     ? "Roommate matches, percentages and introductions"
-    : "Roommate matches are not part of Browse (they start at Tour)",
+    : "Roommate matches are not part of the 1-week pass (they start at 2 weeks)",
   "Search and real cost: always free",
 ];
 

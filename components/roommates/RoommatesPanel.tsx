@@ -175,7 +175,7 @@ function MatchCard({
           </Button>
         ) : (
           <ButtonLink href="/plus" variant="secondary">
-            Introductions come with a Tour, Apply or Move-in pass
+            Introductions come with a 2-week or longer pass
           </ButtonLink>
         )}
         {message && (
@@ -334,9 +334,9 @@ export function RoommatesPanel() {
                 {cityCount} {cityCount === 1 ? "person" : "people"} in {profile.city}
               </h2>
               <p className="mt-1 text-text-muted">
-                Your profile is free. A Tour, Apply or Move-in pass shows who fits your
-                habits, room type and community, and lets you ask for an introduction.
-                Answering an introduction someone sent you, and chatting, are always free.
+                Your profile is free. A 2-week or longer pass shows who fits your habits,
+                room type and community, and lets you ask for an introduction. Answering
+                an introduction someone sent you, and chatting, are always free.
               </p>
               <ButtonLink href="/plus" className="mt-4">
                 See passes

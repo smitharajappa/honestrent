@@ -17,7 +17,7 @@ const FREE = [
 ];
 const PLUS = [
   "Drive times from every apartment to up to 5 places you add (work, a grocery chain, a place of worship)",
-  "Roommate matches and introductions (Tour, Apply and Move-in passes): see who fits your habits, room type and community. A free profile, answering introductions and chatting stay free",
+  "Roommate matches and introductions (2-, 3- and 4-week passes): see who fits your habits, room type and community. A free profile, answering introductions and chatting stay free",
   "Price-drop alerts (coming)",
   "Saved apartments and places on every device (coming)",
 ];

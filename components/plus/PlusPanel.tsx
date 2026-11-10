@@ -87,14 +87,18 @@ export function PlusPanel() {
                 }`}
               >
                 <div
-                  className={`flex items-center justify-between gap-2 px-4 py-2.5 ${
+                  className={`px-4 py-3 ${
                     on
                       ? "bg-gradient-to-br from-brand to-brand-hover text-brand-fg"
                       : "bg-surface-muted"
                   }`}
                 >
-                  <p className="text-lg font-extrabold tracking-tight">{p.name}</p>
-                  <p className="text-sm font-semibold tabular-nums">{p.days} days</p>
+                  <p className="text-lg font-extrabold tracking-tight whitespace-nowrap">
+                    {p.name} Pass
+                  </p>
+                  <p className="text-sm font-medium">
+                    {p.purpose} · {p.days} days
+                  </p>
                 </div>
                 <div className="p-4">
                   {p.badge && (
@@ -112,7 +116,6 @@ export function PlusPanel() {
                     {dollars(perDayCents(p))} a day
                     {savingVsWeekly(p) > 0 && ` · save ${savingVsWeekly(p)}%`}
                   </p>
-                  <p className="mt-3 text-sm text-text-muted">{p.blurb}</p>
                   <div className="mt-3 border-t border-dashed border-border-strong pt-3">
                     <p
                       className={`flex items-center gap-1.5 text-xs ${includesRoommates(p.id) ? "font-semibold text-text" : "text-text-muted"}`}

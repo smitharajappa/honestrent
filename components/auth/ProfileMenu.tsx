@@ -26,7 +26,7 @@ export function ProfileMenuPanel({
   className,
 }: {
   user: ProfileSource;
-  /** What to say about the pass, for example "Tour pass · 11 days left". */
+  /** What to say about the pass, for example "2-Week pass · 11 days left". */
   planLabel?: string;
   hasPass?: boolean;
   onNavigate?: () => void;

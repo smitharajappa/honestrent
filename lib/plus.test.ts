@@ -61,7 +61,7 @@ describe("what a pass includes", () => {
     starts_at: start,
     ends_at: end,
   });
-  it("includes roommates from Tour up, not Browse", () => {
+  it("includes roommates from the 2-week pass up, not the 1-week pass", () => {
     expect(includesRoommates("browse")).toBe(false);
     expect(includesRoommates("tour")).toBe(true);
     expect(includesRoommates("apply")).toBe(true);
@@ -72,7 +72,7 @@ describe("what a pass includes", () => {
       [row("tour", "2026-11-05T00:00:00Z", "2026-11-19T00:00:00Z")],
       now,
     );
-    expect(c).toMatchObject({ id: "tour", name: "Tour", daysLeft: 9 });
+    expect(c).toMatchObject({ id: "tour", name: "2-Week", daysLeft: 9 });
   });
   it("ignores passes that ended or have not started, and unknown names", () => {
     expect(
@@ -96,7 +96,7 @@ describe("what a pass includes", () => {
     );
     expect(c?.id).toBe("move_in");
   });
-  it("gives roommate access only while a Tour or higher pass runs", () => {
+  it("gives roommate access only while a 2-week or longer pass runs", () => {
     const browse = [row("browse", "2026-11-08T00:00:00Z", "2026-11-15T00:00:00Z")];
     expect(roommatesUntil(browse, now)).toBeNull();
     const both = [...browse, row("tour", "2026-11-09T00:00:00Z", "2026-11-23T00:00:00Z")];

@@ -9,7 +9,7 @@
    apartment communities they are looking at, and optionally their gender with a sharing
    preference (**anyone**, or **only people of my own gender**).
 3. See people in the same city, best fit first, with reasons ("Both night owls", "Budgets
-   within $10"). Seeing matches and asking for an introduction come with a Tour, Apply or Move-in pass (free
+   within $10"). Seeing matches and asking for an introduction come with a 2-, 3- or 4-week pass (free
    for signed-in renters during demo mode). Creating a profile, answering an introduction and
    chatting are always free. See `docs/payments-demo.md`.
    Matches only include people who want a kind of room in common and whose sharing preference is

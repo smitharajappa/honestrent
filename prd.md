@@ -117,7 +117,7 @@ FEATURES
 
   Round 3 (then; needs accounts, payments and email services):
   R3.1 "Honest Rent Plus" waitlist test before building payments. BUILT (Nov 2026): four passes
-       (Browse 7 days $5.99, Tour 14 days $8.99, Apply 21 days $11.99, Move-in 28 days
+       (1-Week $5.99, 2-Week $8.99, 3-Week $11.99, 4-Week
        $14.99; one-time, no auto-renew) shown at /plus with a join button, plus anonymous
        daily view and join counts. Optional sign-in (Google or email link) exists. Passes
        unlock only extras (drive times to places you add); search, real cost and approval fit
@@ -129,7 +129,7 @@ FEATURES
   R3.5 Saved places and buildings synced across devices (accounts).
 
   Round 4 (later):
-  R4.1 Roommate matching (Tour, Apply and Move-in passes; a profile, answering and chat stay free). FIRST VERSION BUILT
+  R4.1 Roommate matching (2-, 3- and 4-week passes; a profile, answering and chat stay free). FIRST VERSION BUILT
        (Nov 2026): signed-in renters make a
        profile (nickname, city, budget, move-in date, languages, interests, sleep, cleaning,
        guests, smoking, pets, study habits, room type, up to 3 apartment communities, optional

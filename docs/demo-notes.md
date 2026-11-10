@@ -98,7 +98,7 @@ never see."
 
 ### Pass (25 seconds)
 
-Do: **Plus**, pick **Tour**, demo checkout, **Pay (demo)**, open the profile menu.
+Do: **Plus**, pick the **2-Week Pass**, demo checkout, **Pay (demo)**, open the profile menu.
 
 "Search is free forever. A pass, seven to twenty-eight days, one payment, no auto-renew, adds roommate
 matches and extra drive times. This checkout is a demo: no card, no money. The profile menu now shows
@@ -117,7 +117,7 @@ immigration status."
 ## 6:45 Tech stack (30 seconds)
 
 "A mobile-first web app: Next.js and React with TypeScript, Tailwind, Supabase for the database and
-sign-in, MapLibre with OpenStreetMap, and Vercel hosting. GitHub Actions updates the database, with 180
+sign-in, MapLibre with OpenStreetMap, and Vercel hosting. GitHub Actions updates the database, with 178
 automated tests and an accessibility audit. I built it with an AI coding assistant, Claude Code, under
 my direction."
 
@@ -158,7 +158,7 @@ AI will never decide who is approved or see a Social Security number."
 | Database and sign-in | Supabase: Postgres, row-level security, email-link sign-in                                              |
 | Hosting              | Vercel                                                                                                  |
 | Automation           | GitHub Actions: database migrations, data loads, tests on every change                                  |
-| Quality              | Vitest (180 tests), ESLint, Prettier, axe-core accessibility audit                                      |
+| Quality              | Vitest (178 tests), ESLint, Prettier, axe-core accessibility audit                                      |
 | Data sources         | OpenStreetMap, City of Dallas open data, US Census ZIP centers, Nominatim, TomTom routing (planned key) |
 | Built with           | Claude Code, an AI coding assistant                                                                     |
 

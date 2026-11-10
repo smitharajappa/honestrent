@@ -14,7 +14,7 @@ export type Viewer = {
   demoOpen: boolean;
   /** Can use Plus features right now. */
   hasPlus: boolean;
-  /** Can see roommate matches and ask for introductions (a Tour, Apply or Move-in pass). */
+  /** Can see roommate matches and ask for introductions (a 2-, 3- or 4-week pass). */
   hasRoommates: boolean;
   /** The pass running now, for showing in the profile. */
   pass: CurrentPass | null;

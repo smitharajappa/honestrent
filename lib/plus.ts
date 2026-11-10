@@ -11,32 +11,46 @@ export type Pass = {
   cents: number;
   badge?: "Most popular" | "Best value";
   blurb: string;
+  /** Two or three words on what the pass is for, shown on the card. */
+  purpose: string;
 };
 
+// The id never changes (it is stored with each purchase); the name is what people read. The name
+// is the length, so nobody has to guess what a pass is. Shown as "2-Week pass" or "2-Week Pass".
 export const PASSES: Pass[] = [
-  { id: "browse", name: "Browse", days: 7, cents: 599, blurb: "A week to look around." },
+  {
+    id: "browse",
+    name: "1-Week",
+    days: 7,
+    cents: 599,
+    blurb: "A week to look around.",
+    purpose: "Look around",
+  },
   {
     id: "tour",
-    name: "Tour",
+    name: "2-Week",
     days: 14,
     cents: 899,
     badge: "Most popular",
     blurb: "Two weeks to visit and compare.",
+    purpose: "Visit and compare",
   },
   {
     id: "apply",
-    name: "Apply",
+    name: "3-Week",
     days: 21,
     cents: 1199,
     blurb: "Three weeks to choose and apply.",
+    purpose: "Choose and apply",
   },
   {
     id: "move_in",
-    name: "Move-in",
+    name: "4-Week",
     days: 28,
     cents: 1499,
     badge: "Best value",
     blurb: "Four weeks, from search to keys.",
+    purpose: "Search to keys",
   },
 ];
 
@@ -87,7 +101,7 @@ export function nextPassWindow(
 
 // ---- what a pass includes ---------------------------------------------------------------
 
-/** Roommate matches and introductions come with Tour, Apply and Move-in (not Browse). */
+/** Roommate matches and introductions come with the 2-, 3- and 4-week passes (not the 1-week pass). */
 export const ROOMMATE_PASS_IDS: PassId[] = ["tour", "apply", "move_in"];
 
 export function includesRoommates(id: PassId): boolean {
