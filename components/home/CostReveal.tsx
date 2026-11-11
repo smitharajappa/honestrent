@@ -7,7 +7,8 @@ import { CountUp } from "../motion/CountUp";
 import { LogoMark } from "../ui/Logo";
 import { Badge } from "../ui/Badge";
 
-// Made-up numbers for one sample building: the point is the shape of the gap, not the figures.
+// Made-up numbers for one sample building, shown as an estimate: the point is the shape of the
+// gap, not the figures. Real buildings show their own numbers with a last-verified date.
 const AD = 1450;
 const ROWS = [
   { label: "Required fees (trash, pest, parking)", amount: 85, kind: "add" },
@@ -29,7 +30,7 @@ export function CostReveal({ className }: { className?: string }) {
 
   return (
     <motion.section
-      aria-label="Sample: advertised rent compared with the real monthly cost"
+      aria-label="Estimate for a sample building: advertised rent compared with the estimated real monthly cost"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
@@ -45,7 +46,7 @@ export function CostReveal({ className }: { className?: string }) {
           <LogoMark className="size-7" />
           One sample building
         </span>
-        <Badge>Made-up numbers</Badge>
+        <Badge>Estimate · made-up numbers</Badge>
       </div>
 
       <div className="relative mt-5">
@@ -83,14 +84,14 @@ export function CostReveal({ className }: { className?: string }) {
       </motion.ul>
 
       <div className="relative mt-4 border-t border-border pt-4">
-        <p className="eyebrow">What you really pay</p>
+        <p className="eyebrow">Estimated real cost</p>
         <p className="mt-1 text-4xl font-extrabold tracking-tight tabular-nums">
-          <CountUp key={round} from={AD} to={REAL} go={done} />
+          <CountUp key={round} from={AD} to={REAL} go={done} prefix="~" />
           <span className="text-base font-semibold text-text-muted"> /mo</span>
         </p>
         <div
           role="img"
-          aria-label={`Advertised ${formatUsd(AD)}, plus fees ${formatUsd(85)} and utilities ${formatUsd(140)}, minus a deal of ${formatUsd(55)}, equals ${formatUsd(REAL)} a month.`}
+          aria-label={`Advertised ${formatUsd(AD)}, plus fees ${formatUsd(85)} and utilities ${formatUsd(140)}, minus a deal of ${formatUsd(55)}, equals an estimated ${formatUsd(REAL)} a month.`}
           className="mt-3 flex h-2.5 overflow-hidden rounded-full bg-surface-muted"
         >
           <span className="h-full bg-brand/55" style={{ width: pct(AD) }} />
@@ -104,8 +105,11 @@ export function CostReveal({ className }: { className?: string }) {
           />
         </div>
         <p className="mt-3 text-sm text-text-muted">
-          <strong className="font-semibold text-text">{formatUsd(GAP)} a month</strong>{" "}
-          the ad never showed. Honest Rent adds it up for every building.
+          <strong className="font-semibold text-text">
+            About {formatUsd(GAP)} a month
+          </strong>{" "}
+          the ad never showed. An estimate: real buildings show their own figures, each
+          with a last-verified date.
         </p>
         <button
           type="button"
