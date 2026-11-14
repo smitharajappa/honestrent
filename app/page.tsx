@@ -90,8 +90,8 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
                   <span className="text-text-muted">The ad says</span>
                   <strong className="tabular-nums">$1,450</strong>
                   <span aria-hidden="true">→</span>
-                  <span className="text-text-muted">you really pay</span>
-                  <strong className="tabular-nums text-warning-text">$1,620</strong>
+                  <span className="text-text-muted">estimated real cost</span>
+                  <strong className="tabular-nums text-warning-text">~$1,620</strong>
                 </p>
               </>
             )}

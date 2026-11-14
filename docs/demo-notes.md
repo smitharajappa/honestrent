@@ -55,7 +55,7 @@ use real quotes. Never present the synthetic ones as real customers.
 Do: stay on the home page, click **Play again** on the card.
 
 "This card is the whole idea. The ad says $1,450. Fees, utilities and a deal come in one by one, and
-the real price is $1,620, a hundred and seventy dollars a month the ad never showed. These numbers are
+the estimated real price is about $1,620, roughly a hundred and seventy dollars a month the ad never showed. These numbers are
 made up for the card; real buildings show their own."
 
 ### Search and approval (45 seconds)
