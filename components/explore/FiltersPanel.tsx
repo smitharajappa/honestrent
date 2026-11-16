@@ -107,10 +107,7 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
   const id = `filter-${title.toLowerCase().replace(/\W+/g, "-")}`;
   return (
     <div role="group" aria-labelledby={id}>
-      <p
-        id={id}
-        className="mb-2 text-sm font-semibold text-text-muted"
-      >
+      <p id={id} className="mb-2 text-sm font-semibold text-text-muted">
         {title}
       </p>
       <div className="flex flex-wrap gap-2">{children}</div>

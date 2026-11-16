@@ -24,10 +24,7 @@ export function SearchForm({ area, budget, moveIn, today, errors = {} }: Props) 
     <Form action="/" noValidate className="space-y-5">
       <div className="grid gap-6 lg:grid-cols-[2fr_3fr] lg:gap-8">
         <div role="group" aria-labelledby="group-search" className="min-w-0">
-          <p
-            id="group-search"
-            className="mb-3 text-sm font-semibold text-text-muted"
-          >
+          <p id="group-search" className="mb-3 text-sm font-semibold text-text-muted">
             Your search
           </p>
           <div className="grid gap-5 sm:grid-cols-2">
@@ -86,10 +83,7 @@ export function SearchForm({ area, budget, moveIn, today, errors = {} }: Props) 
           aria-labelledby="group-approval"
           className="min-w-0 border-t border-border pt-5 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8"
         >
-          <p
-            id="group-approval"
-            className="mb-3 text-sm font-semibold text-text-muted"
-          >
+          <p id="group-approval" className="mb-3 text-sm font-semibold text-text-muted">
             Will they approve you?{" "}
             <span className="font-medium normal-case">(optional)</span>
           </p>
