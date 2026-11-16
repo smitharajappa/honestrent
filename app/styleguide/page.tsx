@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { BuildingCover } from "@/components/BuildingCover";
-import { CostBar } from "@/components/CostBar";
+import { CostStrip } from "@/components/ResultCard";
+import { MapThumb } from "@/components/map/MapThumb";
+import { CostReceipt } from "@/components/CostReceipt";
 import { FitDisplay, FitUnconfirmed } from "@/components/approval/FitBadge";
 import { LocateButton } from "@/components/location/LocateButton";
 import { HiddenCostBanner } from "@/components/building/HiddenCostBanner";
@@ -50,7 +51,9 @@ const COLORS: { name: string; className: string; use: string }[] = [
   { name: "border-strong", className: "bg-border-strong", use: "Input borders (3:1)" },
   { name: "text", className: "bg-text", use: "Main text" },
   { name: "text-muted", className: "bg-text-muted", use: "Secondary text" },
-  { name: "brand", className: "bg-brand", use: "Actions only (10%)" },
+  { name: "brand", className: "bg-brand", use: "Ballpoint blue: actions only (10%)" },
+  { name: "mark", className: "bg-mark", use: "Highlighter: charges the ad hid, only" },
+  { name: "rule", className: "bg-rule", use: "Dotted leaders and tear lines" },
   { name: "success", className: "bg-success-soft", use: "Good fit, savings, ready" },
   { name: "warning", className: "bg-warning-soft", use: "Extra fees, guarantor, stale" },
   { name: "danger", className: "bg-danger-soft", use: "Errors, unlikely" },
@@ -61,7 +64,7 @@ const COLORS: { name: string; className: string; use: string }[] = [
     use: "Unlikely (soft rose, never alarm red)",
   },
   { name: "slate", className: "bg-slate-soft", use: "Neighbourhood facts" },
-  { name: "accent", className: "bg-accent", use: "Deals and small highlights" },
+  { name: "accent", className: "bg-accent", use: "Deal sticker" },
 ];
 
 export default function StyleguidePage() {
@@ -76,9 +79,11 @@ export default function StyleguidePage() {
       </header>
 
       <Section title="Vibe">
-        <p className="text-lg font-semibold">Trustworthy · Clear · Welcoming</p>
+        <p className="text-lg font-semibold">Itemised · Checkable · Decided</p>
         <p className="mt-1 text-sm text-text-muted">
-          For Ana, a newcomer comparing real costs and approval odds without US credit.
+          The receipt and the stamp: two documents every newcomer handles. Prices are
+          itemised like a receipt; approval is stamped like a decision. Reasons in
+          DESIGN.md.
         </p>
       </Section>
 
@@ -99,13 +104,21 @@ export default function StyleguidePage() {
       </Section>
 
       <Section title="Type">
-        <p className="text-3xl font-bold">Heading: Plus Jakarta Sans</p>
+        <p className="font-heading text-3xl font-bold [font-stretch:85%]">
+          Heading: Archivo, narrowed
+        </p>
         <h3 className="mt-3 text-lg font-bold">Section heading</h3>
-        <p className="mt-2">Body: Inter, 16px. Clear and easy to read on a phone.</p>
+        <p className="mt-2">
+          Body: Public Sans, 16px. The typeface US government forms use.
+        </p>
         <p className="mt-2 text-sm text-text-muted">Secondary text, 14px.</p>
-        <p className="mt-2 text-3xl font-bold tabular-nums">$1,184</p>
+        <p className="figure mt-2 text-3xl">$1,184</p>
         <p className="text-xs text-text-muted">
-          Prices use tabular numbers so digits line up.
+          Figures: DM Mono (the <code>figure</code> style), so amounts line up like a
+          receipt.
+        </p>
+        <p className="mt-3 text-sm">
+          A <span className="marker">hidden charge</span> gets the highlighter.
         </p>
       </Section>
 
@@ -132,7 +145,7 @@ export default function StyleguidePage() {
           <div
             role="menu"
             aria-label="Profile menu (static copy)"
-            className="w-72 rounded-2xl border border-brand-hover bg-brand text-brand-fg shadow-raised"
+            className="w-72 rounded-md border border-brand-hover bg-brand text-brand-fg shadow-raised"
           >
             <ProfileMenuPanel user={{ email: "sample.renter@example.com" }} />
           </div>
@@ -237,32 +250,50 @@ export default function StyleguidePage() {
         </div>
       </Section>
 
-      <Section title="Building covers (decorative)">
+      <Section title="Map thumbnail (replaces drawn covers)">
         <p className="mb-3 text-sm text-text-muted">
-          Each building gets its own color and skyline from its id. A real photo replaces
-          it once the building supplies one.
+          The streets around the building, drawn once from our own map tiles and kept as a
+          picture. A real photo can replace it once a building supplies one.
         </p>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {[
-            "Maple Creek",
-            "Cottonwood",
-            "Bluebonnet",
-            "Legacy Row",
-            "Prairie Oak",
-            "Willow",
-          ].map((name) => (
-            <div
-              key={name}
-              className="h-20 overflow-hidden rounded-xl border border-border"
-            >
-              <BuildingCover id={name} name={name} />
-            </div>
-          ))}
+        <div className="grid max-w-3xl gap-3 sm:grid-cols-2">
+          <div className="h-40 overflow-hidden rounded-md border border-border">
+            <MapThumb name="UT Dallas" latitude={32.9886} longitude={-96.748} />
+          </div>
+          <div className="h-40 overflow-hidden rounded-md border border-border">
+            <MapThumb name="Downtown Plano" latitude={33.0198} longitude={-96.6989} />
+          </div>
         </div>
       </Section>
 
-      <Section title="Cost bar">
-        <CostBar
+      <Section title="Cost strip (same four columns on every card)">
+        <div className="max-w-md">
+          <CostStrip
+            cost={{
+              advertisedRent: 1225,
+              monthlyFees: 100,
+              monthlyDealSavings: 141,
+              realMonthlyCost: 1184,
+            }}
+            utilities={{
+              source: "building",
+              known: true,
+              avg: 120,
+              low: 90,
+              high: 160,
+              asOf: "2025-12-31",
+              reportCount: null,
+            }}
+            moveInTotal={null}
+          />
+        </div>
+        <p className="mt-2 text-sm text-text-muted">
+          Highlighter on charges the ad hid. &ldquo;Not disclosed&rdquo; when the building
+          hasn&apos;t shared every part.
+        </p>
+      </Section>
+
+      <Section title="Cost receipt">
+        <CostReceipt
           cost={{
             advertisedRent: 1225,
             monthlyFees: 100,
@@ -341,8 +372,9 @@ export default function StyleguidePage() {
           <FitUnconfirmed />
         </div>
         <p className="mt-3 text-sm text-text-muted">
-          Always an icon, a label and one line of reason. Green, amber, soft rose and
-          grey.
+          Ink stamps (components/ui/Stamp.tsx): always an icon, a label and one line of
+          reason. Green, amber and soft-rose ink; &ldquo;Rules not confirmed&rdquo; is a
+          dashed, straight outline because nothing has been decided.
         </p>
       </Section>
 
@@ -460,7 +492,7 @@ export default function StyleguidePage() {
             <RevealBlock
               key={i}
               index={i}
-              className="rounded-xl bg-surface-muted p-3 text-sm"
+              className="rounded-md bg-surface-muted p-3 text-sm"
             >
               Item {i + 1} fades up
             </RevealBlock>

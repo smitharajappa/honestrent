@@ -67,7 +67,7 @@ export function InterestForm({ buildingId, buildingName, plans, moveIn, budget }
       {errors.form && (
         <p
           role="alert"
-          className="flex items-start gap-2 rounded-xl bg-danger-soft p-3 text-sm text-danger-text"
+          className="flex items-start gap-2 rounded-md bg-danger-soft p-3 text-sm text-danger-text"
         >
           <AlertIcon className="mt-0.5 size-4 shrink-0" />
           {errors.form}

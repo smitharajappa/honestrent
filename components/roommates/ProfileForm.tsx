@@ -72,7 +72,7 @@ function toDraft(p: MyProfile | null): Draft {
 }
 
 const inputClass =
-  "mt-1 min-h-11 w-full rounded-xl border border-border-strong bg-surface px-3 text-base";
+  "mt-1 min-h-11 w-full rounded-md border border-border-strong bg-surface px-3 text-base";
 
 function Chips({
   options,
@@ -133,7 +133,7 @@ function Choice({
             type="button"
             aria-pressed={value === key}
             onClick={() => onChange(key)}
-            className={`min-h-11 rounded-xl border px-3.5 text-sm font-medium ${
+            className={`min-h-11 rounded-md border px-3.5 text-sm font-medium ${
               value === key
                 ? "border-brand bg-brand text-brand-fg"
                 : "border-border-strong bg-surface text-text"

@@ -3,19 +3,24 @@ import { LocationProvider } from "@/components/location/LocationContext";
 import { MyPlacesProvider } from "@/components/location/MyPlacesContext";
 import { MotionProvider } from "@/components/motion/Reveal";
 import type { Metadata, Viewport } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Archivo, Public_Sans } from "next/font/google";
 import { ApprovalProvider } from "@/components/approval/ApprovalContext";
 import { ShortlistProvider } from "@/components/shortlist/ShortlistContext";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
 import { IS_DEMO, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-// Next.js downloads Inter at build time and serves it from our own site.
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const jakarta = Plus_Jakarta_Sans({
+// Next.js downloads these fonts at build time and serves them from our own site.
+// Why each one: see "Type" in DESIGN.md.
+const publicSans = Public_Sans({
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  variable: "--font-jakarta",
+  variable: "--font-public-sans",
+  display: "swap",
+});
+const archivo = Archivo({
+  subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-archivo",
   display: "swap",
 });
 
@@ -52,7 +57,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${jakarta.variable}`}>
+    <html lang="en" className={`${publicSans.variable} ${archivo.variable}`}>
       <body className="flex min-h-screen flex-col font-sans antialiased">
         {/* Approval answers live in memory only; the shortlist is saved on this device. */}
         <MotionProvider>
@@ -63,7 +68,7 @@ export default function RootLayout({
                   <MyPlacesProvider>
                     <a
                       href="#content"
-                      className="sr-only rounded-xl bg-surface px-4 py-2 font-semibold text-text shadow-raised focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
+                      className="sr-only rounded-md bg-surface px-4 py-2 font-semibold text-text shadow-raised focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
                     >
                       Skip to content
                     </a>

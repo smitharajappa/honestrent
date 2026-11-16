@@ -1,14 +1,12 @@
 import { Suspense } from "react";
 import { ResultsExplorer } from "@/components/explore/ResultsExplorer";
-import { HeroArt } from "@/components/HeroArt";
 import { CollapsibleSearch } from "@/components/explore/CollapsibleSearch";
-import { CostReveal } from "@/components/home/CostReveal";
 import { HomeSections } from "@/components/home/HowItWorks";
 import { ResultsSkeleton } from "@/components/ResultsSkeleton";
 import { SearchForm } from "@/components/SearchForm";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { AlertIcon, LockIcon } from "@/components/ui/icons";
+import { AlertIcon } from "@/components/ui/icons";
 import { fetchBuildings } from "@/lib/buildings";
 import { searchHref } from "@/lib/links";
 import { inArea } from "@/lib/explore";
@@ -42,91 +40,41 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
     ...(!areaCheck.ok ? { area: areaCheck.error } : {}),
   };
 
-  return (
-    <main>
-      {/* Hero: full width, compact once results are showing. */}
-      <section aria-labelledby="page-title" className="hero-bg">
-        <div
-          className={`page-container grid items-center gap-8 lg:grid-cols-[1fr_27rem] ${
-            showingResults ? "pt-8 pb-24 sm:pt-10" : "pt-10 pb-28 sm:pt-14 lg:pt-16"
-          }`}
-        >
-          <div className="max-w-3xl">
-            <p className="inline-flex items-center gap-1.5 rounded-full bg-surface/80 px-3 py-1 text-xs font-semibold text-text-muted shadow-card">
-              <LockIcon className="size-3.5" />
-              No SSN or US credit? Start here.
-            </p>
-            {showingResults ? (
-              <h1
-                id="page-title"
-                className="mt-4 text-3xl leading-[1.05] font-extrabold tracking-tight text-balance sm:text-4xl"
-              >
-                Find a place that will say yes.{" "}
-                <span className="text-text-muted">See what it really costs.</span>
-              </h1>
-            ) : (
-              <h1 id="page-title" className="display mt-4 text-balance">
-                Find a place that will say yes.{" "}
-                <span className="marker">See what it really costs.</span>
-              </h1>
-            )}
-            {!showingResults && (
-              <>
-                <p className="mt-5 max-w-xl text-lg text-pretty text-text-muted">
-                  Apartments ranked by what you&apos;ll really pay each month (rent,
-                  required fees and utilities, minus deals) and by how likely they are to
-                  approve newcomers. Starting in the Dallas area: Richardson, Plano and
-                  Dallas.
-                </p>
-                <div className="mt-6 flex flex-wrap items-center gap-3">
-                  <ButtonLink href="#search" size="lg">
-                    Search apartments
-                  </ButtonLink>
-                  <ButtonLink href="#how-heading" size="lg" variant="secondary">
-                    How it works
-                  </ButtonLink>
-                </div>
-                <p className="mt-5 inline-flex flex-wrap items-center gap-x-2 gap-y-1 rounded-xl bg-surface/80 px-3.5 py-2 text-sm shadow-card lg:hidden">
-                  <span className="text-text-muted">The ad says</span>
-                  <strong className="tabular-nums">$1,450</strong>
-                  <span aria-hidden="true">→</span>
-                  <span className="text-text-muted">estimated real cost</span>
-                  <strong className="tabular-nums text-warning-text">~$1,620</strong>
-                </p>
-              </>
-            )}
-          </div>
-          {showingResults ? (
-            <HeroArt compact />
-          ) : (
-            <CostReveal className="hidden lg:block" />
-          )}
-        </div>
-      </section>
+  // Search-first: with no search yet, show every apartment we have checked, so the
+  // product is the first thing people see. A budget and date narrow it down.
+  const browsing = !hasSearched;
+  const resultBudget = validation?.ok ? validation.value.budget : BROWSE_BUDGET;
+  // Browsing uses the first of a month a year ahead, so every plan is available and the
+  // first month in the move-in cash is a whole month.
+  const resultMoveIn = validation?.ok
+    ? validation.value.moveIn
+    : firstOfMonthAYearAhead(today);
 
-      {/* The search card overlaps the hero. */}
-      <div className="page-container relative z-10 -mt-20">
-        <Card
-          as="section"
-          id="search"
-          aria-label="Search apartments"
-          className="scroll-mt-24 p-5 shadow-raised sm:p-6 lg:p-8"
-        >
-          {showingResults && validation?.ok ? (
-            <CollapsibleSearch
-              area={rawArea?.trim() || null}
-              budget={validation.value.budget}
-              moveIn={validation.value.moveIn}
-            >
-              <SearchForm
-                area={rawArea}
-                budget={rawBudget}
-                moveIn={rawMoveIn}
-                today={today}
-                errors={formErrors}
-              />
-            </CollapsibleSearch>
-          ) : (
+  return (
+    <main className="page-container pt-6 pb-16 sm:pt-8">
+      <h1
+        id="page-title"
+        className="max-w-4xl text-3xl font-bold text-balance sm:text-4xl"
+      >
+        Dallas–Fort Worth apartments, ranked by what you will really pay
+      </h1>
+      <p className="mt-2 max-w-3xl text-text-muted sm:text-lg">
+        Rent plus required fees and utilities, minus deals, and whether the building is
+        likely to approve you without an SSN or US credit.
+      </p>
+
+      <Card
+        as="section"
+        id="search"
+        aria-label="Search apartments"
+        className="mt-5 scroll-mt-24 p-4 sm:p-6"
+      >
+        {showingResults && validation?.ok ? (
+          <CollapsibleSearch
+            area={rawArea?.trim() || null}
+            budget={validation.value.budget}
+            moveIn={validation.value.moveIn}
+          >
             <SearchForm
               area={rawArea}
               budget={rawBudget}
@@ -134,28 +82,45 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
               today={today}
               errors={formErrors}
             />
-          )}
-        </Card>
-
-        {showingResults && validation?.ok ? (
-          <Suspense
-            key={`${area ?? ""}-${validation.value.budget}-${validation.value.moveIn}`}
-            fallback={<ResultsSkeleton />}
-          >
-            <Results
-              area={area}
-              nearChosen={nearChosen}
-              budget={validation.value.budget}
-              moveIn={validation.value.moveIn}
-              today={today}
-            />
-          </Suspense>
+          </CollapsibleSearch>
         ) : (
-          <HomeSections />
+          <SearchForm
+            area={rawArea}
+            budget={rawBudget}
+            moveIn={rawMoveIn}
+            today={today}
+            errors={formErrors}
+          />
         )}
-      </div>
+      </Card>
+
+      {(showingResults || browsing) && (
+        <Suspense
+          key={`${area ?? ""}-${resultBudget}-${resultMoveIn}`}
+          fallback={<ResultsSkeleton />}
+        >
+          <Results
+            area={area}
+            nearChosen={nearChosen}
+            budget={resultBudget}
+            moveIn={resultMoveIn}
+            today={today}
+            browsing={browsing}
+          />
+        </Suspense>
+      )}
+
+      {!showingResults && <HomeSections />}
     </main>
   );
+}
+
+/** Budget used when nobody has searched yet: high enough to include every apartment. */
+const BROWSE_BUDGET = 100000;
+
+function firstOfMonthAYearAhead(isoDate: string): string {
+  const [y, m] = isoDate.split("-").map(Number);
+  return `${y + 1}-${String(m).padStart(2, "0")}-01`;
 }
 
 async function Results({
@@ -164,12 +129,14 @@ async function Results({
   budget,
   moveIn,
   today,
+  browsing = false,
 }: {
   area: string | null;
   nearChosen: boolean;
   budget: number;
   moveIn: string;
   today: string;
+  browsing?: boolean;
 }) {
   const data = await fetchBuildings();
 
@@ -208,6 +175,7 @@ async function Results({
       budget={budget}
       moveIn={moveIn}
       today={today}
+      browsing={browsing}
     />
   );
 }

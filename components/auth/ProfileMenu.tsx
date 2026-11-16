@@ -168,7 +168,7 @@ export function ProfileMenu() {
           id={menuId}
           role="menu"
           aria-label="Profile"
-          className="absolute top-full right-0 z-50 mt-1 w-[min(18rem,calc(100vw-2rem))] rounded-2xl border border-brand-hover bg-brand text-brand-fg shadow-raised"
+          className="absolute top-full right-0 z-50 mt-1 w-[min(18rem,calc(100vw-2rem))] rounded-md border border-brand-hover bg-brand text-brand-fg shadow-raised"
         >
           <ProfileMenuPanel
             user={user}

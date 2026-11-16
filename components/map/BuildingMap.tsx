@@ -264,7 +264,7 @@ export default function BuildingMap({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border border-border bg-surface-muted ${className ?? "h-72"}`}
+      className={`relative overflow-hidden rounded-md border border-border bg-surface-muted ${className ?? "h-72"}`}
     >
       {failed ? (
         <p className="grid h-full place-items-center p-6 text-center text-sm text-text-muted">

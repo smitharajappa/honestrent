@@ -10,14 +10,14 @@ import {
   type Fit,
   type FitLevel,
 } from "@/lib/approval";
-import { Badge, type Tone } from "../ui/Badge";
+import { Stamp, type StampTone } from "../ui/Stamp";
 import { CheckIcon, InfoIcon, UsersIcon, XCircleIcon } from "../ui/icons";
 import { useApproval } from "./ApprovalContext";
 
-const STYLE: Record<FitLevel, { tone: Tone; icon: React.ReactNode }> = {
-  good: { tone: "success", icon: <CheckIcon className="size-3.5" /> },
-  guarantor: { tone: "warning", icon: <UsersIcon className="size-3.5" /> },
-  unlikely: { tone: "unlikely", icon: <XCircleIcon className="size-3.5" /> },
+const STYLE: Record<FitLevel, { tone: StampTone; icon: React.ReactNode }> = {
+  good: { tone: "good", icon: <CheckIcon className="size-3.5" /> },
+  guarantor: { tone: "maybe", icon: <UsersIcon className="size-3.5" /> },
+  unlikely: { tone: "no", icon: <XCircleIcon className="size-3.5" /> },
 };
 
 /** Approval fit for one building. Shows nothing (or a hint) until all 3 answers are given. */
@@ -43,9 +43,9 @@ export function FitBadge({
 export function FitUnconfirmed({ compact = false }: { compact?: boolean }) {
   return (
     <div className="mt-3">
-      <Badge tone="neutral" icon={<InfoIcon className="size-3.5" />}>
+      <Stamp tone="pending" icon={<InfoIcon className="size-3.5" />}>
         Rules not confirmed
-      </Badge>
+      </Stamp>
       <p
         className={
           compact ? "mt-1 text-xs text-text-muted" : "mt-1.5 text-sm text-text-muted"
@@ -73,9 +73,9 @@ export function FitDisplay({
   const { tone, icon } = STYLE[fit.level];
   return (
     <div className="mt-3">
-      <Badge tone={tone} icon={icon}>
+      <Stamp tone={tone} icon={icon}>
         {FIT_LABELS[fit.level]}
-      </Badge>
+      </Stamp>
       <p
         className={
           compact ? "mt-1 text-xs text-text-muted" : "mt-1.5 text-sm text-text-muted"

@@ -7,7 +7,7 @@ type CardProps = React.HTMLAttributes<HTMLElement> & {
 export function Card({ as: Tag = "div", className, ...rest }: CardProps) {
   return (
     <Tag
-      className={cn("rounded-2xl border border-border bg-surface shadow-card", className)}
+      className={cn("rounded-md border border-border bg-surface shadow-card", className)}
       {...rest}
     />
   );

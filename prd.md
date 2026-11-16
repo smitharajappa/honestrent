@@ -1,6 +1,7 @@
 PRODUCT: Honest Rent
-STATUS: v2 DRAFT (10/29/2026). Updated after the Discovery Report (Smitha Rajappa,
-Oct 2026). The synthetic interviews in that report are hypotheses until the six
+STATUS: v3 DRAFT (11/15/2026). Updated after professor feedback on regulation,
+scaling and defensibility (see research/strategy-response.md). v2 followed the
+Discovery Report (Smitha Rajappa, Oct 2026). The synthetic interviews in that report are hypotheses until the six
 real interviews are done. Every line below is a hypothesis until research/ and
 interviews/ back it up.
 PIVOT NOTES:
@@ -10,8 +11,22 @@ PIVOT NOTES:
   uncertainty was the most common pain (4 of 6 interviews) and that fee
   transparency alone is a weak reason to switch for renters with good credit.
   The v1 PRD is in git history (commit 31ff73b and earlier).
+  11/15/2026: four changes after professor feedback.
+    a. Changed "expand to the next big city" to an expansion scorecard,
+       because fee rules now differ by state AND city (Austin passed its own
+       fee-disclosure ordinance on 5/28/2026 although Texas has none).
+    b. Moved building self-reporting from Round 4 to the next round (S1-S4),
+       because manual data won't scale and operators in regulated places
+       already prepare itemised fee lists for regulators.
+    c. Changed the company story from "honest prices" to "the newcomer's
+       on-ramp to US renting", because real monthly cost alone is easy to
+       copy and new laws (Colorado, Massachusetts, FTC) push competitors to
+       copy it.
+    d. Redesigned the visual identity (receipt + approval stamps), because
+       the old look read as a generic template. Reasons are in DESIGN.md.
 
-POSITIONING: Approval-first renting for newcomers without US credit.
+POSITIONING: The newcomer's on-ramp to US renting. Approval-first renting for
+  newcomers without US credit, starting in DFW.
   Promise to renters: "Find a place that will say yes, and see what it really
   costs." Honest Rent ranks only by real cost and approval fit, never by who pays us.
 
@@ -115,6 +130,23 @@ FEATURES
        ranking. Only where the city publishes open data (Dallas now; Richardson and Plano
        show a link until a bulk source exists). See research/safety-data.md.
 
+  Next round: self-reporting and local rules (scaling the data; v3):
+  S1. Building self-report form - done means: a leasing office can enter fees,
+      deals, approval rules, documents and last year's water/wastewater average
+      in one form, and download it as the itemised fee list its city or state
+      requires (Texas: also the §92.3515 selection criteria). Entries show as
+      "Reported by the building" with a date, after a team check.
+  S2. Verified badge and audit - done means: buildings that self-report show a
+      badge. If renter bills for a size run more than 15% above the building's
+      own average for 2 months, the badge pauses and both numbers show.
+      Buildings that decline show "Not reported by the building".
+  S3. Local rules - done means: a jurisdictions table (state, city, rule,
+      effective date, source link, last checked) drives a "Your rights here"
+      box on each building page. A new city is a new row, not new code.
+  S4. Operator lead report - done means: after an arrival wave, the team can
+      print per-building counts (views, renters whose profile matched the
+      rules, "I'm interested" taps). Counts only, never renter details.
+
   Round 3 (then; needs accounts, payments and email services):
   R3.1 "Honest Rent Plus" waitlist test before building payments. BUILT (Nov 2026): four passes
        (1-Week $5.99, 2-Week $8.99, 3-Week $11.99, 4-Week
@@ -140,13 +172,40 @@ FEATURES
        ID-check vendor is not chosen yet and no ID scan is ever stored. Still to do: ID-check
        vendor, stronger chat moderation, email alerts for new matches. See docs/roommates.md.
   R4.2 Landlord portal: free listings, with Honest Rent verifying fees and approval
-       rules before they show.
+       rules before they show. (v3: the first step moved up as S1-S4.)
   R4.3 Lease referrals: properties pay when a renter signs, through a partner
        broker.
   R4.4 Movers program (see HOW WE MAKE MONEY).
   R4.5 Partner referrals: guarantor companies, Nova Credit, student lenders.
   R4.6 Anonymous approval outcomes from renters (after legal advice).
-  R4.7 Renter Passport with partners (after legal advice).
+  R4.7 Renter Passport with partners (after legal advice). v3: this is the
+       moat, not an extra. Apply once with verified income, an international
+       credit report and a guarantor quote, through a partner consumer
+       reporting agency. Colorado already requires landlords to accept
+       portable screening reports.
+  R4.8 Rent reporting to build US credit, through a partner (for example
+       Esusu or similar), so the renter who arrives through us stays in year 2.
+
+WHY THIS IS A COMPANY, NOT A FEATURE (v3):
+  Real monthly cost can be copied. These, together, are hard to copy:
+  1. Approval data for people without SSN or US credit (rules now, outcomes
+     later): a data network effect listing sites don't collect.
+  2. The Renter Passport (R4.7).
+  3. First-year money help: guarantor and deposit options, move-in cash and
+     rent reporting (R4.5, R4.8).
+  4. Counter-positioning: we never rank by who pays. Listing sites earn from
+     paid placement, so copying the promise costs them revenue.
+  Test before each feature: "If Apartments.com copied this tomorrow, would
+  renters still come to us?"
+
+FLYWHEEL (v3):
+  Renters trust the ranking -> approval-ready leads -> buildings self-report
+  -> more verified buildings -> renter bills audit the numbers -> more trust.
+  Cold start: one UTD cohort and about 30 buildings within 3 miles, seeded by
+  hand; then a lead report to each operator (target management companies,
+  not single buildings). Targets for spring 2027: 30 buildings, 30% self-
+  reporting (at least 3 operators), median data age under 30 days, 1 in 4
+  move-ins sharing a bill, discrepancy rate under 10%.
 
 HOW WE MAKE MONEY (to test):
   Renters:
@@ -215,8 +274,11 @@ OUT OF SCOPE (for now):
   - Native mobile app
   - Building data beyond Richardson-Plano. Search works for any DFW city, but
     data collection stays in Richardson-Plano until it reaches about 30
-    buildings (the report's atomic network) or landlords self-list (R4.2).
+    buildings (the report's atomic network) or landlords self-list (S1).
     "Request my area" measures demand in Dallas and Fort Worth first.
+    Next metro: one that scores 15+ on the expansion scorecard (newcomer
+    density, hidden-fee pain, approval friction, ease of self-reporting) after
+    DFW meets the flywheel targets. Houston and Austin score highest today.
   - Software for landlords (vertical SaaS)
   - Honest Rent as a lender or guarantor
 
@@ -229,6 +291,8 @@ KILL CRITERIA:
      both real monthly cost and approval fit for Dallas.
   4. Fewer than 5% of renters who see the Honest Rent Plus waitlist join it in the
      first season (then drop the Move Pass and stay commission-only).
+  5. Fewer than 2 operators self-report after seeing a lead report (then data
+     stays manual and we stay a small local guide).
 
 NEXT EVIDENCE (from the discovery report):
   - Six real customer interviews (add: would you trust an approval prediction?
@@ -242,3 +306,6 @@ NEXT EVIDENCE (from the discovery report):
   - Test cost per lead with one student-group post.
   - Get advice on licensing, credit reporting and fair housing before R4.6
     and R4.7.
+  - Count how many of the 30 target buildings each management company runs.
+  - Check whether Texas's 2023 preemption law (HB 2127) limits Austin's fee
+    ordinance before relying on it.

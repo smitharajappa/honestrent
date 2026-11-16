@@ -195,7 +195,7 @@ export function Checkout({ initialPass }: { initialPass: PassId }) {
                       className="peer sr-only"
                     />
                     <span
-                      className={`block rounded-xl border p-3 text-sm peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[var(--ring)] ${
+                      className={`block rounded-md border p-3 text-sm peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[var(--ring)] ${
                         pass === x.id
                           ? "border-brand bg-brand-soft font-semibold"
                           : "border-border-strong"
@@ -230,20 +230,20 @@ export function Checkout({ initialPass }: { initialPass: PassId }) {
               <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
                 <div className="sm:col-span-2">
                   <dt className="text-text-muted">Card number</dt>
-                  <dd className="mt-1 flex min-h-11 items-center gap-2 rounded-xl border border-border bg-surface-muted px-3 tabular-nums">
+                  <dd className="mt-1 flex min-h-11 items-center gap-2 rounded-md border border-border bg-surface-muted px-3 tabular-nums">
                     <LockIcon className="size-4 text-text-muted" />
                     4242 4242 4242 4242
                   </dd>
                 </div>
                 <div>
                   <dt className="text-text-muted">Expires</dt>
-                  <dd className="mt-1 flex min-h-11 items-center rounded-xl border border-border bg-surface-muted px-3 tabular-nums">
+                  <dd className="mt-1 flex min-h-11 items-center rounded-md border border-border bg-surface-muted px-3 tabular-nums">
                     12 / 34
                   </dd>
                 </div>
                 <div>
                   <dt className="text-text-muted">Security code</dt>
-                  <dd className="mt-1 flex min-h-11 items-center rounded-xl border border-border bg-surface-muted px-3 tabular-nums">
+                  <dd className="mt-1 flex min-h-11 items-center rounded-md border border-border bg-surface-muted px-3 tabular-nums">
                     •••
                   </dd>
                 </div>

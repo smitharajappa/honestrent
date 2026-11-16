@@ -140,12 +140,12 @@ export function DriveToPlaces({
 
       <div className="mt-4" aria-live="polite">
         {loading && !result && (
-          <p className="rounded-xl bg-surface-muted p-4 text-sm text-text-muted">
+          <p className="rounded-md bg-surface-muted p-4 text-sm text-text-muted">
             Getting drive times to {current.label}…
           </p>
         )}
         {typeof result === "string" && (
-          <p className="rounded-xl bg-surface-muted p-4 text-sm text-text-muted">
+          <p className="rounded-md bg-surface-muted p-4 text-sm text-text-muted">
             {result}
           </p>
         )}
@@ -165,7 +165,7 @@ export function DriveToPlaces({
           </>
         )}
         {!result && !loading && (
-          <p className="rounded-xl bg-surface-muted p-4 text-sm text-text-muted">
+          <p className="rounded-md bg-surface-muted p-4 text-sm text-text-muted">
             Real drive times need our traffic data, which isn&apos;t switched on yet.
           </p>
         )}
@@ -234,7 +234,7 @@ function AddPlace({
 
   if (gate) {
     return (
-      <div className="mt-3 rounded-xl border border-border bg-surface-muted p-4 text-sm">
+      <div className="mt-3 rounded-md border border-border bg-surface-muted p-4 text-sm">
         <p className="font-semibold">
           {gate === "sign-in"
             ? "Sign in to add your own places"
@@ -279,7 +279,7 @@ function AddPlace({
   const name = label.trim() || "My place";
 
   return (
-    <div className="mt-3 rounded-xl border border-border bg-surface-muted p-4">
+    <div className="mt-3 rounded-md border border-border bg-surface-muted p-4">
       <p className="text-sm font-semibold">Add a place</p>
       <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_2fr]">
         <label className="text-sm">
@@ -288,7 +288,7 @@ function AddPlace({
             value={label}
             onChange={(e) => setLabel(e.target.value.slice(0, 24))}
             placeholder="Work, Temple, Walmart…"
-            className="mt-1 min-h-11 w-full rounded-xl border border-border-strong bg-surface px-3 text-base"
+            className="mt-1 min-h-11 w-full rounded-md border border-border-strong bg-surface px-3 text-base"
           />
         </label>
         <label className="text-sm">
@@ -304,7 +304,7 @@ function AddPlace({
             }}
             placeholder="Street, city (or ZIP)"
             autoComplete="off"
-            className="mt-1 min-h-11 w-full rounded-xl border border-border-strong bg-surface px-3 text-base"
+            className="mt-1 min-h-11 w-full rounded-md border border-border-strong bg-surface px-3 text-base"
           />
         </label>
       </div>

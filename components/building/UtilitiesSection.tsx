@@ -26,7 +26,7 @@ export function UtilitiesSection({ building }: { building: Building }) {
       <p className="text-sm">{BILLING_TEXT[billing]}</p>
 
       {billing !== "included" && (
-        <ul className="divide-y divide-border rounded-xl border border-border">
+        <ul className="divide-y divide-border rounded-md border border-border">
           {sizes.map((bedrooms) => {
             const u = utilitiesFor(building, bedrooms);
             return (
@@ -65,7 +65,7 @@ export function UtilitiesSection({ building }: { building: Building }) {
 
       {items.length > 0 && (
         <div>
-          <p className="mb-2 text-xs font-bold tracking-wider text-text-muted uppercase">
+          <p className="mb-2 text-sm font-semibold text-text-muted">
             On the monthly bill
           </p>
           <dl className="space-y-1.5 text-sm">

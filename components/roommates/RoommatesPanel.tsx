@@ -102,7 +102,7 @@ function MatchCard({
         <div className="flex min-w-0 items-start gap-3">
           <span
             aria-hidden="true"
-            className="grid size-12 shrink-0 place-items-center rounded-2xl bg-brand-soft text-lg font-extrabold text-brand-text"
+            className="grid size-12 shrink-0 place-items-center rounded-md bg-brand-soft text-lg font-extrabold text-brand-text"
           >
             {p.nickname
               .replace(/^Sample\s+/, "")
@@ -323,7 +323,7 @@ export function RoommatesPanel() {
       {tab === "matches" && (
         <section aria-label="Matches">
           {!profile.visible && (
-            <p className="mb-4 rounded-xl bg-surface-muted p-3 text-sm">
+            <p className="mb-4 rounded-md bg-surface-muted p-3 text-sm">
               You&apos;re hidden, so others can&apos;t see you. Turn that on in My
               profile.
             </p>
