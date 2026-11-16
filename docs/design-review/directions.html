@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Honest Rent design directions</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=DM+Mono:wght@400;500&family=Public+Sans:wght@400;600&family=Atkinson+Hyperlegible:wght@400;700&display=swap"
+    />
+    <style>
+      /* Three candidate identities, each shown as the same result card (same sample building). */
+      :root {
+        --page: #e9eae6;
+        --ink: #1b2230;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--ink);
+        font:
+          15px/1.5 "Public Sans",
+          system-ui,
+          sans-serif;
+        padding: 32px max(16px, 3vw);
+      }
+      h1 {
+        font:
+          800 1.8rem/1.1 "Archivo",
+          sans-serif;
+        font-stretch: 78%;
+        margin: 0 0 6px;
+      }
+      .intro {
+        margin: 0 0 28px;
+        max-width: 70ch;
+      }
+      .grid {
+        display: grid;
+        gap: 24px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        align-items: start;
+      }
+      .col h2 {
+        font:
+          700 1.05rem "Archivo",
+          sans-serif;
+        font-stretch: 85%;
+        margin: 0 0 4px;
+      }
+      .col p {
+        margin: 0 0 14px;
+        font-size: 0.88rem;
+      }
+      .chosen {
+        font:
+          500 0.72rem "DM Mono",
+          monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        background: #ffe45c;
+        padding: 2px 6px;
+        margin-left: 6px;
+      }
+
+      /* A: honest receipt + B stamps (chosen) */
+      .a {
+        background: #fff;
+        padding: 18px 18px 28px;
+        font-family: "DM Mono", monospace;
+        font-size: 0.88rem;
+        -webkit-mask: conic-gradient(
+            from -45deg at bottom,
+            #0000,
+            #000 1deg 89deg,
+            #0000 90deg
+          )
+          50% / 10px 100%;
+        mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg)
+          50% / 10px 100%;
+      }
+      .a .name {
+        font:
+          750 1.2rem "Archivo",
+          sans-serif;
+        font-stretch: 80%;
+      }
+      .a .sub {
+        color: #545c6a;
+        font-size: 0.78rem;
+        margin-bottom: 10px;
+      }
+      .a .ln {
+        display: flex;
+        gap: 6px;
+        align-items: baseline;
+        padding: 2px 0;
+      }
+      .a .ln i {
+        flex: 1;
+        border-bottom: 2px dotted #c9ccc6;
+        transform: translateY(-4px);
+      }
+      .a mark {
+        background: #ffe45c;
+        color: inherit;
+        padding: 0 3px;
+      }
+      .a .tot {
+        border-top: 1px dashed #c9ccc6;
+        margin-top: 6px;
+        padding-top: 8px;
+        font-weight: 500;
+        font-size: 1rem;
+      }
+      .a .stamp {
+        display: inline-block;
+        margin-top: 12px;
+        font:
+          800 0.8rem "Archivo",
+          sans-serif;
+        font-stretch: 70%;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #1d7048;
+        border: 2.5px solid currentColor;
+        border-radius: 6px;
+        padding: 2px 9px;
+        transform: rotate(-4deg);
+      }
+
+      /* B: passport */
+      .b {
+        background: #20304f;
+        color: #f2ecdc;
+        padding: 18px;
+        border-radius: 4px;
+        font-family: "Public Sans", sans-serif;
+      }
+      .b .name {
+        font:
+          700 1.15rem "Archivo",
+          sans-serif;
+        letter-spacing: 0.02em;
+      }
+      .b .mrz {
+        font:
+          0.72rem "DM Mono",
+          monospace;
+        letter-spacing: 0.12em;
+        opacity: 0.7;
+        margin: 6px 0 12px;
+      }
+      .b .big {
+        font:
+          500 1.8rem "DM Mono",
+          monospace;
+      }
+      .b .stamps {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .b .stamps span {
+        font:
+          800 0.72rem "Archivo",
+          sans-serif;
+        font-stretch: 70%;
+        text-transform: uppercase;
+        border: 2px solid #9fe0b9;
+        color: #9fe0b9;
+        border-radius: 50%;
+        padding: 12px 8px;
+        transform: rotate(-8deg);
+      }
+      .b .stamps span + span {
+        border-color: #f0b660;
+        color: #f0b660;
+        transform: rotate(6deg);
+      }
+
+      /* C: wayfinding */
+      .c {
+        background: #fff;
+        border-left: 14px solid #00754a;
+        padding: 16px 18px;
+        font-family: "Atkinson Hyperlegible", sans-serif;
+      }
+      .c .name {
+        font:
+          700 1.25rem "Atkinson Hyperlegible",
+          sans-serif;
+      }
+      .c .sign {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        background: #00754a;
+        color: #fff;
+        font-weight: 700;
+        padding: 4px 10px;
+        margin: 10px 0;
+      }
+      .c .big {
+        font-size: 2rem;
+        font-weight: 700;
+      }
+      .c .row {
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid #ccc;
+        padding: 6px 0;
+      }
+      .c .pill {
+        background: #ffd200;
+        color: #111;
+        font-weight: 700;
+        padding: 2px 8px;
+      }
+      .why {
+        font-size: 0.84rem;
+        margin-top: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Three directions, one card</h1>
+    <p class="intro">
+      Each column shows the same sample apartment (made-up figures). The old look was the
+      generic template: teal, Inter and Plus Jakarta Sans, rounded cards with soft
+      shadows, pastel gradients. Each direction instead borrows from a real object in a
+      newcomer's move.
+    </p>
+    <div class="grid">
+      <div class="col">
+        <h2>
+          A · The honest receipt <span class="chosen">Chosen, with B's stamps</span>
+        </h2>
+        <p>The product is an itemised bill, so the card is one.</p>
+        <div class="a">
+          <div class="name">Maple Ridge Flats</div>
+          <div class="sub">1 bed · Richardson · verified Nov 2</div>
+          <div class="ln"><span>Advertised rent</span><i></i><span>$1,295</span></div>
+          <div class="ln">
+            <span><mark>Required fees</mark></span
+            ><i></i><span>+$65</span>
+          </div>
+          <div class="ln">
+            <span><mark>Water, sewer, trash</mark></span
+            ><i></i><span>+$118</span>
+          </div>
+          <div class="ln"><span>Deal ÷ 12 months</span><i></i><span>−$100</span></div>
+          <div class="ln tot">
+            <span>Real monthly cost</span><i></i><span>$1,378</span>
+          </div>
+          <span class="stamp">Passport OK · No SSN</span>
+        </div>
+        <p class="why">
+          Strength: the promise is visible in the shape. Risk: could feel cold; the stamp
+          adds the human decision.
+        </p>
+      </div>
+      <div class="col">
+        <h2>B · The passport</h2>
+        <p>Navy cover, machine-readable line, entry stamps for approval.</p>
+        <div class="b">
+          <div class="name">MAPLE RIDGE FLATS</div>
+          <div class="mrz">
+            P&lt;USA&lt;RICHARDSON&lt;&lt;1BED&lt;&lt;&lt;&lt;&lt;&lt;
+          </div>
+          <div class="big">$1,378<small style="font-size: 0.9rem">/mo</small></div>
+          <div style="font-size: 0.85rem; opacity: 0.8">ad says $1,295</div>
+          <div class="stamps"><span>Approved</span><span>Guarantor</span></div>
+        </div>
+        <p class="why">
+          Strength: speaks to newcomers. Risk: ties the brand to immigration status, which
+          we never store or ask about.
+        </p>
+      </div>
+      <div class="col">
+        <h2>C · Wayfinding</h2>
+        <p>Transit-sign green, very high legibility, distance first.</p>
+        <div class="c">
+          <div class="name">Maple Ridge Flats</div>
+          <div class="sign">→ 1.2 mi to UTD</div>
+          <div class="big">$1,378/mo</div>
+          <div class="row"><span>Ad rent</span><span>$1,295</span></div>
+          <div class="row">
+            <span>Fees and utilities</span><span class="pill">+$183</span>
+          </div>
+          <div class="row"><span>Approval</span><span>Good fit</span></div>
+        </div>
+        <p class="why">
+          Strength: very readable on a phone. Risk: says "location", not "honest cost";
+          the core promise is lost.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

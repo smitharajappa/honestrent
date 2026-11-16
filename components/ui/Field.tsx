@@ -47,7 +47,7 @@ export function Field({
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy}
           className={cn(
-            "block min-h-12 w-full appearance-none rounded-xl border bg-surface px-3.5 text-base text-text tabular-nums",
+            "block min-h-12 w-full appearance-none rounded-md border bg-surface px-3.5 text-base text-text tabular-nums",
             "placeholder:text-text-muted/70 transition-colors duration-150",
             "focus:border-brand focus:ring-4 focus:ring-brand/15 focus:outline-none",
             error ? "border-danger-text" : "border-border-strong hover:border-text-muted",

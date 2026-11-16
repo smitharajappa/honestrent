@@ -28,7 +28,7 @@ export function Select({
         <select
           id={id}
           className={cn(
-            "block min-h-12 w-full appearance-none rounded-xl border border-border-strong bg-surface py-2 pr-10 pl-3.5 text-base text-text",
+            "block min-h-12 w-full appearance-none rounded-md border border-border-strong bg-surface py-2 pr-10 pl-3.5 text-base text-text",
             "transition-colors duration-150 hover:border-text-muted",
             "focus:border-brand focus:ring-4 focus:ring-brand/15 focus:outline-none",
           )}

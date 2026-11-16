@@ -8,7 +8,7 @@ export const LazyMap = dynamic(() => import("./BuildingMap"), {
   loading: () => (
     <div
       role="status"
-      className="grid h-72 animate-pulse place-items-center rounded-2xl border border-border bg-surface-muted text-sm text-text-muted"
+      className="grid h-72 animate-pulse place-items-center rounded-md border border-border bg-surface-muted text-sm text-text-muted"
     >
       Loading map…
     </div>

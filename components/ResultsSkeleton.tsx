@@ -16,7 +16,7 @@ export function ResultsSkeleton() {
               </div>
               <div className="h-8 w-20 shimmer rounded-md" />
             </div>
-            <div className="mt-4 h-24 shimmer rounded-xl" />
+            <div className="mt-4 h-24 shimmer rounded-md" />
           </Card>
         ))}
       </ul>

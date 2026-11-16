@@ -62,11 +62,9 @@ function Stat({
   tone: keyof typeof TONES;
 }) {
   return (
-    <div className="min-w-0 rounded-2xl border border-border bg-surface p-3 shadow-card sm:p-4">
+    <div className="min-w-0 rounded-md border border-border bg-surface p-3 shadow-card sm:p-4">
       <p className="text-xs leading-tight font-semibold text-text-muted">{label}</p>
-      <p
-        className={`mt-1 text-base font-bold tracking-tight tabular-nums sm:text-2xl ${TONES[tone]}`}
-      >
+      <p className={`figure mt-1 text-base font-medium sm:text-2xl ${TONES[tone]}`}>
         {value}
       </p>
       <p className="mt-0.5 hidden truncate text-xs text-text-muted sm:block">{note}</p>

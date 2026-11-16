@@ -20,7 +20,7 @@ export function LogoMark({ className }: { className?: string }) {
           <stop offset="1" style={{ stopColor: "var(--logo-to)" }} />
         </linearGradient>
       </defs>
-      <rect width="64" height="64" rx="16" fill={`url(#${id})`} />
+      <rect width="64" height="64" rx="10" fill={`url(#${id})`} />
       <path
         className="origin-center transition-transform duration-300 ease-out motion-safe:group-hover/logo:-translate-y-0.5"
         d="M13 29 32 14l19 15"

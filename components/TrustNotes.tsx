@@ -4,7 +4,7 @@ import { Tip } from "./ui/Tip";
 /** Neutral-ranking promise and scam-safety tips (trust is part of the product). */
 export function TrustNotes() {
   return (
-    <div className="space-y-3 rounded-2xl border border-border bg-surface p-4 text-sm">
+    <div className="space-y-3 rounded-md border border-border bg-surface p-4 text-sm">
       <p className="flex items-start gap-2">
         <ShieldIcon className="mt-0.5 size-4 shrink-0 text-success-text" />
         <span>

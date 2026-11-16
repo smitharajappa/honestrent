@@ -33,7 +33,7 @@ export default function PlusPage() {
         <div className="grid gap-6 md:grid-cols-2">
           <section
             aria-labelledby="free-heading"
-            className="rounded-2xl border border-border p-5"
+            className="rounded-md border border-border p-5"
           >
             <h2 id="free-heading" className="font-bold">
               Always free
@@ -49,7 +49,7 @@ export default function PlusPage() {
           </section>
           <section
             aria-labelledby="plus-heading"
-            className="rounded-2xl border border-brand p-5"
+            className="rounded-md border border-brand p-5"
           >
             <h2 id="plus-heading" className="font-bold">
               With a pass

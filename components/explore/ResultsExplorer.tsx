@@ -1,5 +1,7 @@
 "use client";
 
+import { moveInCash } from "@/lib/moveIn";
+
 import { motion } from "motion/react";
 import { useMemo, useState } from "react";
 import { isCompleteProfile } from "@/lib/approval";
@@ -46,6 +48,8 @@ type Props = {
   budget: number;
   moveIn: string;
   today: string;
+  /** Nobody has searched yet: every apartment is shown, with no budget or date. */
+  browsing?: boolean;
 };
 
 const SORTS: { value: SortKey; label: string }[] = [
@@ -71,8 +75,25 @@ export function ResultsExplorer({
   budget,
   moveIn,
   today,
+  browsing = false,
 }: Props) {
   const { answers } = useApproval();
+  // Cash before the keys for the whole apartment; null if the building hasn't shared it all.
+  const moveInTotalFor = (item: (typeof items)[number]) => {
+    const cash = moveInCash({
+      building: item.building,
+      plan: item.plan,
+      monthlyTotal: item.estimatedTotal,
+      moveIn,
+      profile,
+      fitLevel: item.fit?.level ?? null,
+      adults: effectiveFilters.people,
+    });
+    return cash.missing.length > 0 ? null : cash.total;
+  };
+  // While browsing there is no real budget or date to carry along, so links stay plain.
+  const linkTo = (path: string) =>
+    browsing ? path : searchHref(path, { budget, moveIn, area });
   const { coords, label: fromLabel } = useLocation();
   const profile = isCompleteProfile(answers) ? answers : null;
   const [filters, setFilters] = useState<FilterState>(NO_FILTERS);
@@ -127,12 +148,14 @@ export function ResultsExplorer({
             label: formatUsd(
               effectiveFilters.people > 1 ? perPerson : cost.realMonthlyCost,
             ),
-            href: searchHref(`/buildings/${building.id}`, { budget, moveIn, area }),
+            href: browsing
+              ? `/buildings/${building.id}`
+              : searchHref(`/buildings/${building.id}`, { budget, moveIn, area }),
             fit: profile ? (item.fit?.level ?? "unknown") : undefined,
           },
         ];
       }),
-    [items, effectiveFilters.people, budget, moveIn, profile, area],
+    [items, effectiveFilters.people, browsing, budget, moveIn, profile, area],
   );
   // Real places with no prices yet: shown grey on the map, never ranked.
   const mapOnlyPins = useMemo<MapPin[]>(
@@ -251,8 +274,18 @@ export function ResultsExplorer({
               {items.length} {items.length === 1 ? "apartment fits" : "apartments fit"}
             </h2>
             <p className="mt-1 text-sm text-text-muted">
-              {area ? `${area} · ` : ""}Under {formatUsd(budget)}/mo
-              {filters.people > 1 ? " per person" : ""} · Move in by {formatDate(moveIn)}
+              {browsing ? (
+                <>
+                  Every apartment we have checked. Add a budget and date above to narrow
+                  it.
+                </>
+              ) : (
+                <>
+                  {area ? `${area} · ` : ""}Under {formatUsd(budget)}/mo
+                  {filters.people > 1 ? " per person" : ""} · Move in by{" "}
+                  {formatDate(moveIn)}
+                </>
+              )}
             </p>
           </div>
           <label className="flex w-full items-center gap-2 text-sm sm:w-auto">
@@ -261,7 +294,7 @@ export function ResultsExplorer({
               <select
                 value={effectiveSort}
                 onChange={(e) => setSort(e.target.value as SortKey)}
-                className="min-h-11 w-full appearance-none truncate rounded-xl border border-border-strong bg-surface py-2 pr-9 pl-3 text-sm font-semibold"
+                className="min-h-11 w-full appearance-none truncate rounded-md border border-border-strong bg-surface py-2 pr-9 pl-3 text-sm font-semibold"
               >
                 {SORTS.map((s) => (
                   <option
@@ -323,7 +356,7 @@ export function ResultsExplorer({
           <div
             role="group"
             aria-label="Show results as"
-            className="mt-4 inline-flex rounded-xl border border-border-strong bg-surface p-1"
+            className="mt-4 inline-flex rounded-md border border-border-strong bg-surface p-1"
           >
             {(
               [
@@ -374,7 +407,7 @@ export function ResultsExplorer({
           </div>
         )}
         {feesSaved.buildings > 0 && (
-          <p className="mt-3 flex items-start gap-2 rounded-xl bg-success-soft p-3 text-sm text-success-text">
+          <p className="mt-3 flex items-start gap-2 rounded-md bg-success-soft p-3 text-sm text-success-text">
             <TagIcon className="mt-0.5 size-4 shrink-0" />
             <span>
               <strong className="font-semibold">
@@ -436,21 +469,14 @@ export function ResultsExplorer({
                 index={index}
                 today={today}
                 people={effectiveFilters.people}
-                detailHref={searchHref(`/buildings/${item.building.id}`, {
-                  budget,
-                  moveIn,
-                  area,
-                })}
+                detailHref={linkTo(`/buildings/${item.building.id}`)}
                 fromLabel={fromLabel}
+                moveInTotal={moveInTotalFor(item)}
                 alternative={
                   item.fit?.level === "unlikely" && firstGoodFit
                     ? {
                         name: firstGoodFit.building.name,
-                        href: searchHref(`/buildings/${firstGoodFit.building.id}`, {
-                          budget,
-                          moveIn,
-                          area,
-                        }),
+                        href: linkTo(`/buildings/${firstGoodFit.building.id}`),
                       }
                     : undefined
                 }

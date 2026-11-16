@@ -36,7 +36,7 @@ export function SignInForm({ next }: { next?: string }) {
 
   if (!available) {
     return (
-      <p className="rounded-xl bg-surface-muted p-4 text-sm text-text-muted">
+      <p className="rounded-md bg-surface-muted p-4 text-sm text-text-muted">
         Sign-in isn&apos;t set up on this copy of the site yet. Everything else works
         without it.
       </p>

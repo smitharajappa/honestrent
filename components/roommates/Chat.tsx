@@ -145,7 +145,7 @@ export function Chat({
             <select
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="mt-1 min-h-11 w-full rounded-xl border border-border-strong bg-surface px-3"
+              className="mt-1 min-h-11 w-full rounded-md border border-border-strong bg-surface px-3"
             >
               {Object.entries(REPORT_REASONS).map(([k, v]) => (
                 <option key={k} value={k}>
@@ -161,7 +161,7 @@ export function Chat({
               onChange={(e) => setNote(e.target.value)}
               maxLength={500}
               rows={2}
-              className="mt-1 w-full rounded-xl border border-border-strong bg-surface px-3 py-2"
+              className="mt-1 w-full rounded-md border border-border-strong bg-surface px-3 py-2"
             />
           </label>
           <p className="text-xs text-text-muted">
@@ -186,7 +186,7 @@ export function Chat({
             className={`flex ${m.sender === myId ? "justify-end" : "justify-start"}`}
           >
             <p
-              className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-sm ${m.sender === myId ? "bg-brand text-brand-fg" : "bg-surface-muted"}`}
+              className={`max-w-[85%] rounded-md px-3.5 py-2 text-sm ${m.sender === myId ? "bg-brand text-brand-fg" : "bg-surface-muted"}`}
             >
               {m.body}
             </p>
@@ -241,7 +241,7 @@ export function Chat({
             maxLength={500}
             autoComplete="off"
             placeholder="Write about the apartment…"
-            className="min-h-11 min-w-0 flex-1 rounded-xl border border-border-strong bg-surface px-3 text-base"
+            className="min-h-11 min-w-0 flex-1 rounded-md border border-border-strong bg-surface px-3 text-base"
           />
           <Button type="submit" disabled={sending}>
             Send

@@ -22,53 +22,117 @@ invisible until she has paid to apply.
 
 **How might we** help Ana trust a price and a "yes" in under 10 seconds?
 
+## Identity: the receipt and the stamp (Nov 2026)
+
+The first look was the generic AI-app kit: teal, Inter with Plus Jakarta Sans, very rounded
+cards with soft shadows, pill badges and a pastel gradient hero. Our professor said it showed
+"obvious signs of being generated". It looked like every other app, so it said nothing about
+ours. We compared three directions on one card (`docs/design-review/directions.html`):
+
+| Direction                          | Borrowed from                   | Why we didn't pick it alone                                                                  |
+| ---------------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------- |
+| **A. The honest receipt** (chosen) | An itemised bill or rent ledger | Can feel cold, so B's stamps add the human decision.                                         |
+| B. The passport                    | Passport cover and entry stamps | The whole look would tie the brand to immigration status, which we never ask about or store. |
+| C. Wayfinding                      | Transit signs                   | Says "location", not "honest cost". The core promise gets lost.                              |
+
+**Why the receipt:** our promise is an itemised price. Renters already audit their ledgers line
+by line (see `research/ledger-example-2026.md`). A receipt shows the promise before anyone reads
+a word.
+
+**Why the stamp:** approval is a decision someone makes about you. Newcomers meet those
+decisions as stamps (visa, I-20, passport), so a stamp reads as "decided", not "decoration".
+
 ## Vibe words
 
-**Trustworthy · Clear · Welcoming.** Calm, never salesy. Money decisions deserve a quiet
-interface.
+**Itemised · Checkable · Decided.** Calm, never salesy. Every number can be checked by eye; every
+approval says who decides and why.
 
-## Color (60-30-10)
+## Color: and why each one
 
-- **60% neutrals:** page background `bg-bg`, text `text-text`, borders.
-- **30% surfaces:** cards `bg-surface`, inner panels `bg-surface-muted`.
-- **10% brand teal:** the one brand color. Used for actions (primary buttons, links, focus
-  ring) and **selected states** (List/Map toggle, filter chips, section bar, map tabs) and
-  the rent part of the cost bar. Not for labels or info boxes.
+- **Paper and ink, 60%:** a slightly cool paper page (`bg`) with white receipt slips
+  (`surface`) and blue-black ink text (`text`). Why: thermal paper and receipt ink are cool, not
+  cream. We avoid warm cream on purpose because it is a common generated look.
+- **Ballpoint blue `brand`, 10%:** actions only (buttons, links, focus, selected states). Why: it
+  is the pen you sign a lease with, and blue reads as "you can press this" without borrowing a
+  bank's or a listing site's color. It replaced teal, which many generated apps use.
+- **Highlighter `mark`:** used **only** on charges the advert hid (required fees, utilities billed
+  by the building) and the `marker` text style. Why: renters mark up surprise charges on their
+  own ledgers with a highlighter. If it is yellow, it was hidden. Never used for anything else.
+- **Deal sticker `accent`:** a pale green tag for move-in deals. Why: a price sticker, and green
+  already means "taken off".
+- **`rule`:** dotted leader lines and dashed tear lines. Decoration only.
 - **One meaning per color**, always with words and an icon:
   - green `success`: savings, deals taken off, good fit, "ready";
-  - amber `warning`: costs added (fees, utilities), possible with guarantor, data may be stale;
-  - soft rose `unlikely`: "Unlikely" approval. Never alarm red: our renters have often
-    been refused already, so it always comes with the reason and a nearby good fit;
-  - grey `neutral`: unknown or unconfirmed ("Rules not confirmed", "Not known"). Never
-    blue, so the eye isn't drawn to the one thing we can't confirm;
-  - red `danger`: errors only;
-  - blue `info`: explanations and tips;
-  - slate `slate`: neighbourhood facts (incident counts). Never red or graded.
-- **Warm accent** `accent` (amber #E8A33D): deal tags and small highlights only.
-- **Approval fit has four states:** Good fit (green), Possible with guarantor (amber),
-  Unlikely (soft rose), Rules not confirmed (grey), each with an icon and a one-line reason.
-- **Decorative colors** (`--cover-1` to `--cover-6`, `--hero-*`) are only for building
-  covers and the hero illustration. Never use them for text, status or actions.
+  - amber `warning`: costs added, possible with guarantor, data may be stale;
+  - soft rose `unlikely`: "Unlikely" approval. Never alarm red: our renters have often been
+    refused already, so it always comes with the reason and a nearby good fit;
+  - grey `neutral`: unknown or unconfirmed. Never blue, so the eye isn't drawn to what we can't
+    confirm;
+  - red `danger`: errors only; blue `info`: tips; slate `slate`: neighbourhood facts, never
+    graded.
+- **Decorative colors** (`--hero-*`) are for page backgrounds only. The old `--cover-*` colors
+  are no longer used.
 - Never write raw hex colors in components. Add or change a token in `globals.css`.
-- Every text color must pass WCAG AA (4.5:1 body text, 3:1 large text and input
-  borders) in light **and** dark mode.
+- Every text color must pass WCAG AA (4.5:1 body text, 3:1 large text and input borders) in
+  light **and** dark mode.
 
 ## Brand
 
-- **Logo:** `components/ui/Logo.tsx`: an H under a roof, with an amber bar like a receipt line.
-  Header, tab icon (`app/icon.svg`) and phone icon (`app/apple-icon.png`) all use it. Colors are
-  the `--logo-*` tokens: a teal that deepens toward one corner, plus the warm amber.
-- Gradients and glows are decoration only. Buttons and links stay solid brand teal so text
-  keeps its contrast.
+- **Logo:** `components/ui/Logo.tsx`: an H under a roof, with a highlighter line across it like a
+  marked receipt line. Pen blue, flat (no gradient), with less rounded corners.
+- **Receipt pieces** (utilities in `globals.css`): `figure` (equal-width digits for every
+  price), `leader` (the dotted line between a label and its amount) and `marker` (the
+  highlighter, for hidden charges only).
+- **Stamps:** `components/ui/Stamp.tsx` (`stamp` utility). Good fit, Possible with guarantor and
+  Unlikely are tilted ink stamps. "Rules not confirmed" is a straight, dashed outline, because
+  nobody has decided anything yet.
+- **Cost strip:** `CostStrip` in `components/ResultCard.tsx`. Every card shows the same four
+  columns: Rent · Fees · Utilities · Move-in. Why: Japanese rental listings show rent,
+  management fee, deposit and key money in fixed columns, so renters compare at a glance. A
+  part the building hasn't shared says **"Not disclosed"** instead of disappearing (like the
+  UK rule that rent and deposit must be filled in before a listing goes live).
+- **One big total, breakdown on tap:** like Airbnb's total price. The card leads with the
+  estimated total; "Full breakdown" opens `components/CostReceipt.tsx` (each line of the bill,
+  so it can be checked by eye).
+- **Map thumbnails instead of drawn covers:** `components/map/MapThumb.tsx` draws the streets
+  around each building from our own map tiles, once, and keeps it as a picture. Why: drawn
+  skylines were decoration pretending to be a photo. A map is real and tells the renter
+  something (what is nearby). A real photo replaces it once a building supplies one.
+- **Shape:** 6px corners (`rounded-md`) on cards, buttons and fields; 2px on badges. Pills stay
+  only for filter chips, avatars and round icon buttons.
+- **Depth:** cards are flat with a border; hover darkens the border instead of lifting the card.
 - Motion: small and quick (150 to 300ms), always off for people who ask for less motion.
 
-## Type
+### What we removed because it looked generated (Nov 2026)
 
-- **Headings:** Plus Jakarta Sans (`font-heading`): friendly and clear.
-- **Body, numbers and forms:** Inter (`font-sans`). Prices use `tabular-nums`.
-- Big moments: `display` (one per page, fluid size) with an `eyebrow` label above it.
+After the redesign it still looked generated, so we checked it against published lists of
+"AI design tells" and how real rental sites look. We removed:
+
+| Removed                                                                               | Why                                                                                                 |
+| ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Pill label above the headline                                                         | The default generated hero. It also looked clickable.                                               |
+| One headline phrase highlighted in colour                                             | A common generated move; the highlighter now means only "hidden charge".                            |
+| Small capital monospace labels on sections                                            | Read as decoration. Labels are now plain sentence case.                                             |
+| Monospace for prices, zigzag receipt edge                                             | Monospace used to look "technical" is a known tell. Equal-width digits do the real job.             |
+| Marketing hero with two buttons before the product                                    | Real rental sites open on search and listings. The home page now is the search.                     |
+| Four icon-tile step cards, three icon "why" cards, coloured band with blurred circles | The most common generated landing-page layout. Now a plain numbered list beside one worked example. |
+| Drawn building covers and hero skyline                                                | Decoration pretending to be a photo. Replaced with real map thumbnails.                             |
+| Cards lifting on hover                                                                | Generic hover effect. The border darkens instead.                                                   |
+
+## Type: and why each face
+
+- **Headings: Archivo** (`font-heading`), at a narrowed width (`font-stretch` 75–85%). Why: it
+  looks like a printed header or a stamp, is sturdy at small sizes, and the narrow width fits
+  long building names on a phone.
+- **Body and forms: Public Sans** (`font-sans`). Why: it was made for US government websites and
+  forms, the same kind of forms newcomers fill in. It reads as plain and official.
+- **Figures:** Public Sans with equal-width digits (`figure` utility), so amounts line up in a
+  column and can be compared at a glance. No monospace font.
+- Labels (`eyebrow`) are short, plain and in sentence case. Use them only when a heading needs
+  one, never on every section.
 - Body text is at least 16px in inputs (phones zoom in on smaller text).
 - One `h1` per page. Headings go in order (h1 → h2 → h3).
+- Both fonts load through `next/font` (served from our own site, no new library).
 
 ## Layout
 
@@ -81,18 +145,19 @@ interface.
 
 ## Shape and space
 
-- Corners: cards `rounded-2xl`, controls `rounded-xl`, chips `rounded-full`.
+- Corners: cards and controls `rounded-md` (6px), badges `rounded-sm`, chips and avatars
+  `rounded-full`.
 - Spacing on a 4px grid (Tailwind's default scale).
-- Two shadows only: `shadow-card` (resting) and `shadow-raised` (floating).
+- Two shadows only: `shadow-card` (a paper slip resting) and `shadow-raised` (lifted).
 - Tap targets are at least 44px tall.
 
 ## Components (reuse before creating)
 
 `components/ui/`: `Button` / `ButtonLink` (primary, secondary, ghost), `Field`, `Select`,
-`Card`, `Badge`, `Tip`, `InfoNote`, `icons`.
+`Card`, `Badge`, `Stamp` (approval fit), `Tip`, `InfoNote`, `icons`.
 
-Honest Rent-specific: `BuildingCover` (drawn cover; shows a real photo once a building supplies
-one), `CostBar` (rent, + fees, − deals), `home/CostReveal` (the home page's animated ad-vs-real price card), `home/HowItWorks` (steps, why, closing call to action), `ui/Logo`, `ResultCard`, `explore/FiltersPanel` (toggle
+Honest Rent-specific: `map/MapThumb` (map picture of the building's block), `CostStrip`
+(the four fixed cost columns), `CostReceipt` (rent, + fees, + utilities, − deals, as receipt lines), `home/CostReveal` (the worked example of ad price vs real cost), `home/HowItWorks` (a plain numbered list beside the example), `ui/Logo`, `ResultCard`, `explore/FiltersPanel` (toggle
 chips), `explore/InsightBanner`, `shortlist/SaveButton` and `CompareToggle`, `CompareTray`,
 `TrustNotes`, `location/LocateButton` (device location or a ZIP code to measure from; kept in the tab, never sent or saved), `map/LazyMap` (maps, MapLibre + OpenFreeMap tiles) and `motion/Reveal` (fade-up animation presets; respects "reduce motion").
 
@@ -143,7 +208,9 @@ If a new pattern is needed, add it there and to `/styleguide`.
 | Pair every status color with words and an icon       | Use color alone to mean something              |
 | Show the "last verified" date wherever prices appear | Hide how fresh the data is                     |
 | Keep renter answers on their device                  | Ask for SSN, exact score or immigration status |
-| Use teal for actions only                            | Paint labels, info boxes or icons teal         |
+| Use pen blue for actions only                        | Paint labels, info boxes or icons blue         |
+| Use the highlighter only for charges the ad hid      | Highlight deals, headings or anything else     |
+| Use `figure` for every price                         | Mix proportional and monospaced prices         |
 
 ## Review loop
 

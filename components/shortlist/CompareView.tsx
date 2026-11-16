@@ -8,8 +8,8 @@ import { itemsFor, type ShortlistItem } from "@/lib/shortlist";
 import type { Building } from "@/lib/types";
 import { useApproval } from "../approval/ApprovalContext";
 import { AnswersNote, FitDisplay } from "../approval/FitBadge";
-import { BuildingCover } from "../BuildingCover";
-import { CostBar } from "../CostBar";
+import { MapThumb } from "../map/MapThumb";
+import { CostReceipt } from "../CostReceipt";
 import { UtilitiesLine } from "../ResultCard";
 import { Badge } from "../ui/Badge";
 import { ButtonLink } from "../ui/Button";
@@ -72,7 +72,7 @@ export function CompareView({ buildings, today, moveIn }: Props) {
             {formatUsd(i.estimatedTotal)}
           </p>
           {i.estimatedTotal === b.realCost && <Badge tone="success">Lowest</Badge>}
-          <CostBar cost={i.cost} utilities={i.utilities} />
+          <CostReceipt cost={i.cost} utilities={i.utilities} />
         </div>
       ),
     },
@@ -182,7 +182,7 @@ export function CompareView({ buildings, today, moveIn }: Props) {
       )}
 
       {/* Scrolls sideways on phones; row labels stay pinned on the left. */}
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-border bg-surface shadow-card">
+      <div className="mt-6 overflow-x-auto rounded-md border border-border bg-surface shadow-card">
         <table className="w-full min-w-[44rem] border-collapse text-left text-sm">
           <caption className="sr-only">Side-by-side comparison of apartments</caption>
           <thead>
@@ -192,8 +192,12 @@ export function CompareView({ buildings, today, moveIn }: Props) {
               </th>
               {items.map((i) => (
                 <th key={i.building.id} scope="col" className="min-w-56 p-4 align-top">
-                  <div className="h-20 overflow-hidden rounded-xl">
-                    <BuildingCover id={i.building.id} name={i.building.name} />
+                  <div className="h-20 overflow-hidden rounded-md">
+                    <MapThumb
+                      name={i.building.name}
+                      latitude={i.building.latitude}
+                      longitude={i.building.longitude}
+                    />
                   </div>
                   <Link
                     href={`/buildings/${i.building.id}`}
@@ -220,7 +224,7 @@ export function CompareView({ buildings, today, moveIn }: Props) {
               <tr key={row.label} className="border-t border-border">
                 <th
                   scope="row"
-                  className="sticky left-0 z-10 bg-surface p-4 align-top text-xs font-bold tracking-wider text-text-muted uppercase"
+                  className="sticky left-0 z-10 bg-surface p-4 align-top text-sm font-semibold text-text-muted"
                 >
                   {row.label}
                 </th>

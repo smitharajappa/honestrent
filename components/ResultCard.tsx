@@ -4,12 +4,12 @@ import { bedroomLabel, formatDate, formatUsd } from "@/lib/format";
 import { isDealActive } from "@/lib/cost";
 import { SOURCE_LABELS, type UtilityView } from "@/lib/utilities";
 import { FitDisplay, FitUnconfirmed } from "./approval/FitBadge";
-import { BuildingCover } from "./BuildingCover";
-import { CostBar } from "./CostBar";
+import { MapThumb } from "./map/MapThumb";
+import { CostReceipt } from "./CostReceipt";
 import { CompareToggle, SaveButton } from "./shortlist/ShortlistButtons";
 import { RevealItem } from "./motion/Reveal";
 import { Badge } from "./ui/Badge";
-import { BusIcon, CheckIcon, MapPinIcon, PlusCircleIcon, TagIcon } from "./ui/icons";
+import { BusIcon, CheckIcon, MapPinIcon, TagIcon } from "./ui/icons";
 import { VerifiedNote } from "./VerifiedNote";
 
 type Props = {
@@ -24,6 +24,8 @@ type Props = {
   alternative?: { name: string; href: string };
   /** "you" or "ZIP 75080": where distances are measured from. */
   fromLabel?: string | null;
+  /** Cash due before the keys, or null when the building hasn't shared every part. */
+  moveInTotal?: number | null;
 };
 
 /** One line saying what the utilities part of the price is and where it came from. */
@@ -50,32 +52,58 @@ export function UtilitiesLine({ utilities }: { utilities: UtilityView }) {
   );
 }
 
-/** The biggest required monthly fees as small chips that pop in one after another. */
-function FeeChips({
-  fees,
+type StripCell = { label: string; value: string; hidden?: boolean; muted?: boolean };
+
+/**
+ * The same four columns on every card, so cards can be compared at a glance (like the
+ * fixed fee columns on Japanese rental listings). Anything the building hasn't shared
+ * says so instead of being left out. Charges the ad hid get the highlighter.
+ */
+export function CostStrip({
+  cost,
+  utilities,
+  moveInTotal,
 }: {
-  fees: { id: string; name: string; monthly_usd: number }[];
+  cost: ExploreItem["cost"];
+  utilities: UtilityView;
+  moveInTotal: number | null;
 }) {
-  const shown = [...fees]
-    .filter((f) => f.monthly_usd > 0)
-    .sort((a, b) => b.monthly_usd - a.monthly_usd)
-    .slice(0, 3);
-  if (shown.length === 0) return null;
+  const NOT_SHARED = "Not disclosed";
+  const util: StripCell =
+    utilities.source === "included"
+      ? { label: "Utilities", value: "In rent" }
+      : utilities.source === "direct"
+        ? { label: "Utilities", value: "You pay", muted: true }
+        : utilities.known && utilities.avg > 0
+          ? { label: "Utilities", value: `+${formatUsd(utilities.avg)}`, hidden: true }
+          : { label: "Utilities", value: NOT_SHARED, muted: true };
+  const cells: StripCell[] = [
+    { label: "Rent", value: formatUsd(cost.advertisedRent) },
+    cost.monthlyFees > 0
+      ? { label: "Fees", value: `+${formatUsd(cost.monthlyFees)}`, hidden: true }
+      : { label: "Fees", value: "$0" },
+    util,
+    moveInTotal != null
+      ? { label: "Move-in", value: formatUsd(moveInTotal) }
+      : { label: "Move-in", value: NOT_SHARED, muted: true },
+  ];
   return (
-    <ul
-      aria-label="Biggest required monthly fees"
-      className="mt-2 flex flex-wrap gap-1.5"
-    >
-      {shown.map((f, i) => (
-        <li
-          key={f.id}
-          style={{ animationDelay: `${300 + i * 90}ms` }}
-          className="animate-chip-pop rounded-full bg-warning-soft px-2.5 py-0.5 text-xs font-semibold text-warning-text tabular-nums"
-        >
-          {f.name.length > 24 ? "Monthly fees" : f.name} +{formatUsd(f.monthly_usd)}
-        </li>
+    <dl className="mt-3 grid grid-cols-4 divide-x divide-border rounded-md border border-border text-center">
+      {cells.map((c) => (
+        <div key={c.label} className="min-w-0 px-1 py-2">
+          <dt className="text-[11px] text-text-muted">{c.label}</dt>
+          <dd
+            className={
+              c.muted
+                ? "mt-0.5 text-xs leading-tight text-text-muted"
+                : "figure mt-0.5 text-sm font-semibold"
+            }
+          >
+            {c.hidden ? <span className="marker">{c.value}</span> : c.value}
+          </dd>
+        </div>
       ))}
-    </ul>
+    </dl>
   );
 }
 
@@ -92,6 +120,7 @@ export function ResultCard({
   people = 1,
   alternative,
   fromLabel,
+  moveInTotal = null,
 }: Props) {
   const {
     building,
@@ -112,18 +141,13 @@ export function ResultCard({
   return (
     <RevealItem
       index={index}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-card transition-[transform,box-shadow,border-color] duration-200 ease-out-soft hover:-translate-y-0.5 hover:border-border-strong hover:shadow-raised"
+      className="group relative flex flex-col overflow-hidden rounded-md border border-border bg-surface transition-colors duration-150 hover:border-border-strong"
     >
       <div className="relative h-40 overflow-hidden">
-        <BuildingCover
-          id={building.id}
+        <MapThumb
           name={building.name}
-          className="transition-transform duration-500 ease-out-soft group-hover:scale-[1.05]"
-        />
-        {/* A soft fade at the bottom so the labels on the cover always read clearly. */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-text/20 to-transparent"
+          latitude={building.latitude}
+          longitude={building.longitude}
         />
         <div className="absolute top-3 left-3 flex gap-1.5">
           {rank === 1 && (
@@ -145,9 +169,6 @@ export function ResultCard({
           ) : (
             <span />
           )}
-          <span className="shrink-0 rounded-full bg-surface/85 px-2 py-0.5 text-[11px] font-medium text-text-muted">
-            Illustrative cover
-          </span>
         </div>
         <SaveButton
           buildingId={building.id}
@@ -158,7 +179,7 @@ export function ResultCard({
 
       <article
         aria-labelledby={`b-${building.id}`}
-        className="flex flex-1 flex-col p-4 sm:p-5"
+        className="flex flex-1 flex-col border-t border-border p-4 sm:p-5"
       >
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
@@ -176,7 +197,7 @@ export function ResultCard({
             </p>
           </div>
           <div className="shrink-0 text-right">
-            <p className="text-3xl leading-none font-extrabold tracking-tight tabular-nums">
+            <p className="figure text-3xl leading-none font-medium">
               {isEstimate ? "~" : ""}
               {formatUsd(shared ? perPerson : estimatedTotal)}
             </p>
@@ -189,7 +210,10 @@ export function ResultCard({
             </p>
             {!shared && difference !== 0 && (
               <p className="mt-0.5 text-xs text-text-muted tabular-nums">
-                ad: <span className="line-through">{formatUsd(cost.advertisedRent)}</span>
+                ad:{" "}
+                <span className="figure line-through">
+                  {formatUsd(cost.advertisedRent)}
+                </span>
               </p>
             )}
             {shared && (
@@ -200,27 +224,21 @@ export function ResultCard({
           </div>
         </div>
 
-        <div className="mt-3">
-          {difference > 0 && (
-            <Badge tone="warning" icon={<PlusCircleIcon className="size-3.5" />}>
-              {formatUsd(difference)}/mo more than advertised
-            </Badge>
-          )}
-          {difference < 0 && (
-            <Badge tone="success" icon={<TagIcon className="size-3.5" />}>
-              {formatUsd(-difference)}/mo less than advertised
-            </Badge>
-          )}
-          {difference === 0 && (
-            <Badge icon={<CheckIcon className="size-3.5" />}>Same as advertised</Badge>
-          )}
-        </div>
-
-        <CostBar cost={cost} utilities={utilities} />
-        <FeeChips fees={building.building_fees} />
-        <p className="mt-1.5 text-xs text-text-muted">
-          <UtilitiesLine utilities={utilities} />
-        </p>
+        <CostStrip cost={cost} utilities={utilities} moveInTotal={moveInTotal} />
+        {cost.monthlyDealSavings > 0 && (
+          <p className="mt-2 text-xs text-success-text">
+            Includes a deal worth {formatUsd(cost.monthlyDealSavings)}/mo over the lease.
+          </p>
+        )}
+        <details className="group/details relative z-10 mt-2 text-sm">
+          <summary className="inline-flex min-h-11 cursor-pointer list-none items-center font-semibold text-brand-text underline underline-offset-2 [&::-webkit-details-marker]:hidden">
+            Full breakdown
+          </summary>
+          <CostReceipt cost={cost} utilities={utilities} className="mt-0" />
+          <p className="mt-1.5 text-xs text-text-muted">
+            <UtilitiesLine utilities={utilities} />
+          </p>
+        </details>
 
         {fit && <FitDisplay fit={fit} compact alternative={alternative} />}
         {!building.approval_known && <FitUnconfirmed compact />}

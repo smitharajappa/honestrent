@@ -49,7 +49,7 @@ export function CollapsibleSearch({
         className="flex min-h-12 w-full items-center justify-between gap-3 text-left"
       >
         <span className="flex min-w-0 items-center gap-2.5">
-          <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-brand-soft text-brand-text">
+          <span className="grid size-9 shrink-0 place-items-center rounded-md bg-brand-soft text-brand-text">
             <SearchIcon className="size-4" />
           </span>
           <span className="min-w-0">

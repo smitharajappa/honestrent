@@ -139,7 +139,7 @@ export function AccountPanel() {
               }}
               maxLength={40}
               autoComplete="name"
-              className="min-h-11 min-w-0 flex-1 rounded-xl border border-border-strong bg-surface px-3 text-base"
+              className="min-h-11 min-w-0 flex-1 rounded-md border border-border-strong bg-surface px-3 text-base"
             />
             <Button type="submit" variant="secondary">
               Save name
@@ -181,7 +181,7 @@ export function AccountPanel() {
       <section
         id="pass"
         aria-labelledby="pass-heading"
-        className={`scroll-mt-24 overflow-hidden rounded-2xl border shadow-card ${
+        className={`scroll-mt-24 overflow-hidden rounded-md border shadow-card ${
           status?.signedIn && status.pass ? "border-brand" : "border-border bg-surface"
         }`}
       >

@@ -26,7 +26,7 @@ export default function PrivacyPage() {
         little.
       </PageHeader>
       <div className="mx-auto w-full max-w-2xl px-4 py-8">
-        <p className="rounded-xl bg-warning-soft p-3 text-sm text-warning-text">
+        <p className="rounded-md bg-warning-soft p-3 text-sm text-warning-text">
           Draft written by the Honest Rent team. It has not been reviewed by a lawyer yet.
         </p>
 

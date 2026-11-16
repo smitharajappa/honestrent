@@ -54,7 +54,7 @@ export function PlusPanel() {
   return (
     <div>
       {status?.signedIn && (
-        <div role="status" className="mb-6 rounded-xl bg-surface-muted p-4 text-sm">
+        <div role="status" className="mb-6 rounded-md bg-surface-muted p-4 text-sm">
           <p>
             Signed in as <strong>{status.email}</strong>.
           </p>

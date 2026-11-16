@@ -26,7 +26,7 @@ export function SearchForm({ area, budget, moveIn, today, errors = {} }: Props) 
         <div role="group" aria-labelledby="group-search" className="min-w-0">
           <p
             id="group-search"
-            className="mb-3 text-xs font-bold tracking-wider text-text-muted uppercase"
+            className="mb-3 text-sm font-semibold text-text-muted"
           >
             Your search
           </p>
@@ -88,7 +88,7 @@ export function SearchForm({ area, budget, moveIn, today, errors = {} }: Props) 
         >
           <p
             id="group-approval"
-            className="mb-3 text-xs font-bold tracking-wider text-text-muted uppercase"
+            className="mb-3 text-sm font-semibold text-text-muted"
           >
             Will they approve you?{" "}
             <span className="font-medium normal-case">(optional)</span>
@@ -96,7 +96,7 @@ export function SearchForm({ area, budget, moveIn, today, errors = {} }: Props) 
           <div className="grid gap-5 sm:grid-cols-3">
             <ApprovalSelects />
           </div>
-          <div className="mt-6 rounded-2xl bg-surface-muted p-4">
+          <div className="mt-6 rounded-md bg-surface-muted p-4">
             <p className="text-sm font-semibold">
               What you&apos;ll see on every building
             </p>

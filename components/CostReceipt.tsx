@@ -1,75 +1,68 @@
 import type { CostBreakdown } from "@/lib/cost";
 import { formatUsd } from "@/lib/format";
 import type { UtilityView } from "@/lib/utilities";
+import { cn } from "./ui/cn";
 
 /**
- * Rent, plus fees, plus utilities billed by the building, minus deals, drawn as
- * one bar so the gap between the ad and the real total is visible at a glance.
- * Screen readers get the same numbers as text.
+ * The price as an itemised receipt: advertised rent, plus required fees, plus utilities
+ * billed by the building, minus deals. Charges the ad left out get the highlighter
+ * (the one meaning of that yellow). Amounts are monospaced so they line up and can be
+ * checked by eye. Screen readers get the same lines as a list.
  */
-export function CostBar({
+export function CostReceipt({
   cost,
   utilities,
+  className,
 }: {
   cost: CostBreakdown;
   utilities?: UtilityView;
+  className?: string;
 }) {
   const util = utilities?.known ? utilities.avg : 0;
-  const total = cost.advertisedRent + cost.monthlyFees + util;
-  const pct = (n: number) => `${Math.max(0, Math.min(100, (n / total) * 100))}%`;
-  const label =
-    `Advertised rent ${formatUsd(cost.advertisedRent)}, plus fees ${formatUsd(cost.monthlyFees)}` +
-    (util > 0 ? `, plus about ${formatUsd(util)} utilities` : "") +
-    `, minus deals ${formatUsd(cost.monthlyDealSavings)}, equals about ${formatUsd(
-      cost.realMonthlyCost + util,
-    )} a month.`;
+  const total = cost.realMonthlyCost + util;
+  const lines: { label: string; amount: string; hidden?: boolean; save?: boolean }[] = [
+    { label: "Advertised rent", amount: formatUsd(cost.advertisedRent) },
+  ];
+  if (cost.monthlyFees > 0)
+    lines.push({
+      label: "Required fees",
+      amount: `+${formatUsd(cost.monthlyFees)}`,
+      hidden: true,
+    });
+  if (util > 0)
+    lines.push({
+      label: "Utilities, about",
+      amount: `+${formatUsd(util)}`,
+      hidden: true,
+    });
+  if (cost.monthlyDealSavings > 0)
+    lines.push({
+      label: "Deal, spread over lease",
+      amount: `−${formatUsd(cost.monthlyDealSavings)}`,
+      save: true,
+    });
 
   return (
-    <div role="img" aria-label={label} className="mt-3">
-      <div className="relative flex h-2.5 overflow-hidden rounded-full bg-surface-muted">
-        <span
-          className="h-full origin-left animate-bar-grow bg-brand/55"
-          style={{ width: pct(cost.advertisedRent) }}
-        />
-        {cost.monthlyFees > 0 && (
-          <span
-            className="h-full origin-left animate-bar-grow bg-warning-text/70 [animation-delay:150ms]"
-            style={{ width: pct(cost.monthlyFees) }}
-          />
-        )}
-        {util > 0 && (
-          <span className="h-full bg-warning-text/40" style={{ width: pct(util) }} />
-        )}
-        {cost.monthlyDealSavings > 0 && (
-          <span
-            className="absolute inset-y-0 right-0 bg-[repeating-linear-gradient(135deg,var(--success-text)_0_3px,transparent_3px_6px)] opacity-80"
-            style={{ width: pct(cost.monthlyDealSavings) }}
-          />
-        )}
-      </div>
-      <div
-        aria-hidden="true"
-        className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-text-muted tabular-nums"
-      >
-        <span className="inline-flex items-center gap-1">
-          <span className="size-2 rounded-full bg-brand/55" />
-          Rent {formatUsd(cost.advertisedRent)}
+    <div className={cn("mt-3 text-sm", className)}>
+      <ul aria-label="Monthly cost, line by line" className="space-y-1">
+        {lines.map((l) => (
+          <li key={l.label} className="flex items-baseline gap-2">
+            <span className={l.hidden ? "marker" : "text-text-muted"}>{l.label}</span>
+            <span aria-hidden="true" className="leader" />
+            <span className={cn("figure", l.save && "text-success-text")}>
+              {l.amount}
+            </span>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-1.5 flex items-baseline gap-2 border-t border-dashed border-rule pt-1.5 font-semibold">
+        <span>{util > 0 ? "Estimated total" : "Real monthly cost"}</span>
+        <span aria-hidden="true" className="leader" />
+        <span className="figure">
+          {util > 0 ? "~" : ""}
+          {formatUsd(total)}
         </span>
-        <span className="inline-flex items-center gap-1">
-          <span className="size-2 rounded-full bg-warning-text/70" />+ Fees{" "}
-          {formatUsd(cost.monthlyFees)}
-        </span>
-        {util > 0 && (
-          <span className="inline-flex items-center gap-1">
-            <span className="size-2 rounded-full bg-warning-text/40" />+ Utilities ~
-            {formatUsd(util)}
-          </span>
-        )}
-        <span className="inline-flex items-center gap-1">
-          <span className="size-2 rounded-full bg-success-text" />− Deals{" "}
-          {formatUsd(cost.monthlyDealSavings)}
-        </span>
-      </div>
+      </p>
     </div>
   );
 }

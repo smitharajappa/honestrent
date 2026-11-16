@@ -109,7 +109,7 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
     <div role="group" aria-labelledby={id}>
       <p
         id={id}
-        className="mb-2 text-xs font-bold tracking-wider text-text-muted uppercase"
+        className="mb-2 text-sm font-semibold text-text-muted"
       >
         {title}
       </p>

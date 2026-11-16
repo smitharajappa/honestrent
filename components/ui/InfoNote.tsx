@@ -12,7 +12,7 @@ export function InfoNote({
   return (
     <p
       className={cn(
-        "flex items-start gap-2 rounded-xl bg-info-soft p-3 text-sm text-info-text",
+        "flex items-start gap-2 rounded-md bg-info-soft p-3 text-sm text-info-text",
         className,
       )}
     >

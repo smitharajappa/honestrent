@@ -24,8 +24,8 @@ import {
   UsersIcon,
 } from "@/components/ui/icons";
 import { VerifiedNote } from "@/components/VerifiedNote";
-import { BuildingCover } from "@/components/BuildingCover";
-import { CostBar } from "@/components/CostBar";
+import { MapThumb } from "@/components/map/MapThumb";
+import { CostReceipt } from "@/components/CostReceipt";
 import { BuildingLocation } from "@/components/map/BuildingLocation";
 import { RevealOnScroll } from "@/components/motion/Reveal";
 import { CompareToggle, SaveButton } from "@/components/shortlist/ShortlistButtons";
@@ -178,11 +178,11 @@ export default async function BuildingPage({
         {search.ok ? "Back to results" : "Search apartments"}
       </ButtonLink>
 
-      <div className="relative mt-3 h-48 overflow-hidden rounded-3xl border border-border sm:h-72">
-        <BuildingCover id={building.id} name={building.name} />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-text/20 to-transparent"
+      <div className="relative mt-3 h-48 overflow-hidden rounded-md border border-border sm:h-72">
+        <MapThumb
+          name={building.name}
+          latitude={building.latitude}
+          longitude={building.longitude}
         />
         {!mapOnly && (
           <SaveButton
@@ -191,14 +191,11 @@ export default async function BuildingPage({
             className="absolute top-3 right-3"
           />
         )}
-        <span className="absolute top-3 left-3 rounded-full bg-surface/85 px-2.5 py-0.5 text-[11px] font-medium text-text-muted">
-          Illustrative cover
-        </span>
       </div>
 
       <section
         aria-labelledby="building-name"
-        className="relative -mt-12 rounded-2xl border border-border bg-surface p-5 shadow-raised sm:mx-6 sm:p-6"
+        className="relative -mt-12 rounded-md border border-border bg-surface p-5 shadow-raised sm:mx-6 sm:p-6"
       >
         <Badge>{building.city}</Badge>
         <h1
@@ -398,7 +395,7 @@ export default async function BuildingPage({
                 <Section id="safety" title="Reported incidents nearby">
                   {safety ? (
                     <>
-                      <p className="rounded-xl bg-slate-soft p-3 text-sm text-slate-text">
+                      <p className="rounded-md bg-slate-soft p-3 text-sm text-slate-text">
                         <strong className="font-semibold">
                           {COMPARISON_TEXT[compareWithCity(safety).level]}
                         </strong>{" "}
@@ -702,7 +699,10 @@ export default async function BuildingPage({
                 Advertised {formatUsd(cheapest.cost.advertisedRent)} ·{" "}
                 {cheapest.plan.name}
               </p>
-              <CostBar cost={cheapest.cost} utilities={cheapestUtilities ?? undefined} />
+              <CostReceipt
+                cost={cheapest.cost}
+                utilities={cheapestUtilities ?? undefined}
+              />
               {cheapestUtilities && (
                 <p className="mt-1.5 text-xs text-text-muted">
                   <UtilitiesLine utilities={cheapestUtilities} />
@@ -763,7 +763,7 @@ function Section({
           className="mb-4 flex items-center gap-3 text-lg font-bold tracking-tight"
         >
           {Icon && (
-            <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-brand-soft text-brand-text">
+            <span className="grid size-9 shrink-0 place-items-center rounded-md bg-brand-soft text-brand-text">
               <Icon className="size-[18px]" />
             </span>
           )}

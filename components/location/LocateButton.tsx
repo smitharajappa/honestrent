@@ -95,7 +95,7 @@ export function LocateButton({ compact = false }: { compact?: boolean }) {
             autoComplete="off"
             placeholder="ZIP code"
             aria-invalid={zipError ? true : undefined}
-            className="min-h-11 w-28 rounded-xl border border-border-strong bg-surface px-3 text-base tabular-nums"
+            className="min-h-11 w-28 rounded-md border border-border-strong bg-surface px-3 text-base tabular-nums"
           />
           <Button type="button" variant="secondary" onClick={applyZip}>
             Use ZIP
