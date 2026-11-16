@@ -1,0 +1,833 @@
+<title>Honest Rent Strategy Response</title>
+<meta name="claude:viewport-fit-sides" content="cover" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=DM+Mono:wght@400;500&family=Public+Sans:ital,wght@0,400;0,600;1,400&display=swap"
+/>
+<style>
+  /* Layout: one receipt-width column of argument, with wide tables and the flywheel allowed to break out. */
+  :root {
+    --paper: #f3f4f1; /* thermal-paper white, slightly cool */
+    --slip: #ffffff; /* the receipt itself */
+    --ink: #1b2230; /* receipt ink */
+    --ink-2: #545c6a; /* faded ink */
+    --rule: #c9ccc6; /* dotted leader lines */
+    --pen: #2340a8; /* ballpoint blue: links and actions */
+    --mark: #ffe45c; /* highlighter: the hidden charge */
+    --mark-ink: #1b2230;
+    --stamp-good: #1d7048;
+    --stamp-maybe: #8a4b00;
+    --stamp-no: #a3324a;
+    --font-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+    --font-body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-figure: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12151a;
+      --slip: #1a1e25;
+      --ink: #e9ebee;
+      --ink-2: #a6adb8;
+      --rule: #3a404a;
+      --pen: #8fa6ff;
+      --mark: #6b5a00;
+      --mark-ink: #fff6c2;
+      --stamp-good: #5fd39a;
+      --stamp-maybe: #f0b660;
+      --stamp-no: #ff8fa6;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #12151a;
+    --slip: #1a1e25;
+    --ink: #e9ebee;
+    --ink-2: #a6adb8;
+    --rule: #3a404a;
+    --pen: #8fa6ff;
+    --mark: #6b5a00;
+    --mark-ink: #fff6c2;
+    --stamp-good: #5fd39a;
+    --stamp-maybe: #f0b660;
+    --stamp-no: #ff8fa6;
+    color-scheme: dark;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 16px/1.6 var(--font-body);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 40px 72px;
+  }
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    display: grid;
+    gap: 48px;
+  }
+  a {
+    color: var(--pen);
+    text-underline-offset: 3px;
+  }
+  a:focus-visible {
+    outline: 2px solid var(--pen);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-stretch: 78%;
+    line-height: 1.05;
+    text-wrap: balance;
+    margin: 0;
+  }
+  h1 {
+    font-size: clamp(2.2rem, 6vw, 3.4rem);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  h2 {
+    font-size: clamp(1.5rem, 3.6vw, 2rem);
+    font-weight: 750;
+  }
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    font-stretch: 90%;
+  }
+  p {
+    margin: 0;
+    max-width: 65ch;
+  }
+  .figure,
+  td.num {
+    font-family: var(--font-figure);
+    font-variant-numeric: tabular-nums;
+  }
+  .eyebrow {
+    font-family: var(--font-figure);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  mark {
+    background: var(--mark);
+    color: var(--mark-ink);
+    padding: 0 3px;
+  }
+  section {
+    display: grid;
+    gap: 16px;
+  }
+  .lede {
+    font-size: 1.12rem;
+  }
+
+  /* The receipt: the subject's own document. */
+  .receipt {
+    background: var(--slip);
+    padding: 22px 22px 30px;
+    max-width: 420px;
+    font-family: var(--font-figure);
+    font-size: 0.92rem;
+    --tooth: 10px;
+    mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% /
+      var(--tooth) 100%;
+    -webkit-mask: conic-gradient(
+        from -45deg at bottom,
+        #0000,
+        #000 1deg 89deg,
+        #0000 90deg
+      )
+      50% / var(--tooth) 100%;
+    padding-bottom: calc(30px + var(--tooth) / 2);
+  }
+  .receipt .head {
+    display: flex;
+    justify-content: space-between;
+    color: var(--ink-2);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--rule);
+    margin-bottom: 8px;
+  }
+  .line {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    padding: 3px 0;
+  }
+  .line .lbl {
+    flex: none;
+  }
+  .line .dots {
+    flex: 1;
+    border-bottom: 2px dotted var(--rule);
+    transform: translateY(-4px);
+    min-width: 12px;
+  }
+  .line .amt {
+    flex: none;
+  }
+  .line.total {
+    border-top: 1px dashed var(--rule);
+    margin-top: 8px;
+    padding-top: 10px;
+    font-weight: 500;
+    font-size: 1.05rem;
+  }
+  .stamp {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-stretch: 70%;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.86rem;
+    border: 2.5px solid currentColor;
+    border-radius: 6px;
+    padding: 3px 10px;
+    transform: rotate(-4deg);
+    color: var(--stamp-good);
+    margin-top: 14px;
+  }
+  .hero {
+    display: grid;
+    gap: 28px;
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  @media (min-width: 720px) {
+    .hero {
+      grid-template-columns: 1.15fr 1fr;
+    }
+  }
+  .hero > * {
+    min-width: 0;
+  }
+
+  /* Questions numbered because the professor asked four. */
+  .q {
+    display: grid;
+    gap: 14px;
+    padding-top: 20px;
+    border-top: 2px solid var(--ink);
+  }
+  .q .eyebrow {
+    color: var(--ink);
+  }
+  .answer {
+    font-family: var(--font-display);
+    font-stretch: 85%;
+    font-weight: 650;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    max-width: 52ch;
+  }
+  ul,
+  ol {
+    margin: 0;
+    padding-left: 1.2em;
+    display: grid;
+    gap: 6px;
+    max-width: 65ch;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    margin-inline: -4px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 560px;
+    font-size: 0.92rem;
+  }
+  th,
+  td {
+    text-align: left;
+    vertical-align: top;
+    padding: 9px 10px;
+    border-bottom: 1px dotted var(--rule);
+  }
+  th {
+    font-family: var(--font-figure);
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    border-bottom: 1.5px solid var(--ink);
+  }
+  td.num {
+    text-align: right;
+    white-space: nowrap;
+  }
+  tr.lead td {
+    font-weight: 600;
+  }
+  .note {
+    font-size: 0.86rem;
+    color: var(--ink-2);
+  }
+
+  .flywheel {
+    background: var(--slip);
+    padding: 12px;
+    overflow-x: auto;
+  }
+  .flywheel svg {
+    display: block;
+    width: 100%;
+    min-width: 520px;
+    height: auto;
+  }
+  .fw-node {
+    fill: var(--slip);
+    stroke: var(--ink);
+    stroke-width: 1.5;
+  }
+  .fw-node.hot {
+    fill: var(--mark);
+  }
+  .fw-text {
+    fill: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .fw-small {
+    fill: var(--ink-2);
+    font-family: var(--font-figure);
+    font-size: 12px;
+  }
+  .fw-arrow {
+    fill: none;
+    stroke: var(--pen);
+    stroke-width: 2;
+  }
+  .fw-head {
+    fill: var(--pen);
+  }
+  .fw-hot-text {
+    fill: var(--mark-ink);
+  }
+  .fw-core {
+    fill: none;
+    stroke: var(--ink-2);
+    stroke-width: 1.2;
+    stroke-dasharray: 4 4;
+  }
+
+  .change {
+    display: grid;
+    gap: 2px;
+    padding: 12px 0;
+    border-bottom: 1px dotted var(--rule);
+  }
+  .change b {
+    font-weight: 600;
+  }
+  .change span {
+    color: var(--ink-2);
+  }
+  footer {
+    font-size: 0.86rem;
+    color: var(--ink-2);
+  }
+</style>
+
+<main>
+  <header class="hero">
+    <div style="display: grid; gap: 16px">
+      <p class="eyebrow">Honest Rent · response to professor feedback · Nov 15, 2026</p>
+      <h1>Four hard questions, answered with evidence</h1>
+      <p class="lede">
+        Honest Rent ranks Dallas-area apartments by what they really cost each month and
+        by how likely a newcomer without US credit is to be approved. Here is what changed
+        after your feedback.
+      </p>
+    </div>
+    <div
+      class="receipt"
+      aria-label="Example of the receipt the app shows for one apartment"
+    >
+      <div class="head"><span>1 bed · Richardson</span><span>sample</span></div>
+      <div class="line">
+        <span class="lbl">Advertised rent</span><span class="dots"></span
+        ><span class="amt">$1,295</span>
+      </div>
+      <div class="line">
+        <span class="lbl"><mark>Required fees</mark></span
+        ><span class="dots"></span><span class="amt">+$65</span>
+      </div>
+      <div class="line">
+        <span class="lbl"><mark>Water, sewer, trash</mark></span
+        ><span class="dots"></span><span class="amt">+$118</span>
+      </div>
+      <div class="line">
+        <span class="lbl">Move-in deal ÷ 12</span><span class="dots"></span
+        ><span class="amt">−$100</span>
+      </div>
+      <div class="line total">
+        <span class="lbl">Real monthly cost</span><span class="dots"></span
+        ><span class="amt">$1,378</span>
+      </div>
+      <span class="stamp">Passport OK · No SSN</span>
+    </div>
+  </header>
+
+  <section class="q" aria-labelledby="q1">
+    <p class="eyebrow">Question 1 of 4</p>
+    <h2 id="q1">Rules differ by state and city. Does the problem change by region?</h2>
+    <p class="answer">
+      Yes. Regulation does not remove the problem, it moves it. Hidden fees hurt most
+      where there is no law; buildings find it cheapest to self-report where there is one.
+    </p>
+    <p>
+      Texas has no all-in price rule, but Austin passed its own itemised fee-list
+      ordinance on May 28, 2026 (<a
+        href="https://www.austintexas.gov/equity-inclusion/rental-fee-transparency-ordinance"
+        >City of Austin</a
+      >). Colorado, Massachusetts, Seattle and others have their own rules, and the FTC
+      opened a rulemaking in March 2026. So we store rules as data in a
+      <b>jurisdictions table</b> and show a <b>"Your rights here"</b> box on each building
+      page. A new city is a new row, not new code.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Place</th>
+            <th>Fee rule</th>
+            <th>Screening rule</th>
+            <th>So we lead with</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Texas</td>
+            <td>
+              None; written selection criteria or the application fee is refunded (<a
+                href="https://texas.public.law/statutes/tex._prop._code_section_92.3515"
+                >§92.3515</a
+              >)
+            </td>
+            <td>None</td>
+            <td>Real monthly cost</td>
+          </tr>
+          <tr>
+            <td>Austin</td>
+            <td>
+              Itemised fee list, 5+ units, from 2026 (<a
+                href="https://communityimpact.com/austin/east-austin/government/2026/06/08/new-austin-rental-fee-disclosure-requirement-to-boost-tenant-transparency/"
+                >Community Impact</a
+              >); state preemption law may limit it (<a
+                href="https://www.texastribune.org/2025/07/18/texas-legislature-death-star-law-city-ordinances-limits/"
+                >Texas Tribune</a
+              >)
+            </td>
+            <td>None</td>
+            <td>Approval fit; easy self-reporting</td>
+          </tr>
+          <tr>
+            <td>Colorado</td>
+            <td>
+              Undisclosed fees banned from Jan 2026 (<a
+                href="https://www.costar.com/article/1725530122/colorado-bans-apartment-landlords-from-collecting-junk-fees"
+                >CoStar</a
+              >)
+            </td>
+            <td>
+              Must accept portable reports (<a
+                href="https://www.leaserunner.com/blog/portable-tenant-screening-report-by-state"
+                >LeaseRunner</a
+              >)
+            </td>
+            <td>Renter Passport</td>
+          </tr>
+          <tr>
+            <td>Massachusetts</td>
+            <td>
+              All-in price from Sep 2025 (<a
+                href="https://insights.mintz.com/insights-center/viewpoints/2025-08-04-preparing-allston-christmas-what-massachusetts-new-junk-fee"
+                >Mintz</a
+              >)
+            </td>
+            <td>Optional</td>
+            <td>Approval and move-in cash</td>
+          </tr>
+          <tr>
+            <td>Seattle</td>
+            <td>
+              City ordinance from July 2027 (<a href="https://www.credaily.com/?p=222021"
+                >CRE Daily</a
+              >)
+            </td>
+            <td>Notice rules</td>
+            <td>Approval fit</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Expansion scorecard</h3>
+    <p class="note">
+      Team judgement, 1 to 5. The US hosted a record 1,177,766 international students in
+      2024/25, including 294,253 on OPT (<a
+        href="https://opendoorsdata.org/wp-content/uploads/2025/11/OD25_Fast-Facts.pdf"
+        >Open Doors 2025</a
+      >), though new enrolment fell about 7%.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Metro</th>
+            <th>Newcomers</th>
+            <th>Fee pain</th>
+            <th>Approval friction</th>
+            <th>Self-report ease</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="lead">
+            <td>Dallas–Richardson–Plano (now)</td>
+            <td class="num">4</td>
+            <td class="num">5</td>
+            <td class="num">5</td>
+            <td class="num">2</td>
+            <td class="num">16</td>
+          </tr>
+          <tr>
+            <td>Houston</td>
+            <td class="num">4</td>
+            <td class="num">5</td>
+            <td class="num">5</td>
+            <td class="num">2</td>
+            <td class="num">16</td>
+          </tr>
+          <tr>
+            <td>Austin</td>
+            <td class="num">4</td>
+            <td class="num">3</td>
+            <td class="num">5</td>
+            <td class="num">4</td>
+            <td class="num">16</td>
+          </tr>
+          <tr>
+            <td>Boston</td>
+            <td class="num">5</td>
+            <td class="num">2</td>
+            <td class="num">4</td>
+            <td class="num">4</td>
+            <td class="num">15</td>
+          </tr>
+          <tr>
+            <td>Denver</td>
+            <td class="num">3</td>
+            <td class="num">2</td>
+            <td class="num">2</td>
+            <td class="num">4</td>
+            <td class="num">11</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      We move to a new metro when it scores 15 or more <b>and</b> Dallas meets the
+      flywheel targets below.
+    </p>
+  </section>
+
+  <section class="q" aria-labelledby="q2">
+    <p class="eyebrow">Question 2 of 4</p>
+    <h2 id="q2">
+      Manual data won't scale. How do buildings self-report, and how does the flywheel
+      start?
+    </h2>
+    <p class="answer">
+      Buildings report because it saves them work and brings them renters who will pass
+      screening. Renter bills check that they told the truth.
+    </p>
+    <ol>
+      <li>
+        <b>Comply once, publish everywhere.</b> A free form produces the fee list a city
+        or state now requires (and, in Texas, the §92.3515 selection criteria), and
+        publishes an honest listing.
+      </li>
+      <li>
+        <b>Data is the price of a lead.</b> Only self-reporting buildings receive
+        approval-ready leads: renters whose income range, ID type and guarantor plans
+        already match the building's rules.
+      </li>
+      <li>
+        <b>Silence is visible.</b> Self-reporters get a "Verified by building" badge.
+        Others show "Not reported by the building" beside our estimate.
+      </li>
+    </ol>
+    <p>
+      This is give-to-get, the mechanism Glassdoor uses for reviews and salaries (<a
+        href="https://clear.glassdoor.nl/blog/give-to-get/"
+        >Glassdoor</a
+      >), applied to buildings. Renters never pay for the core search.
+    </p>
+    <figure class="flywheel" aria-labelledby="fw-cap">
+      <svg
+        viewBox="0 0 640 440"
+        role="img"
+        aria-label="Flywheel: renters trust the ranking, which creates approval-ready leads, which gets buildings to self-report, and renter bills audit those numbers, which builds more trust. Cold start in the centre: one UT Dallas cohort and about 30 buildings seeded by hand."
+      >
+        <defs>
+          <marker
+            id="ah"
+            viewBox="0 0 10 10"
+            refX="8"
+            refY="5"
+            markerWidth="7"
+            markerHeight="7"
+            orient="auto-start-reverse"
+          >
+            <path d="M0,0 L10,5 L0,10 z" class="fw-head" />
+          </marker>
+        </defs>
+        <!-- arcs between nodes, clockwise -->
+        <path class="fw-arrow" d="M420,64 Q560,70 548,160" marker-end="url(#ah)" />
+        <path class="fw-arrow" d="M548,262 Q560,368 420,376" marker-end="url(#ah)" />
+        <path class="fw-arrow" d="M220,376 Q80,368 92,262" marker-end="url(#ah)" />
+        <path class="fw-arrow" d="M92,160 Q80,70 220,64" marker-end="url(#ah)" />
+        <!-- nodes -->
+        <rect class="fw-node" x="220" y="36" width="200" height="56" rx="4" />
+        <text class="fw-text" x="320" y="60" text-anchor="middle">Renters trust</text>
+        <text class="fw-text" x="320" y="80" text-anchor="middle">the ranking</text>
+
+        <rect class="fw-node" x="458" y="183" width="176" height="56" rx="4" />
+        <text class="fw-text" x="546" y="207" text-anchor="middle">Approval-ready</text>
+        <text class="fw-text" x="546" y="227" text-anchor="middle">
+          leads to buildings
+        </text>
+
+        <rect class="fw-node hot" x="220" y="348" width="200" height="56" rx="4" />
+        <text class="fw-text fw-hot-text" x="320" y="372" text-anchor="middle">
+          Buildings self-report
+        </text>
+        <text class="fw-text fw-hot-text" x="320" y="392" text-anchor="middle">
+          fees, deals, rules
+        </text>
+
+        <rect class="fw-node" x="6" y="183" width="176" height="56" rx="4" />
+        <text class="fw-text" x="94" y="207" text-anchor="middle">Renter bills</text>
+        <text class="fw-text" x="94" y="227" text-anchor="middle">audit the numbers</text>
+
+        <!-- cold start -->
+        <circle class="fw-core" cx="320" cy="211" r="86" />
+        <text class="fw-small" x="320" y="190" text-anchor="middle">COLD START</text>
+        <text class="fw-text" x="320" y="214" text-anchor="middle">1 UTD cohort</text>
+        <text class="fw-text" x="320" y="234" text-anchor="middle">+ 30 buildings</text>
+        <text class="fw-small" x="320" y="256" text-anchor="middle">seeded by hand</text>
+      </svg>
+      <figcaption id="fw-cap" class="note">
+        Highlighted: the step the professor asked about. We target management companies,
+        since one yes can cover several buildings.
+      </figcaption>
+    </figure>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Flywheel target, spring 2027</th>
+            <th>Goal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Buildings with data near UTD</td>
+            <td class="num">30</td>
+          </tr>
+          <tr>
+            <td>Share that self-report</td>
+            <td class="num">30%</td>
+          </tr>
+          <tr>
+            <td>Median age of a building's data</td>
+            <td class="num">&lt; 30 days</td>
+          </tr>
+          <tr>
+            <td>Move-ins who share one bill</td>
+            <td class="num">1 in 4</td>
+          </tr>
+          <tr>
+            <td>Self-report vs renter-bill mismatch</td>
+            <td class="num">&lt; 10%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      <b>Kill signal:</b> if fewer than 2 operators self-report after seeing a lead
+      report, data stays manual and Honest Rent stays a small local guide.
+    </p>
+  </section>
+
+  <section class="q" aria-labelledby="q3">
+    <p class="eyebrow">Question 3 of 4</p>
+    <h2 id="q3">Competitors can copy the features. Feature or company?</h2>
+    <p class="answer">
+      Real monthly cost alone is a feature, and new laws push listing sites to copy it.
+      The company is the newcomer's on-ramp to US renting.
+    </p>
+    <ul>
+      <li>
+        <b>Approval data no one else collects:</b> rules for renters without an SSN or US
+        credit now, anonymous outcomes later. Each outcome improves the next prediction.
+      </li>
+      <li>
+        <b>Renter Passport:</b> apply once with verified income, an international credit
+        report and a guarantor quote, through a partner reporting agency. Colorado already
+        makes landlords accept portable reports.
+      </li>
+      <li>
+        <b>First-year money help:</b> guarantor and deposit options, move-in cash, and
+        rent reporting to build US credit through a partner. An Urban Institute trial
+        found rent reporting raised the share of renters with a score by 12 points (<a
+          href="https://www.bankrate.com/personal-finance/credit/how-to-report-rent-payments-to-credit-bureaus"
+          >Bankrate</a
+        >).
+      </li>
+      <li>
+        <b>Counter-positioning:</b> we never rank by who pays. Listing sites earn from
+        paid placement, so copying that promise would cost them revenue.
+      </li>
+    </ul>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>If Apartments.com copied it tomorrow…</th>
+            <th>Copy risk</th>
+            <th>Why renters still come</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Real monthly cost</td>
+            <td>High</td>
+            <td>Entry point only</td>
+          </tr>
+          <tr>
+            <td>Utilities from renter bills</td>
+            <td>Medium</td>
+            <td>Needs a renter community that trusts us</td>
+          </tr>
+          <tr>
+            <td>Approval fit without SSN or US credit</td>
+            <td>Low</td>
+            <td>Needs newcomer approval data</td>
+          </tr>
+          <tr>
+            <td>Renter Passport</td>
+            <td>Low</td>
+            <td>Needs partners and buildings that accept it</td>
+          </tr>
+          <tr>
+            <td>Never ranked by who pays</td>
+            <td>Very low</td>
+            <td>Copying it costs them placement revenue</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="q" aria-labelledby="q4">
+    <p class="eyebrow">Question 4 of 4</p>
+    <h2 id="q4">The design looked generated. What changed, and why?</h2>
+    <p class="answer">
+      The new look borrows from two documents every newcomer handles: the itemised receipt
+      and the passport stamp.
+    </p>
+    <ul>
+      <li>
+        <b>Search first, like real rental sites,</b> instead of a marketing hero. The home
+        page opens on the search and the listings.
+      </li>
+      <li>
+        <b>The same four cost columns on every card</b> (Rent · Fees · Utilities ·
+        Move-in), borrowed from Japanese rental listings, with
+        <b>"Not disclosed"</b> wherever a building hasn't shared a figure (like the UK
+        rule that rent and deposit must be filled in). One big total leads, Airbnb-style,
+        and the full itemised breakdown opens on tap.
+      </li>
+      <li>
+        <b>Map thumbnails of each building's block</b> instead of drawn covers: real,
+        useful, and copied from nowhere.
+      </li>
+      <li>
+        <b>One highlighter colour, used only on charges the advert hid,</b> the way
+        renters mark up their own ledgers. If it is yellow, it was hidden.
+      </li>
+      <li>
+        <b>Approval as an ink stamp</b> (Passport OK, Guarantor needed, Unlikely), because
+        approval is a decision someone makes about you, and stamps are how newcomers meet
+        that decision.
+      </li>
+      <li>
+        <b>Ballpoint blue for actions</b> instead of the default teal: the pen you sign a
+        lease with.
+      </li>
+    </ul>
+    <p>
+      We also checked the result against published lists of "AI design tells" and removed
+      what matched: the pill above the headline, a highlighted headline phrase, capital
+      monospace labels, icon-tile step cards and blurred colour bands. The full reasons
+      for each choice are in the repository's DESIGN.md.
+    </p>
+  </section>
+
+  <section class="q" aria-labelledby="changed">
+    <p class="eyebrow">Summary</p>
+    <h2 id="changed">What we changed because of this feedback</h2>
+    <div>
+      <div class="change">
+        <b>Expansion order is a scorecard, not "the next big city".</b
+        ><span>Because fee rules differ by state and by city.</span>
+      </div>
+      <div class="change">
+        <b>Building self-reporting moved up to the next round.</b
+        ><span
+          >Because manual data won't scale, and regulated operators already prepare fee
+          lists.</span
+        >
+      </div>
+      <div class="change">
+        <b>Flywheel targets and a kill signal were added.</b
+        ><span>Because a flywheel claim needs numbers that can fail.</span>
+      </div>
+      <div class="change">
+        <b>The company story is now the newcomer's on-ramp.</b
+        ><span>Because real monthly cost alone is easy to copy.</span>
+      </div>
+      <div class="change">
+        <b>The visual identity was rebuilt around the receipt and the stamp.</b
+        ><span>Because the old look was a generic template.</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Sample figures on the receipt are made up. Scores marked as team judgement are
+    estimates, not measurements. Full memo: research/strategy-response.md; product plan:
+    prd.md (v3).
+  </footer>
+</main>
